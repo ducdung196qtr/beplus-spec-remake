@@ -15,7 +15,7 @@ Autonomous 2-stage specification-driven remake & transformation engine for OpenD
 
 ## Linked References & Tools
 - `references/gutenberg-token-contract.md`: Authoritative FSE design tokens, fluid clamps, and theme.json contracts.
-- `references/forensic-inspection-patterns.md`: Comprehensive 35-chapter forensic manual covering specificity traps, bento alignment, frosted glass badges, slider carousels, mobile navigation drawers, scroll text illumination, split cards with floating overlays, workspace scratchpad isolation, optical icon hierarchy (curing tiny icons), sticky stacking cards scroll engine, and WCAG AA dark canvas typography invariant (curing invisible dimmed text).
+- `references/forensic-inspection-patterns.md`: Comprehensive 36-chapter forensic manual covering specificity traps, bento alignment, frosted glass badges, slider carousels, mobile navigation drawers, scroll text illumination, split cards with floating overlays, workspace scratchpad isolation, optical icon hierarchy (curing tiny icons), sticky stacking cards scroll engine, WCAG AA dark canvas typography invariant (curing invisible dimmed text), and disarming default template Base64 data URI bloat (curing 600s watchdog timeouts).
 - `references/opendesign-api-orchestration.md`: Headless REST API automation pipeline for OpenDesign daemon (port 7456), SQLite message seeding constraints, and SSE streaming.
 - `templates/beplus-spec-template.md`: 100% English master architectural specification template for Phase 1 `Beplus-spec.md`.
 - `scripts/inspect-site.mjs`: Automated CDP forensic inspection script extracting computed CSS, deep component anatomy, and motion triggers.
@@ -50,12 +50,16 @@ Autonomous 2-stage specification-driven remake & transformation engine for OpenD
 16. **Workspace Hygiene & Scratchpad Isolation Mandate**:
     - Never write or leave raw scraped HTML dumps (`target.html`, `dump.html`, `raw.html`, `temp.html`) in the project root directory. OpenDesign automatically indexes root directory files and exposes them in the web file tree (`/files/target.html`), causing user confusion that the AI copied raw code rather than building from spec.
     - All DOM inspections must be processed in-memory via CDP port 9222 (`Runtime.evaluate`) or isolated in temporary external directories (such as `/tmp/scratchpad/`) and purged (`rm -rf`) before completing Phase 1. The project root must exclusively contain official deliverables (`Beplus-spec.md`, `index.html`, `main.css`).
-17. **Optical Icon Hierarchy & Anti-Miniaturization Standard (Curing Tiny Icons)**:
-    - Mandatory compliance with 3-Tier Optical Sizing:
-      * **Tier 1 (Metric & Stat Cards like `8,000+`)**: Squircle container tile `52px × 52px` (`.bento-badge`), inner SVG icon `28px × 28px`, `stroke-width="1.75"`.
-      * **Tier 2 (Feature Capsules & Value Lists like `Strategic Planning`, `Smart Health`)**: Dedicated squircle icon box `.feature-icon-box` `38px × 38px` with subtle tinted background and 8px border-radius, inner SVG icon `20px × 20px`, `stroke-width="1.75"`. Naked unboxed SVGs floating loosely next to bold typography are strictly forbidden.
-      * **Tier 3 (Inline micro-elements & button chevrons)**: SVG icon `16px × 16px`, `stroke-width="1.75"`.
-    - Abolish hardcoded `stroke-width="1"` on icons under 24px to prevent delicate hairline disappearance on high-DPI displays.
+17. **Context-Proportional Optical Icon Hierarchy (Anti-Miniaturization Standard)**:
+    - **Respect Reference Box Topology (Icon-box is NOT universally mandatory)**: An outer container box (`.feature-icon-box` or `.bento-badge`) is NOT required everywhere. Faithfully respect the original reference design:
+      * If the reference design has an icon box (squircle badge, circular wrapper, container tile), reproduce the container box with subtle background tinting and appropriate border-radius.
+      * If the reference design uses **unboxed / standalone icons** (floating directly next to titles, headers, or inside cards without a box), KEEP THEM UNBOXED! Do NOT force an artificial `.feature-icon-box` container onto designs that do not have one.
+    - **Proportional Optical Sizing (Never Too Small)**: Regardless of whether an icon is boxed or unboxed, its dimensions and stroke weight MUST scale proportionally to its adjacent content so it never looks dwarfed or miniaturized:
+      * **Metric / Stat Cards (`8,000+`, large numbers)**: If boxed, use ~52px container tile with 28px icon. If unboxed, scale the icon to a prominent `32px – 40px` with `stroke-width="1.75"` to balance the heavy numerical typography.
+      * **Feature Cards / Service Headlines (H3/H4 titles)**: If boxed, use ~38px tile with 20px icon. If unboxed, scale the icon to `24px – 28px` with `stroke-width="1.5 – 1.75"` so it sits in visual equilibrium with the title.
+      * **List Items / Micro-Affordances / Buttons**: `16px – 20px` with `stroke-width="1.75"`.
+    - **Anti-Miniaturization Invariant**: Icons must NEVER be rendered too small (e.g. 12px–14px hairlines) next to bold headlines.
+    - **Zero AI Sparkle Ban**: Generic sparkle icons (`✨`), magic wands, or AI stars are strictly prohibited.
 18. **Sticky Stacking Cards Scroll Engine**:
     - For multi-card feature or service sections (such as *What We Offer*), desktop viewports (`min-width: 768px`) MUST implement native CSS `position: sticky; top: calc(...); margin-bottom: calc(...);` with staggered increasing top offsets (`top: 80px, 110px, 140px...`).
     - As the user scrolls, cards glide up and stack sequentially like a physical 3D card deck with layered elevation shadows. On mobile viewports (`<= 767px`), gracefully degrade to `position: static` with clean gutters.
@@ -63,6 +67,9 @@ Autonomous 2-stage specification-driven remake & transformation engine for OpenD
     - **Above-the-Fold Premature Dimming Ban**: Hero subtext and above-the-fold introductory copy MUST maintain 100% opacity (`opacity: 1`) and high contrast (`color: rgba(255, 255, 255, 0.88)` on dark canvases) upon initial page load. Strictly forbidden from wrapping hero copy in `scroll-word` spans or assigning opacity < 0.85 on entry.
     - **Dark Canvas Invariant**: All typography on dark surfaces (`.hero-section`, `.section-dark`, dark cards, background photos) must maintain a minimum 4.5:1 contrast ratio (WCAG AA). Dark text tokens (`var(--wp--preset--color--paragraph)` #6d6d6d or `--wp--preset--color--contrast` #201d1d) on dark backgrounds are strictly forbidden. Primary text uses `var(--wp--preset--color--base)` (#ffffff), and secondary body uses `rgba(255, 255, 255, 0.85)`.
     - **Dark Scroll Illumination**: Scroll-illuminated words (`scroll-word.is-lit`) on dark backgrounds MUST illuminate to pure bright white (`#ffffff`), never dark charcoal (`--contrast`).
+20. **Ban on Base64 Data URI Image Ingestion & Plugin Disarmament**:
+    - Never scrape and convert remote imagery into embedded Base64 data URIs (`data:image/webp;base64,...`). Embedding hundreds of kilobytes of base64 strings into HTML deliverables exhausts context tokens, degrades model generation speed, and triggers the 600-second daemon watchdog timeout ("Reply timed out"). All images must be mapped to semantic Unsplash URLs preserving aspect ratios or clean external URLs.
+    - If OpenDesign auto-attaches `.od-skills/web-prototype-*`, purge it immediately and clear `applied_plugin_snapshot_id` so only `beplus-spec-remake` governs the project.
 
 ---
 
@@ -222,12 +229,15 @@ Upon human approval, the AI reads `Beplus-spec.md` and generates or refactors `i
    - Every padding/margin/gap must be `var(--wp--preset--spacing--*)`.
    - Every color must be `var(--wp--preset--color--*)`.
    - Zero hardcoded pixel sizes or hex colors on component classes.
-2. **Universal Optical Icon Hierarchy & Anti-Miniaturization**:
+2. **Context-Proportional Optical Icon Hierarchy & Anti-Miniaturization**:
    - Any `<img>` <= 64px or SVG icon MUST be replaced with inline Lucide SVG.
-   - **MANDATORY 3-TIER OPTICAL SIZING & CONTAINER BOX ARCHITECTURE**:
-     * **Tier 1 (Metric & Stat Cards like `8,000+`)**: Must use a **`52px × 52px` squircle container tile** (`.bento-badge`) with a **`28px` inline SVG** (`stroke-width: 1.75`).
-     * **Tier 2 (Feature Capsules & Value Lists like `Strategic Planning`, `Smart Health`)**: Must use a **`38px × 38px` squircle icon box** (`.feature-icon-box`) with subtle tinted background (`background: rgba(..., 0.06)` or `#F4F5F7`), `border-radius: var(--wp--preset--spacing--10)` (8px), housing a **`20px` inline SVG** (`stroke-width: 1.75`). Standalone, naked unboxed icons floating loosely next to bold headlines are STRICTLY PROHIBITED.
-     * **Tier 3 (Inline micro-elements & button chevrons)**: `16px` SVG with `stroke-width: 1.75`.
+   - **TOPOLOGY-AWARE OPTICAL SIZING & SCALE BALANCE**:
+     * **Respect Reference Box Topology**: Outer container boxes are NOT mandatory everywhere. If the reference site has boxed icons, reproduce the container box (`.bento-badge` ~52px, `.feature-icon-box` ~38px). If the reference site uses standalone unboxed icons, keep them unboxed! Never artificially box icons that were standalone in the reference.
+     * **Proportional Scaling with Adjacent Content**: Ensure icon dimensions scale proportionally to adjacent typography:
+       - Large Metric / Stat cards: `28px` (in ~52px box) or `32px–40px` (unboxed) with `stroke-width="1.75"`.
+       - Feature / Service headlines: `20px` (in ~38px box) or `24px–28px` (unboxed) with `stroke-width="1.5 – 1.75"`.
+       - Buttons / List chevrons: `16px–20px`.
+     * **Anti-Miniaturization Rule**: Icons must NEVER be rendered too small (e.g. 12px–14px hairline) next to prominent bold headlines.
    - AI sparkle icons (`✨`), magic wands, and generic placeholder graphics are STRICTLY FORBIDDEN.
 3. **Native CSS Sticky Stacking Cards Engine**:
    - Multi-card feature or service decks (*What We Offer*) MUST implement native CSS `position: sticky; top: calc(...); margin-bottom: calc(...);` with staggered increasing top offsets (`top: 80px, 110px, 140px...`).
@@ -324,10 +334,10 @@ if "align-items: stretch" not in css and "align-items:stretch" not in css:
 if re.search(r"sparkles", html, re.I):
     errors.append("ICON DEFECT: AI sparkle icons are strictly prohibited!")
 
-# Check for miniaturized naked icons (icons <= 16px outside button tags)
-small_naked_svgs = soup.find_all(lambda tag: tag.name == 'svg' and tag.get('width') in ['12', '14', '16'] and not tag.find_parent(['button', 'a', '.feature-icon-box']))
-if small_naked_svgs:
-    errors.append(f"ICON DEFECT: Found {len(small_naked_svgs)} tiny naked SVGs outside buttons/containers! Must use 3-Tier Optical Sizing (38px box for features, 52px for stats).")
+# Check for miniaturized hairline icons (< 16px outside buttons/interactive links)
+tiny_svgs = soup.find_all(lambda tag: tag.name == 'svg' and tag.get('width') in ['10', '12', '14'] and not tag.find_parent(['button', 'a', '.btn']))
+if tiny_svgs:
+    errors.append(f"ICON DEFECT: Found {len(tiny_svgs)} miniaturized (< 16px) SVGs outside buttons! Scale icons proportionally (24px-28px unboxed, 38px-52px boxed) to match content.")
 
 # 8. Zero Latin dummy text
 latin_matches = re.findall(r"\b(lorem|ipsum|sed\s+ut|sed\s+acc|dolor\s+sit|consectetur)\b", html, re.I)
@@ -407,6 +417,11 @@ if re.search(r"offer-card|offer-list", html):
 # 21. WCAG AA Contrast & Dark Canvas Typography Invariant Audit
 if re.search(r"hero[^\"]*scroll-illuminated|hero-desc[^\"]*scroll-word", html, re.I):
     errors.append("CONTRAST DEFECT: Hero subtext must NEVER have scroll-word illumination or opacity < 0.85 on initial load! Hero copy is above-the-fold and must be 100% visible, fully opaque, and high-contrast (color: rgba(255, 255, 255, 0.88) on dark canvas).")
+
+# 22. Base64 Data URI Ingestion Ban Audit
+base64_images = soup.find_all("img", src=re.compile(r"data:image/[^;]+;base64,", re.I))
+if len(base64_images) > 0:
+    errors.append(f"PERFORMANCE DEFECT: Found {len(base64_images)} embedded base64 data URI images! Never embed base64 images; map 100% to Unsplash or external CDN.")
 
 if errors:
     print("=== QUALITY AUDIT FAILED ===")

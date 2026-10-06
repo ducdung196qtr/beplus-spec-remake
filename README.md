@@ -139,13 +139,16 @@ Adhering to these strict quality gates is what separates a professional, pixel-f
 * **Phase 1 is Non-Negotiable**: AI models fail when attempting to write code directly from a raw web scrape. The engine **must** complete `Beplus-spec.md` first.
 * **Human-in-the-Loop Gate**: After Phase 1, the agent will stop and present an executive summary. **Review `Beplus-spec.md` and explicitly confirm** (`"Approved, proceed to Phase 2"`) before generating code.
 
-### 2. Optical Icon Hierarchy & Anti-Miniaturization Standard (Gate #18)
-* **The Root Cause**: AI models routinely render icons too tiny (14–16px) with ultra-thin hairline strokes (`stroke-width="1"`). Bold text (`font-weight: 700`) visually dwarfs naked icons, creating severe optical imbalance.
-* **Mandatory 3-Tier Optical Architecture**:
-  * **Tier 1 (Metric & Stat Cards like `8,000+`)**: Must use a **`52px × 52px` squircle container tile** (`.bento-badge`) with a **`28px` inline SVG** and **`stroke-width: 1.75`**.
-  * **Tier 2 (Feature Capsules & Value Lists)**: Must use a **`38px × 38px` squircle icon box** (`.feature-icon-box`) with a **`20px` inline SVG** and **`stroke-width: 1.75`**. **Naked unboxed icons are strictly prohibited.**
-  * **Tier 3 (Inline micro-elements & button chevrons)**: **`16px`** SVG with `stroke-width: 1.75`.
-* **Zero AI Sparkle Ban**: Icons depicting sparkles, magic wands, or AI stars are forbidden.
+### 2. Context-Proportional Optical Icon Hierarchy (Gate #18)
+* **The Root Cause**: AI models routinely render icons too tiny (12–14px) with ultra-thin hairline strokes (`stroke-width="1"`). Bold text (`font-weight: 700`) visually dwarfs naked icons, creating severe optical imbalance.
+* **Respect Original Design Topology (Icon boxes are NOT mandatory everywhere)**:
+  * **Boxed in reference**: Keep the container box (e.g. `52px` tile for stats, `38px` squircle for feature pills).
+  * **Unboxed in reference**: Keep the icon unboxed! Do NOT force artificial container boxes onto designs that don't have them.
+* **Proportional Scaling with Content**:
+  * **Metric / Stat Cards (`8,000+`)**: `28px` (in ~52px box) or `32px–40px` (unboxed) with `stroke-width: 1.75`.
+  * **Feature Headlines (H3/H4)**: `20px` (in ~38px box) or `24px–28px` (unboxed) with `stroke-width: 1.5 – 1.75`.
+  * **Micro-elements / Buttons**: `16px–20px`.
+  * **Zero AI Sparkle Ban**: Icons depicting sparkles, magic wands, or AI stars remain strictly forbidden.
 
 ### 3. WCAG AA Optical Contrast & Dark Canvas Typography Invariant (Gate #21)
 * **Above-the-Fold Premature Dimming Ban**: Never wrap hero introductory descriptions in `span.scroll-word` with `opacity: 0.25`. The hero sits at `scrollTop: 0`; dimming on initial load produces unreadable text that fails WCAG AA standards.

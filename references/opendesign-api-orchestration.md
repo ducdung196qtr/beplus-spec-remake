@@ -106,3 +106,36 @@ To check completion headlessly without keeping the connection open:
 jq '{id, status, error}' /var/lib/docker/volumes/open-design_open_design_data/_data/runs/<run_id>/state.json
 ```
 Status transitions: `running` -> `succeeded` or `failed`.
+
+---
+
+## 3. Critical Failure Modes & Root-Cause Solutions
+
+### 3.1. The `example-web-prototype` Plugin Trap & 600s Watchdog Stall ("Reply timed out")
+
+#### Symptom:
+A run takes 20+ minutes and terminates with a red banner: **`Reply timed out`** (`Agent stalled without emitting any new output for 600s. The model or CLI likely hung while generating`).
+
+#### Root Cause Forensic:
+1. When a user creates a project via the OpenDesign UI homepage or clicks the default prototype card, the daemon auto-assigns the official plugin snapshot: `plugin_id: example-web-prototype` (`/app/plugins/_official/examples/web-prototype`).
+2. This creates `.od-skills/web-prototype-<hash>/` inside the project alongside `beplus-spec-remake`.
+3. `web-prototype` has a strict P0 requirement: *"No remote image dependencies. Every used image is embedded as a data URI in the artifact HTML."*
+4. The AI agent gets hijacked by this rule, downloads all 20+ remote images, and writes Python scripts to convert them into a massive Base64 WebP JSON (`/tmp/data_uris.json` reaching ~1 MB).
+5. When the agent attempts to assemble an HTML file with ~1 MB of embedded base64 data URIs in a single turn, the LLM token generation stream freezes/stalls, exceeding the 600-second daemon inactivity watchdog.
+
+#### Deterministic Remediation:
+1. **Purge the conflicting plugin directory**:
+   ```bash
+   docker exec -u 0 open-design rm -rf /app/.od/projects/<project_id>/.od-skills/web-prototype-*
+   ```
+2. **Clear the snapshot binding in SQLite**:
+   ```bash
+   sqlite3 /var/lib/docker/volumes/open-design_open_design_data/_data/app.sqlite \
+     "UPDATE projects SET applied_plugin_snapshot_id = NULL WHERE id = '<project_id>';"
+   ```
+3. **Clean up lingering base64 artifacts**:
+   ```bash
+   docker exec -u 0 open-design rm -f /tmp/data_uris.json /tmp/svg_logos.json /tmp/prototype.html
+   ```
+4. **Enforce Pure `beplus-spec-remake`**:
+   Ensure `.od-skills/` only contains `beplus-spec-remake` and instruct the agent to use Unsplash imagery instead of base64 data URIs.

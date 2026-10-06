@@ -1261,10 +1261,14 @@ Every icon node rendered in Gutenberg FSE templates MUST adhere to this optical 
 | **Tier 2: Feature Capsules & Value Lists** | `Strategic Planning`, `Smart Health`, What We Offer pills | `38px × 38px` or `42px × 42px` rounded square (`border-radius: 8–10px`) | **`20px × 20px`** (Min 20px) | `1.75` | Balances bold H4 / strong titles effortlessly |
 | **Tier 3: Inline Micro-Affordances** | Button chevrons (`»`), Trust badges, status dots | Inline or `24px × 24px` flex badge | **`16px × 16px`** | `1.75` | Clear directional navigation cues without breaking baseline |
 
-### 33.3. Mandatory Icon Box Architecture
-Whenever a feature list or floating card is constructed, the markup MUST wrap the SVG in a dedicated `.feature-icon-box`:
+### 33.3. Topology-Aware Icon Architecture (Boxed vs. Unboxed)
+An outer container box (`.feature-icon-box` or `.bento-badge`) is **NOT universally mandatory**. Always respect the original reference site's topology:
+
+1. **When Reference Uses Boxed Icons**: Wrap the SVG in a container box (`.feature-icon-box` 38px–42px or `.bento-badge` 52px–56px) with subtle background tinting.
+2. **When Reference Uses Unboxed / Standalone Icons**: Keep them unboxed! Never force an artificial box wrapper onto a design that doesn't have one. Instead, ensure the SVG dimensions scale up proportionally (e.g. `24px–28px` for feature headers, `32px–40px` for stats) with `stroke-width="1.5 – 1.75"` so they balance the adjacent typography and never look miniaturized.
+
 ```html
-<!-- CORRECT: Optical Hierarchy Compliant -->
+<!-- Pattern A: Boxed (when reference site has icon boxes) -->
 <div class="feature-capsule">
   <div class="feature-icon-box">
     <svg class="lucide lucide-compass" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
@@ -1276,9 +1280,20 @@ Whenever a feature list or floating card is constructed, the markup MUST wrap th
     <p>Custom roadmaps engineered for rapid enterprise expansion.</p>
   </div>
 </div>
+
+<!-- Pattern B: Unboxed (when reference site uses standalone floating icons) -->
+<div class="feature-item">
+  <svg class="lucide lucide-trending-up feature-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+    <!-- paths -->
+  </svg>
+  <div class="feature-content">
+    <h4>Enterprise Intelligence</h4>
+    <p>Real-time analytics and predictive financial modeling.</p>
+  </div>
+</div>
 ```
 ```css
-/* CSS Token Implementation */
+/* CSS Token Implementation for Boxed Variants */
 .feature-icon-box {
   display: inline-flex;
   align-items: center;
@@ -1295,6 +1310,12 @@ Whenever a feature list or floating card is constructed, the markup MUST wrap th
   width: 20px;
   height: 20px;
   stroke-width: 1.75;
+}
+
+/* CSS Token Implementation for Unboxed Variants */
+.feature-icon {
+  flex-shrink: 0;
+  color: var(--wp--preset--color--primary, currentColor);
 }
 ```
 
@@ -1446,3 +1467,36 @@ During Phase 2 automated testing, verify:
 1. `Hero Description Opacity`: Must be `>= 0.85`. Zero `opacity: 0.25` above the fold.
 2. `Color on Dark`: Must NOT be `var(--wp--preset--color--paragraph)` or `var(--wp--preset--color--contrast)` on dark surfaces.
 3. `WCAG AA Contrast Ratio`: Calculated minimum 4.5:1 for body copy against computed background.
+
+---
+
+## 36. Disarming Default OpenDesign Template Traps & Base64 Data URI Bloat ("Reply Timed Out")
+
+### 36.1. The `example-web-prototype` Hijack Trap
+When a user launches a project from the OpenDesign UI homepage (or starts from the default prototype prompt), OpenDesign automatically attaches the official example plugin `example-web-prototype` (`/app/plugins/_official/examples/web-prototype`).
+- This stages `.od-skills/web-prototype-<hash>/` inside the project alongside `beplus-spec-remake`.
+- Inside `web-prototype/references/checklist.md`, a strict P0 rule is declared:
+  *"No remote image dependencies. Every used image is embedded as a data URI in the artifact HTML."*
+- When an AI model (particularly OpenAI GPT-4o) processes this conflicting directive, it gets hijacked by the P0 checklist instead of following `beplus-spec-remake`.
+
+### 36.2. The 1MB Base64 Context Explosion & 600s Watchdog Kill
+- The agent spends 15–20 minutes writing Python scripts to download every image from Webflow CDN, converting them into Base64 WebP strings stored in `/tmp/data_uris.json` (reaching 900KB–1MB+).
+- When the agent attempts to assemble and emit an HTML file containing nearly 1MB of base64 text in a single chat turn, the LLM API stream chokes, exhausts context tokens, or drops connection.
+- After 600 seconds with zero new output emitted by the agent, OpenDesign's daemon watchdog halts execution with a fatal timeout banner:
+  `Reply timed out — Agent stalled without emitting any new output for 600s. The model or CLI likely hung while generating.`
+
+### 36.3. Mandatory Prevention & Remediation Architecture
+1. **Never Convert Remote Images to Base64 Data URIs**:
+   In `beplus-spec-remake`, all images must be mapped to high-resolution Unsplash photos (preserving original aspect ratios) or clean external CDN URLs. Converting images to base64 data URIs is strictly forbidden.
+2. **Purge Official Prototype Plugin Snapshots**:
+   If an OpenDesign project shows `.od-skills/web-prototype-*`, purge it immediately:
+   ```bash
+   rm -rf /app/.od/projects/<project_id>/.od-skills/web-prototype-*
+   ```
+3. **Disarm SQLite Snapshot Bindings**:
+   In SQLite `projects` table, clear `applied_plugin_snapshot_id`:
+   ```bash
+   UPDATE projects SET applied_plugin_snapshot_id = NULL WHERE id = '<project_id>';
+   ```
+4. **Purge Lingering Base64 Files in `/tmp/`**:
+   Ensure `/tmp/data_uris.json` and `/tmp/svg_logos.json` are wiped before launching the remake turn.
