@@ -131,7 +131,7 @@ graph TD
 
 ---
 
-## ⚠️ Critical Guidelines & Core Caveats (Những Điểm Lưu Ý Sống Còn)
+## ⚠️ Critical Guidelines & Core Caveats
 
 Adhering to these strict quality gates is what separates a professional, pixel-faithful reproduction from a generic AI-generated template:
 

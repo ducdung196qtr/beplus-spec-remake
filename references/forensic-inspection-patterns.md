@@ -118,7 +118,7 @@ Do NOT replace dynamic animations with static blocks unless explicitly specified
 ### 4.2. Actionable Master Blueprint vs. Defensive "Pending" Drafts
 - **Pitfall**: When an AI agent performs forensic audits without a headless browser visual engine, it often falls into an overly cautious pattern: marking layout dimensions as "pending review", leaving copy as vague excerpts, and outputting meta-disclaimers.
 - **User Expectation**: The user expects a complete, production-ready architectural contract (`Beplus-spec.md`). Every section must have:
-  1. **Finalized Production Text**: 100% concrete replacement copy written out for every heading, paragraph, button, and card item (no "pending", no "lorem ipsum"). Sửa sạch 100% commercial typos (`Real Woks` -> `Recent Works`, `Get free Qoute` -> `Get Free Quote`, `Recants Article` -> `Recent Articles`, `Let's Start Talk` -> `Let's Start Talking`, clean static counters `250+`, `12+`, `20+`, `5K+`).
+  1. **Finalized Production Text**: 100% concrete replacement copy written out for every heading, paragraph, button, and card item (no "pending", no "lorem ipsum"). Correct 100% of commercial typos (`Real Woks` -> `Recent Works`, `Get free Qoute` -> `Get Free Quote`, `Recants Article` -> `Recent Articles`, `Let's Start Talk` -> `Let's Start Talking`, clean static counters `250+`, `12+`, `20+`, `5K+`).
   2. **Exhaustive 4-Tier Motion Specs**: Trigger (on-load, on-scroll, hover), mechanical transitions (`rotate`, `translateY`, `box-shadow`, `color`), ambient loop physics (pure CSS keyframe marquee, duration, linear, no pause on hover), and designated driving engine (CSS, Swiper.js, IX2).
   3. **Section-by-Section QA Verification Matrix**: At the bottom of `Beplus-spec.md`, an individual audit row for each section from top to bottom. Phase 1 is ONLY complete when every single section is verified and confirmed `PASS`.
 
@@ -1060,7 +1060,7 @@ function initScrollEntrance() {
 ## 30. 100% Professional English Markdown Deliverables Mandate
 
 ### 30.1. The Language Contamination Defect
-In past iterations, AI agents occasionally emitted Vietnamese table headers (e.g., `STT`, `Tên Section`, `Bố cục & Token`, `Tiêu chí đối soát`) inside `Beplus-spec.md` or review plans.
+In past iterations, AI agents occasionally emitted non-English table headers inside `Beplus-spec.md` or review plans.
 This contaminates commercial deliverables intended for international standard workflows.
 
 ### 30.2. Strict English Rule
@@ -1249,7 +1249,7 @@ In OpenDesign and modern file-driven AI workspaces, the backend daemon monitors 
 ### 33.1. The Root Cause of AI "Icon Miniaturization"
 In almost every AI-driven web generation workflow, icons consistently end up looking disproportionately small, frail, and anemic compared to surrounding text. This stems from three interconnected technical blind spots:
 1. **The Lucide/Feather Inherent Inset Trap**: Standard vector icon glyphs are rendered on a `24x24` viewBox, but have an intentional 2px to 3px inner padding on all sides. A glyph set to `width="16px"` or `18px` has an active visual silhouette of only **12px to 14px**!
-2. **Optical Weight Imbalance vs. Heavy Typography**: AI models calculate size purely numerically (`18px icon` vs `18px text`). However, headings and metric numbers (`8,000+`, `H4 titles`) carry `font-weight: 600–800`, which occupies massive black/white pixel density. Thin vector outlines (especially with `stroke-width="1"`) have less than 15% of that optical density, causing the icon to visually disappear ("lọt thỏm").
+2. **Optical Weight Imbalance vs. Heavy Typography**: AI models calculate size purely numerically (`18px icon` vs `18px text`). However, headings and metric numbers (`8,000+`, `H4 titles`) carry `font-weight: 600–800`, which occupies massive black/white pixel density. Thin vector outlines (especially with `stroke-width="1"`) have less than 15% of that optical density, causing the icon to visually disappear ("optically swallowed").
 3. **The "Naked SVG" Failure**: High-end Webflow templates NEVER float bare SVG outlines loosely in empty space. Human designers always place icons inside **geometric container tiles** (squircles, rounded squares, or circular badges) with subtle tinted backgrounds (`rgba(..., 0.06)`). When AI leaves icons unboxed, the eye perceives them as isolated punctuation marks rather than prominent UI anchors.
 
 ### 33.2. The 3-Tier Optical Sizing & Weight Spec

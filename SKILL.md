@@ -1,6 +1,6 @@
 ---
 name: beplus-spec-remake
-description: Autonomous 2-stage specification-driven remake & transformation engine for OpenDesign and AlonePro WordPress Gutenberg FSE themes. Bắt buộc duyệt spec trước khi build, cam kết 100% Gutenberg FSE tokens var(--wp--preset--*), 0 manual coding, 0 CSS đè, 0 !important, 0 clamp ngoài :root.
+description: Autonomous 2-stage specification-driven remake & transformation engine for OpenDesign and AlonePro WordPress Gutenberg FSE themes. Strictly enforces spec approval before build, 100% Gutenberg FSE tokens var(--wp--preset--*), zero manual coding, zero CSS overrides, zero !important, zero clamp outside :root.
 category: web-design
 triggers:
   - "beplus-spec-remake"
@@ -20,49 +20,49 @@ Autonomous 2-stage specification-driven remake & transformation engine for OpenD
 - `templates/beplus-spec-template.md`: 100% English master architectural specification template for Phase 1 `Beplus-spec.md`.
 - `scripts/inspect-site.mjs`: Automated CDP forensic inspection script extracting computed CSS, deep component anatomy, and motion triggers.
 
-## Absolute Core Mandates (Cốt Lõi Bắt Buộc)
+## Absolute Core Mandates
 
-1. **2-Stage Workflow (Spec Trước, Build Sau)**:
+1. **2-Stage Workflow (Spec First, Build After)**:
    - **Phase 1: Forensic Architectural Specification**: Deeply audits the target site using Chrome DevTools Protocol (CDP port 9222) and computed CSS forensics. Produces `Beplus-spec.md` covering all 12 sections with zero placeholders and zero guessing. **STOPS and requests human approval.**
-   - **Phase 2: Spec-Driven Build & In-Place Refactoring**: Upon human approval, builds/refactors the production deliverables (`index.html`, `main.css`).
-2. **Zero Manual Coding**: Mọi thao tác từ bóc tách, sinh đặc tả, build mã nguồn, chạy QA và tinh chỉnh (refine) đều phải được tự động hóa hoàn toàn qua agent loop. Không chỉnh sửa code trực tiếp bằng tay.
-3. **100% Gutenberg FSE Token Compliance**: 100% màu sắc, typography và spacing trong `main.css` phải sử dụng biến preset FSE (`var(--wp--preset--*)`). Tuyệt đối CẤM hardcoded hex colors, CẤM pixel font-sizes trên selector, CẤM `clamp()` ngoài `:root`.
-4. **Zero CSS Overrides & Zero `!important`**: CẤM viết CSS đè dạng selector con (như `.process-heading h2`, `.cta-band h2` ghi đè `font-size`). CẤM hoàn toàn `!important`.
-5. **Universal Icon vs Image Disambiguation Engine**: Phân tích triệt để `<img>` và `<svg>`: bất kỳ thẻ nào có kích thước <= 64px, chứa class `icon`, `image-20px..image-45px`, đuôi `.svg`, hoặc nằm trong badge/bullet/timeline BẮT BUỘC coi là **Icon Node** và ánh xạ sang inline **Lucide SVG** (`stroke-width="1"`). Tuyệt đối CẤM thay icon bằng ảnh Unsplash!
-6. **Semantic Icon Selection & Anti-Repetition Contract**: Phân tích ngữ nghĩa tiêu đề và nội dung của từng card để chọn icon Lucide tương ứng (About -> `info`, Mission -> `rocket`, Vision -> `binoculars`, Security -> `shield-check`, Analytics -> `trending-up`). Trong một grid hoặc danh sách, các card cạnh nhau CẤM dùng lặp lại cùng một icon. Màu sắc icon phải đo từ computed style gốc, CẤM đoán mò.
-7. **Section Heading Dominance & Semantic Hierarchy Rule**: Tiêu đề chính của section BẮT BUỘC là `<h2>` và có font-size lớn nhất trong section (`var(--wp--preset--font-size--large)` hoặc `x-large`). Các tiêu đề card con bên trong BẮT BUỘC là `<h4>` với `var(--wp--preset--font-size--medium)`. Eyebrow là `<h6>` hoặc `.eyebrow` với `small`. Tiêu đề card CẤM bằng hoặc to hơn tiêu đề section!
-8. **Equal Height Cards & Spacing Architecture**: Tất cả các card trong cùng một hàng flex/grid BẮT BUỘC có `align-items: stretch; display: flex; flex-direction: column; height: 100%;` và căn baseline nút bấm bằng `margin-top: auto;`. Lề mobile `<= 767px` bắt buộc là `16–20px`.
-9. **Slider & Carousel Engineering Standards**: Mọi slider (Swiper/carousel) BẮT BUỘC có chế độ `autoplay` (delay 3.5s - 4.5s, pause on hover), các slide bắt buộc bằng chiều cao nhau (`height: 100%`). Khi hiển thị số slide thập phân (ví dụ 3.5 items trên desktop), vùng chứa phải `overflow: hidden` và có lớp phủ gradient mờ cạnh phải (`mask-image` hoặc fade overlay) để item 0.5 trông mượt mà, chủ đích.
-10. **Ghost Section & Blank Content Elimination**: CẤM để section bị trắng nội dung do lỗi interaction Webflow IX2. CSS gốc bắt buộc có trạng thái hiển thị fallback (`opacity: 1; transform: none;`). Các section đảo màu (dark card trên nền sáng, light card trên nền tối) bắt buộc khai báo đồng thời cả token background và token text color. Triệt tiêu toàn bộ curtain mask (`.image-show-style`) và modal che màn hình.
-11. **Total Elimination of Latin Placeholder Text**: Quét sạch 100% các đoạn text Latin giả lập ("Lorem ipsum", "Sed ut perspiciatis", "Sed acc...") từ template Webflow và viết lại thành nội dung thương mại thật sự sắc bén, đúng độ dài 1:1.
-12. **100% Professional English for All Markdown & Spec Artifacts (CẤM Tiếng Việt trong MD)**: Toàn bộ các file tài liệu đặc tả markdown (`Beplus-spec.md`), plan contracts, bảng QA matrix (`No.`, `Section Name`, `Layout & Tokens`, `Heading Hierarchy (H2>H4)`, `Production Copy`, `Motion & Micro-Interactions`, `Assets & Lucide Icons`, `QA Verdict`), và phản hồi text của AI BẮT BUỘC 100% bằng tiếng Anh chuyên nghiệp. Tuyệt đối CẤM chèn tiếng Việt vào trong file markdown sinh ra!
+   - **Phase 2: Spec-Driven Build & In-Place Refactoring**: Upon human approval, builds and refactors the production deliverables (`index.html`, `main.css`).
+2. **Zero Manual Coding**: All operations—inspection, specification generation, source code building, QA auditing, and iterative refinement—must be 100% autonomously orchestrated by the agent loop. Zero manual source code editing.
+3. **100% Gutenberg FSE Token Compliance**: 100% of colors, typography scales, and spacing units in `main.css` must strictly call WordPress Gutenberg FSE preset variables (`var(--wp--preset--*)`). Hardcoded hex colors, raw pixel font-sizes on CSS selectors, and `clamp()` definitions outside `:root` are STRICTLY PROHIBITED.
+4. **Zero CSS Overrides & Zero `!important`**: Never write child-override CSS selectors (such as `.process-heading h2`, `.cta-band h2` overriding `font-size`). `!important` is STRICTLY PROHIBITED.
+5. **Universal Icon vs Image Disambiguation Engine**: Thoroughly inspect `<img>` and `<svg>` nodes: any element with dimensions <= 64px, class names matching `icon` or `image-20px..image-45px`, `.svg` extensions, or positioned inside badges, bullets, or timelines MUST be classified as an **Icon Node** and mapped to inline **Lucide SVG** (`stroke-width="1.75"`). Never substitute icons with Unsplash photographs.
+6. **Semantic Icon Selection & Anti-Repetition Contract**: Analyze the semantic keywords of each card's title and description to select matching Lucide icons (About -> `info`, Mission -> `rocket`, Vision -> `binoculars`, Security -> `shield-check`, Analytics -> `trending-up`). Adjacent cards in the same grid or list MUST NOT repeat the same icon. Icon colors must be empirically extracted from original computed styles, never estimated.
+7. **Section Heading Dominance & Semantic Hierarchy Rule**: The primary title of every section MUST be an `<h2>` and must hold the largest font-size in that section (`var(--wp--preset--font-size--large)` or `x-large`). Sub-item card titles inside the section MUST be `<h4>` with `var(--wp--preset--font-size--medium)`. Eyebrows must be `<h6>` or `.eyebrow` with `var(--wp--preset--font-size--small)`. Card headings are strictly prohibited from matching or exceeding section heading font-sizes.
+8. **Equal Height Cards & Spacing Architecture**: All cards in the same flex/grid row MUST have `align-items: stretch; display: flex; flex-direction: column; height: 100%;` and pin CTA button baselines using `margin-top: auto;`. Mobile gutters (`<= 767px`) MUST be strictly maintained between `16px–20px`.
+9. **Slider & Carousel Engineering Standards**: All sliders (Swiper or custom carousels) MUST feature autoplay (`delay: 3500ms - 4500ms`, pause on pointer hover), and slides must maintain equal heights (`height: 100%`). When displaying fractional slide counts (e.g. 3.5 items on desktop), the parent container must enforce `overflow: hidden` with a right-edge gradient fade overlay (`mask-image` or fade gradient) so the 0.5 slide peeks smoothly and intentionally.
+10. **Ghost Section & Blank Content Elimination**: Never leave blank or invisible sections due to Webflow IX2 animation traps. The base CSS must declare fallback visibility (`opacity: 1; transform: none;`). Alternating sections (dark cards on light surfaces, light cards on dark canvases) must declare both background and text color tokens simultaneously. Strip all curtain masks (`.image-show-style`) and unclickable overlays.
+11. **Total Elimination of Latin Placeholder Text**: Completely eliminate 100% of Latin dummy text ("Lorem ipsum", "Sed ut perspiciatis", "Sed acc...") from reference templates and author original, brand-authentic commercial English copywriting matching the exact structural length.
+12. **100% Professional English for All Markdown & Spec Artifacts**: All markdown specification files (`Beplus-spec.md`), plan contracts, QA verification matrices (`No.`, `Section Name`, `Layout & Tokens`, `Heading Hierarchy (H2>H4)`, `Production Copy`, `Motion & Micro-Interactions`, `Assets & Lucide Icons`, `QA Verdict`), and conversational messages MUST be composed in 100% professional technical English. Never insert Vietnamese terms or translation artifacts into generated markdown deliverables.
 13. **Scroll-Driven Text Illumination & Staggered Viewport Reveal**: 
-    - **Word-by-Word Scroll Text Illumination (Scrub)**: Khi section gốc có hiệu ứng cuộn làm chữ sáng dần theo thanh cuộn (như ở *What We Offer*), BẮT BUỘC bóc tách dòng text thành các thẻ `<span class="scroll-word">`, ban đầu để mờ (`opacity: 0.25; color: var(--wp--preset--color--paragraph)`), và dùng script tính toán vị trí cuộn để bật sáng dần từng từ sang `opacity: 1; color: var(--wp--preset--color--contrast)`.
-    - **Staggered Viewport Entrance**: Các card, bento item, feature boxes khi bước vào viewport BẮT BUỘC có hiệu ứng fade-up tuần tự (`opacity: 0; transform: translateY(32px)`) kích hoạt qua `IntersectionObserver` với stagger delay `calc(var(--index, 0) * 0.1s)`.
-    - **Card & Arrow Micro-Interactions**: Hover vào card BẮT BUỘC có hiệu ứng nâng card (`transform: translateY(-4px)`), đổ bóng mềm, mũi tên trượt chéo `translate(3px, -3px)`, và ảnh zoom nhẹ `scale(1.04)`. CẤM để card trơ tĩnh không phản hồi!
-14. **Responsive Mobile Navigation Drawer & Hamburger Toggle**: Trên màn hình mobile (`<= 767px`), CẤM làm mất thanh điều hướng. BẮT BUỘC sinh nút toggle hamburger (`<button class="menu-toggle" aria-label="Toggle navigation">` với icon Lucide `menu` / `x`) và menu drawer trượt xuống/trượt ngang chứa toàn bộ link menu chính + nút CTA!
-15. **Zero-Deviation Topology Replication & Thematic Harmony Contract (CẤM biến đổi bố cục & giải thể component gốc)**:
-    - AI OpenDesign tuyệt đối CẤM suy đoán hoặc tự ý vẽ lại một thiết kế generic khác xa trang gốc. BẮT BUỘC tái hiện 1:1 cấu trúc hình học và lớp phủ (layering) của từng component:
-      * **Hero Architecture**: Nếu web gốc dùng floating island navbar (header nổi bo góc tách rời mép) + ảnh nền doanh nghiệp có lớp phủ tối + nút ghost viền mỏng (`border: 1px solid white; background: transparent;`), BẮT BUỘC tái hiện chính xác floating island navbar và nút ghost. CẤM đổi thành header dính phẳng thông thường!
-      * **Split Cards with Floating Overlays (vd: What We Offer)**: Nếu card gốc là dạng chia đôi 50/50 (cột trái: số thứ tự `01` + tiêu đề + đoạn văn + nút; cột phải: khung ảnh + **thẻ card trắng nổi đè lên trên** chứa 3 viên thuốc tính năng có icon checkmark), BẮT BUỘC tái hiện chính xác bố cục 50/50 và thẻ nổi đè lên ảnh. CẤM giải thể thành box phẳng đơn giản!
-      * **Bento Grid Contrasting Cards**: Nếu bento gốc phối hợp giữa card ảnh (`bg`), card trắng (`white`) và card tối (`black`), BẮT BUỘC giữ nguyên sự tương phản màu sắc bề mặt của từng card.
-      * **Photographic Thematic Harmony**: Ảnh Unsplash được chọn BẮT BUỘC phải ăn khớp 100% với chủ đề của ảnh gốc (ví dụ: ảnh gốc là đội ngũ họp bàn quanh phòng hội thảo có bảng biểu số liệu thì ảnh Unsplash phải là doanh nghiệp họp bàn, CẤM đưa ảnh tòa nhà chọc trời hoặc ảnh không đúng ngữ cảnh).
-16. **Workspace Hygiene & Scratchpad Isolation Mandate (CẤM lưu file dump thô trong project root)**:
-    - Tuyệt đối CẤM tạo hoặc lưu các file HTML thô tải về (như `target.html`, `dump.html`, `raw.html`, `temp.html`) ngay trong thư mục gốc của project! OpenDesign tự động index mọi file trong project root thành deliverable hiển thị trên cây thư mục web (`/files/target.html`), gây hiểu lầm nghiêm trọng cho người dùng rằng AI chỉ copy-paste mã nguồn gốc thay vì tự thiết kế theo spec.
-    - Mọi thao tác trích xuất DOM bắt buộc phải xử lý trực tiếp in-memory qua CDP port 9222 (`Runtime.evaluate`) hoặc lưu tạm ra ngoài thư mục project (như `/tmp/scratchpad/` hoặc thư mục ẩn `.cache/`) và BẮT BUỘC tự động dọn dẹp sạch sẽ (`rm -f`) trước khi kết thúc Phase 1. Thư mục project chỉ được phép chứa duy nhất các file sản phẩm chính thức (`Beplus-spec.md`, `index.html`, `main.css`).
-17. **Optical Icon Hierarchy & Anti-Miniaturization Standard (Triệt tiêu bệnh icon nhỏ)**:
-    - Bắt buộc tuân thủ 3-Tier Optical Sizing:
-      * **Tier 1 (Stats/Metrics số lớn như `8,000+`)**: Squircle tile `52px × 52px`, SVG icon bên trong `28px × 28px`, `stroke-width="1.75"`.
-      * **Tier 2 (Feature Capsules / Value Lists như `Strategic Planning`, `Smart Health`)**: Bắt buộc bọc trong container tile `.feature-icon-box` `38px × 38px` nền tinted nhẹ bo góc 8px, SVG icon bên trong `20px × 20px`, `stroke-width="1.75"`. Tuyệt đối CẤM thả icon trần trụi (naked unboxed SVG) trôi nổi trong khoảng trắng bên cạnh chữ bold!
-      * **Tier 3 (Inline micro-affordances, button chevrons)**: SVG icon `16px × 16px`, `stroke-width="1.75"`.
-    - Bỏ ép cứng `stroke-width: 1` cho các icon nhỏ dưới 24px để tránh biến icon thành sợi chỉ hairline mờ nhạt trên màn hình Retina.
-18. **Sticky Stacking Cards Scroll Engine (Cơ chế cuộn xếp chồng thẻ dạng bộ bài)**:
-    - Ở các section danh mục dịch vụ/tính năng nhiều card 50/50 (như *What We Offer*), trên desktop (`min-width: 768px`) BẮT BUỘC sử dụng CSS native `position: sticky; top: calc(...); margin-bottom: calc(...);` với các offset so le tăng dần (`top: 80px, 110px, 140px...`).
-    - Khi người dùng cuộn trang, các card lướt lên và xếp chồng đè lên nhau như một bộ bài vật lý 3D kèm bóng đổ đa tầng. Xuống mobile (`<= 767px`) tự động duỗi thẳng `position: static` tối ưu trải nghiệm vuốt chạm.
-19. **WCAG AA Optical Contrast & Dark Canvas Typography Invariant (Tuyệt đối cấm chữ đen/mờ trên nền tối)**:
-    - **Above-the-Fold Premature Dimming Ban**: Hero subtext và các đoạn giới thiệu trên màn hình đầu tiên (above-the-fold) BẮT BUỘC hiển thị 100% opacity (`opacity: 1`) và độ tương phản cao (`color: rgba(255, 255, 255, 0.88)` trên nền tối). CẤM TUYỆT ĐỐI bọc thẻ `scroll-word` hoặc đặt opacity < 0.85 cho text Hero khi mới load trang!
-    - **Dark Canvas Invariant**: Mọi văn bản trên nền tối (`.hero-section`, `.section-dark`, dark cards, ảnh tối) phải đạt độ tương phản tối thiểu 4.5:1 (WCAG AA). CẤM sử dụng token chữ tối (`var(--wp--preset--color--paragraph)` #6d6d6d hoặc `--wp--preset--color--contrast` #201d1d) trên nền tối. Text chính dùng `var(--wp--preset--color--base)` (#ffffff), text phụ dùng `rgba(255, 255, 255, 0.85)`.
-    - **Dark Scroll Illumination**: Hiệu ứng cuộn sáng chữ (`scroll-word.is-lit`) trên nền tối BẮT BUỘC sáng lên thành màu trắng tinh (`#ffffff`), tuyệt đối CẤM chuyển thành `--contrast` (than đen).
+    - **Word-by-Word Scroll Text Illumination (Scrub)**: When the reference section features scrub-based scroll illumination (e.g. *What We Offer*), the text must be tokenized into `<span class="scroll-word">` elements, initially muted (`opacity: 0.25; color: var(--wp--preset--color--paragraph)`), and illuminated sequentially via scroll tracking to `opacity: 1; color: var(--wp--preset--color--contrast)` (or `#ffffff` on dark canvases).
+    - **Staggered Viewport Entrance**: Cards, bento modules, and feature blocks entering the viewport MUST execute sequential fade-up motion (`opacity: 0; transform: translateY(32px)`) triggered via `IntersectionObserver` with staggered transition delays `calc(var(--index, 0) * 0.1s)`.
+    - **Card & Arrow Micro-Interactions**: Hovering over cards MUST trigger tactile elevation (`transform: translateY(-4px)`), smooth drop-shadow deepening, diagonal arrow translation (`translate(3px, -3px)`), and subtle image scaling (`scale(1.04)`). Never leave interactive cards inert.
+14. **Responsive Mobile Navigation Drawer & Hamburger Toggle**: On mobile viewports (`<= 767px`), the navigation must never collapse into an inaccessible state. Synthesize a functional hamburger toggle button (`<button class="menu-toggle" aria-label="Toggle navigation">` with Lucide `menu` / `x` icons) and a slide-down or off-canvas drawer containing all primary navigation links and CTA buttons.
+15. **Zero-Deviation Topology Replication & Thematic Harmony Contract**:
+    - The AI must never hallucinate or invent generic box layouts differing from the reference site. The exact geometric topology and visual layering of every component MUST be preserved 1:1:
+      * **Hero Architecture**: If the reference site uses a floating island navbar (detached rounded pill navigation) + dark corporate background imagery with tonal overlay + ghost CTA button (`border: 1px solid white; background: transparent;`), strictly reproduce the floating island navbar and ghost button. Never flatten into a generic full-width sticky bar.
+      * **Split Cards with Floating Overlays (e.g. What We Offer)**: If the reference card is a 50/50 split (left column: step index `01` + title + description + CTA; right column: photo frame + **floating elevated white card overlapping the image** containing 3 feature capsules with icons), faithfully reproduce the exact 50/50 split and elevated floating card. Never flatten into an unstyled grid.
+      * **Bento Grid Contrasting Cards**: If the reference bento grid pairs photographic cards (`bg`), white cards (`white`), and dark cards (`black`), maintain the surface color contrasts of each individual module.
+      * **Photographic Thematic Harmony**: High-resolution Unsplash photos must strictly align with the thematic context of the reference imagery (e.g., corporate boardrooms and technology hardware must be mapped to corporate strategy and hardware photos, never irrelevant cityscapes).
+16. **Workspace Hygiene & Scratchpad Isolation Mandate**:
+    - Never write or leave raw scraped HTML dumps (`target.html`, `dump.html`, `raw.html`, `temp.html`) in the project root directory. OpenDesign automatically indexes root directory files and exposes them in the web file tree (`/files/target.html`), causing user confusion that the AI copied raw code rather than building from spec.
+    - All DOM inspections must be processed in-memory via CDP port 9222 (`Runtime.evaluate`) or isolated in temporary external directories (such as `/tmp/scratchpad/`) and purged (`rm -rf`) before completing Phase 1. The project root must exclusively contain official deliverables (`Beplus-spec.md`, `index.html`, `main.css`).
+17. **Optical Icon Hierarchy & Anti-Miniaturization Standard (Curing Tiny Icons)**:
+    - Mandatory compliance with 3-Tier Optical Sizing:
+      * **Tier 1 (Metric & Stat Cards like `8,000+`)**: Squircle container tile `52px × 52px` (`.bento-badge`), inner SVG icon `28px × 28px`, `stroke-width="1.75"`.
+      * **Tier 2 (Feature Capsules & Value Lists like `Strategic Planning`, `Smart Health`)**: Dedicated squircle icon box `.feature-icon-box` `38px × 38px` with subtle tinted background and 8px border-radius, inner SVG icon `20px × 20px`, `stroke-width="1.75"`. Naked unboxed SVGs floating loosely next to bold typography are strictly forbidden.
+      * **Tier 3 (Inline micro-elements & button chevrons)**: SVG icon `16px × 16px`, `stroke-width="1.75"`.
+    - Abolish hardcoded `stroke-width="1"` on icons under 24px to prevent delicate hairline disappearance on high-DPI displays.
+18. **Sticky Stacking Cards Scroll Engine**:
+    - For multi-card feature or service sections (such as *What We Offer*), desktop viewports (`min-width: 768px`) MUST implement native CSS `position: sticky; top: calc(...); margin-bottom: calc(...);` with staggered increasing top offsets (`top: 80px, 110px, 140px...`).
+    - As the user scrolls, cards glide up and stack sequentially like a physical 3D card deck with layered elevation shadows. On mobile viewports (`<= 767px`), gracefully degrade to `position: static` with clean gutters.
+19. **WCAG AA Optical Contrast & Dark Canvas Typography Invariant**:
+    - **Above-the-Fold Premature Dimming Ban**: Hero subtext and above-the-fold introductory copy MUST maintain 100% opacity (`opacity: 1`) and high contrast (`color: rgba(255, 255, 255, 0.88)` on dark canvases) upon initial page load. Strictly forbidden from wrapping hero copy in `scroll-word` spans or assigning opacity < 0.85 on entry.
+    - **Dark Canvas Invariant**: All typography on dark surfaces (`.hero-section`, `.section-dark`, dark cards, background photos) must maintain a minimum 4.5:1 contrast ratio (WCAG AA). Dark text tokens (`var(--wp--preset--color--paragraph)` #6d6d6d or `--wp--preset--color--contrast` #201d1d) on dark backgrounds are strictly forbidden. Primary text uses `var(--wp--preset--color--base)` (#ffffff), and secondary body uses `rgba(255, 255, 255, 0.85)`.
+    - **Dark Scroll Illumination**: Scroll-illuminated words (`scroll-word.is-lit`) on dark backgrounds MUST illuminate to pure bright white (`#ffffff`), never dark charcoal (`--contrast`).
 
 ---
 
@@ -82,71 +82,82 @@ The AI must create `Beplus-spec.md` in the project root directory.
    - If Working Process is a 2-column sticky split layout, DO NOT convert it into a flat 3-column equal grid.
    - If Testimonials is a multi-card horizontal slider bleeding off edges, DO NOT convert it into static boxes with letter initials.
 3. **Universal Icon vs Image Disambiguation & Semantic Mapping Table**:
-   - Audit all visual nodes: differentiate Content Photos (aspect-ratios, Unsplash) vs Icon Nodes (Lucide SVG `stroke-width="1"`).
+   - Audit all visual nodes: differentiate Content Photos (aspect-ratios, Unsplash) vs Icon Nodes (Lucide SVG `stroke-width="1.75"`).
    - Card-by-card semantic icon selection based on content keywords.
    - Exact extracted computed colors and parent badge background colors.
 4. **Finalized Production Text Content (Zero "Demo" & Zero Latin Text)**:
    - 100% real commercial copywriting. Zero disclaimers (`DEMO CONTENT`, `DEMO TESTIMONIALS`, `Prototype note`).
    - Zero Latin dummy text (`Sed ut perspiciatis`, `Sed acc`, `Lorem ipsum` 100% rewritten).
-   - Commercial typo correction (`Real Woks` -> `Recent Works`, `Let’s Start Talk` -> `Let’s Start Talking`).
-5. **Section Heading Dominance & Font Scale Matrix**:
-   - Audit each section to ensure `<h2>` is the main title with largest size (`var(--wp--preset--font-size--large)`), and internal card headings are `<h4>` with `var(--wp--preset--font-size--medium)`.
-6. **Slider & Carousel Specification**:
-   - Autoplay configuration, equal height slide rules, fractional 3.5 peek overlay gradient fade specification.
-7. **Forensic 4-Tier Motion & Physics Blueprint**:
-   - On-Load / Entrance (keyframes, transform, opacity, duration, cubic-bezier, stagger).
-   - On-Scroll / Viewport reveal (intersection threshold, sticky header backdrop-blur 12px).
-   - On-Hover interaction (arrow 45deg rotation, card translateY(-6px) + shadow, button color shift).
-   - Continuous Ambient Loops (pure CSS marquee @keyframes, duration 28s, timing linear, no jitter, no pause on hover).
-   - Driving Engine & Library Integration (Pure CSS @keyframes, Swiper.js, Webflow IX2 localized runtime).
-8. **Section-by-Section QA Verification Matrix**:
-   - Auditing Section 1 through Section 12 individually. Only when ALL sections pass is Phase 1 complete!
+   - Correct all reference typographical errors (`Real Woks` -> `Recent Works`, `Get free Qoute` -> `Get Free Quote`, `Recants Article` -> `Recent Articles`, `Let's Start Talk` -> `Let's Start Talking`).
+5. **Exact Motion Engine & Interaction Contracts**:
+   - Exact slider configurations (autoplay, speed, easing, loop, breakpoints).
+   - Staggered entrances, scroll text illumination, sticky stacking card physics, and hover state curves.
 
 ---
 
-### 1.1. Forensic Data Extraction via CDP & DOM Inspector
-The AI must execute the forensic inspection script:
-```bash
-node scripts/inspect-site.mjs <URL_OR_LOCAL_HTML>
+### 1.1. Step-by-Step CDP Forensic Extraction Pipeline
+
+Execute via headless Chromium on CDP port `9222`:
+
+```javascript
+// Step 1: Extract typography, colors, and layout metrics
+node /app/skills/beplus-spec-remake/scripts/inspect-site.mjs [TARGET_URL]
 ```
-The inspector automatically connects to Chromium over **CDP port 9222** (with graceful static fallback) to measure:
-- `getComputedStyle()` for headings, body text, buttons, and section bounding rects.
-- Real Webflow IX2 animation timeline (`getState()`), capturing 100% real triggers and curves.
-- Icon vs Image disambiguation: isolates icons (<= 64px, `.svg`, icon classes) and measures computed color, stroke, fill, and container background.
-- Heading hierarchy inspection: detects if sections have `<h2>` and flags misplaced `<h2>`/`<h3>` inside cards.
-- Slider/carousel detection: slide count, equal height analysis, autoplay attributes.
-- Latin placeholder detection: flags `lorem`, `sed acc`, `sed ut perspiciatis` for mandatory rewriting.
+
+Inspect the resulting JSON output for:
+- Font families, sizes, line heights, and weights for all headings (`h1` - `h6`) and body copy.
+- Background colors, text colors, and border colors mapped to Gutenberg tokens.
+- Padding, margins, and gaps mapped to AlonePro spacing scale.
+- Exact dimensions and aspect ratios for all images and icon containers.
 
 ---
 
-### 1.2. Global Design System Construction
+### 1.2. Strict Gutenberg FSE Token Schema
 
-#### A. Typography Font Assignment
-- Measured heading font stack -> `--nextora-font-heading`.
-- Measured body font stack -> `--nextora-font-body`.
+All CSS variables in `main.css` and `Beplus-spec.md` MUST follow this exact schema:
 
-#### B. Gutenberg FSE Strict 8-Variable Palette
+#### A. Color Palette (8 Variables)
 ```css
 :root {
-  --wp--preset--color--base: [Canvas Background, e.g. #f6f6f9];
-  --wp--preset--color--contrast: [Headings & Dark Text, e.g. #141414];
-  --wp--preset--color--paragraph: [Body Copy & Muted Text, e.g. #494852];
-  --wp--preset--color--primary: [Main Brand Accent / CTA, e.g. #ff7a52];
-  --wp--preset--color--secondary: [Secondary Accent / Hover, e.g. #ff5622];
-  --wp--preset--color--surface: [Card Containers & Modals, e.g. #ffffff];
-  --wp--preset--color--border: [Dividers & Borders, e.g. #e6e6e6];
-  --wp--preset--color--accent: #F59E0B; /* MANDATORY: Rating Star Gold (#F59E0B) */
+  --wp--preset--color--base: #ffffff;        /* Canvas Background */
+  --wp--preset--color--contrast: #111111;    /* Primary Text / Dark Canvas */
+  --wp--preset--color--paragraph: #666666;   /* Body Copy / Muted Text */
+  --wp--preset--color--primary: #0066cc;     /* Brand Core Accent / CTA */
+  --wp--preset--color--secondary: #004499;   /* Hover State / Deep Accent */
+  --wp--preset--color--surface: #f8f9fa;     /* Card / Module Background */
+  --wp--preset--color--border: #e5e7eb;      /* Dividers / Card Strokes */
+  --wp--preset--color--accent: #f59e0b;      /* Highlights / 5-Star Reviews */
 }
 ```
 
-#### C. AlonePro Fluid Clamps
-- Typography: 7 fluid viewport clamps (`small`, `base`, `medium`, `medium-plus`, `large`, `x-large`, `xx-large`).
-- Spacing: 6 fluid viewport clamps (`spacing-10` through `spacing-60`).
+#### B. Spacing Scale (6 Variables - Fluid Clamp)
+```css
+:root {
+  --wp--preset--spacing--10: clamp(0.5rem, 0.45rem + 0.25vw, 0.75rem);   /* 8px -> 12px */
+  --wp--preset--spacing--20: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);        /* 16px -> 24px */
+  --wp--preset--spacing--30: clamp(1.5rem, 1.35rem + 0.75vw, 2.25rem);   /* 24px -> 36px */
+  --wp--preset--spacing--40: clamp(2rem, 1.8rem + 1vw, 3rem);            /* 32px -> 48px */
+  --wp--preset--spacing--50: clamp(3rem, 2.7rem + 1.5vw, 4.5rem);        /* 48px -> 72px */
+  --wp--preset--spacing--60: clamp(4.5rem, 4.05rem + 2.25vw, 6.75rem);   /* 72px -> 108px */
+}
+```
 
-#### D. Heading Elements Contract (theme.json)
+#### C. Typography Scale (7 Variables - Fluid Clamp)
+```css
+:root {
+  --wp--preset--font-size--small: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);   /* 12px -> 14px */
+  --wp--preset--font-size--base: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);      /* 14px -> 16px */
+  --wp--preset--font-size--medium: clamp(1.125rem, 1.05rem + 0.375vw, 1.35rem); /* 18px -> 21.6px */
+  --wp--preset--font-size--medium-plus: clamp(1.35rem, 1.2rem + 0.75vw, 1.75rem); /* 21.6px -> 28px */
+  --wp--preset--font-size--large: clamp(1.75rem, 1.5rem + 1.25vw, 2.5rem);      /* 28px -> 40px */
+  --wp--preset--font-size--x-large: clamp(2.25rem, 1.85rem + 2vw, 3.5rem);      /* 36px -> 56px */
+  --wp--preset--font-size--xx-large: clamp(3rem, 2.4rem + 3vw, 5rem);           /* 48px -> 80px */
+}
+```
+
+#### D. Heading Elements Contract (theme.json elements)
 ```json
 {
-  "heading": { "color": { "text": "var(--wp--preset--color--contrast)" }, "typography": { "fontFamily": "var(--nextora-font-heading)", "fontWeight": "600", "lineHeight": "1.25" } },
   "h1": { "typography": { "fontSize": "var(--wp--preset--font-size--xx-large)", "fontWeight": "700", "lineHeight": "1.05" }, "spacing": { "margin": { "top": "0", "bottom": "var(--wp--preset--spacing--30)" } } },
   "h2": { "typography": { "fontSize": "var(--wp--preset--font-size--large)", "fontWeight": "700", "lineHeight": "1.15" }, "spacing": { "margin": { "top": "var(--wp--preset--spacing--20)", "bottom": "var(--wp--preset--spacing--20)" } } },
   "h3": { "typography": { "fontSize": "var(--wp--preset--font-size--medium-plus)", "lineHeight": "1.25" }, "spacing": { "margin": { "top": "var(--wp--preset--spacing--20)", "bottom": "var(--wp--preset--spacing--10)" } } },
@@ -157,22 +168,22 @@ The inspector automatically connects to Chromium over **CDP port 9222** (with gr
 ```
 
 #### E. Strict Heading Dominance Rule
-- **Section Heading**: BẮT BUỘC là `<h2>` với font size `var(--wp--preset--font-size--large)`. Đây là tiêu đề to nhất trong section.
-- **Card / Sub-Item Heading**: BẮT BUỘC là `<h4>` với font size `var(--wp--preset--font-size--medium)`.
-- **Eyebrow / Kicker**: BẮT BUỘC là `<h6>` hoặc `.eyebrow` với font size `var(--wp--preset--font-size--small)` và uppercase.
-- **Quy tắc bất biến**: Tiêu đề card CẤM sử dụng `<h2>` và CẤM có cỡ chữ lớn hơn hoặc bằng tiêu đề chính của section.
+- **Section Heading**: MUST be `<h2>` with font size `var(--wp--preset--font-size--large)`. This is the most prominent headline in the section.
+- **Card / Sub-Item Heading**: MUST be `<h4>` with font size `var(--wp--preset--font-size--medium)`.
+- **Eyebrow / Kicker**: MUST be `<h6>` or `.eyebrow` with font size `var(--wp--preset--font-size--small)` and uppercase styling.
+- **Invariant Rule**: Card titles MUST NEVER use `<h2>` and MUST NEVER equal or exceed the font size of the primary section headline.
 
 ---
 
 ### 1.3. Section-by-Section Decomposition Protocol
 
 For EVERY section from Header to Footer, document:
-1. **Exact Block Geometry & Placement**: Max-width (1280px), padding-block (`var(--wp--preset--spacing--50)`), gap tokens. Card grids MUST have `align-items: stretch;` and cards MUST have `display: flex; flex-direction: column; height: 100%;`. Mobile safe margins: `<=767px` là `16-20px`.
+1. **Exact Block Geometry & Placement**: Max-width (1280px), padding-block (`var(--wp--preset--spacing--50)`), gap tokens. Card grids MUST have `align-items: stretch;` and cards MUST have `display: flex; flex-direction: column; height: 100%;`. Mobile safe margins (`<= 767px`) MUST be strictly maintained between `16px–20px`.
 2. **Finalized Production Text Content**: Clean all commercial typos and eliminate all Latin dummy copy ("Sed acc...", "Lorem ipsum").
 3. **Universal Icon vs Image Mapping**:
    - Differentiate Content Photos vs Icon Nodes.
    - Map Content Photos to Unsplash preserving aspect ratios.
-   - Map Icon Nodes to inline Lucide SVGs (`stroke-width="1"`) with context-aware semantic matching and exact computed color tokens.
+   - Map Icon Nodes to inline Lucide SVGs (`stroke-width="1.75"`) with context-aware semantic matching and exact computed color tokens.
 4. **Slider / Carousel Standards**:
    - Autoplay: delay 4000ms, pause on hover.
    - Equal height slides.
@@ -183,179 +194,81 @@ For EVERY section from Header to Footer, document:
 ---
 
 ### 1.4. Human Review Checkpoint (Stop & Confirm)
+
 After writing `Beplus-spec.md`, the AI MUST STOP and print the executive summary:
-```markdown
-### 📋 Specification Complete: Ready for Your Review
-I have completed the forensic architectural specification `Beplus-spec.md` based on real measured data from [Target Site A].
 
-- **Brand & Niche**: [Niche] | [Brand Name]
-- **Heading Font**: `var(--nextora-font-heading)` = [Font Name]
-- **Gutenberg Palette**: Base: [Hex] | Contrast: [Hex] | Primary: [Hex] | Accent: #F59E0B
-- **Heading Hierarchy**: Section Titles = H2 (large) | Card Sub-headings = H4 (medium)
-- **Sections Audited**: [N] sections forensically mapped from Header to Footer.
-- **Asset & Icon Mappings**: [N] Unsplash real photos | [N] Lucide stroke-width=1 semantic icons.
-- **Slider Configuration**: Autoplay 4s | Equal Heights | 3.5 slides with Right-Edge Gradient Fade.
-- **Motion Runtime**: [Engine, e.g. CSS Keyframe Marquee + Localized IX2 / Swiper].
+```text
+I have completed the forensic architectural specification Beplus-spec.md based on real measured data from [Target Site A].
 
-*Please review the specification. Upon your approval, I will proceed to Phase 2 (Build & Refactor).*
+Summary of Findings:
+- Total Sections Identified: [N]
+- Primary Typography: Heading: [Font A], Body: [Font B]
+- Key Palette Tokens: Base: [Hex], Contrast: [Hex], Primary: [Hex]
+- Total Icons Disambiguated: [N] Lucide SVGs (stroke-width: 1.75) mapped semantically
+- Content Quality: 100% of Latin dummy text and template typos replaced with production-ready commercial copy.
+
+Please review Beplus-spec.md. Once approved, I will proceed to Phase 2: Spec-Driven Build & In-Place Refactoring.
 ```
 
 ---
 
 ## 2. PHASE 2: SPEC-DRIVEN BUILD & IN-PLACE REFACTORING
 
-Only after user confirmation does the AI execute Phase 2:
+Upon human approval, the AI reads `Beplus-spec.md` and generates or refactors `index.html` and `main.css`.
 
-### 2.1. In-Place CSS Refactoring (Zero Overrides, Zero !important, 100% FSE Presets)
-- `main.css` is the sole stylesheet for the project.
-- **NO OVERRIDE APPENDING**: The AI is strictly forbidden from appending an override block to the end of `main.css`.
-- **NO BLANK WIPING**: Do NOT wipe the existing layout engine and reset to blank HTML.
-- **PROHIBITION OF ARBITRARY CLAMP() IN SELECTORS**: Raw `clamp(...)` or raw pixel values are STRICTLY FORBIDDEN on element selectors in `main.css`. Clamps belong exclusively in `:root` preset definitions.
-- **PROHIBITION OF HEADING OVERRIDES**: Direct child or descendant selector overrides on headings (e.g. `.process-heading h2`, `.cta-band h2`) modifying `font-size` are STRICTLY FORBIDDEN. Heading font-sizes must strictly follow the `theme.json` contract (`h1` -> `var(--wp--preset--font-size--xx-large)`, `h2` -> `var(--wp--preset--font-size--large)`, `h3` -> `var(--wp--preset--font-size--medium-plus)`, `h4` -> `var(--wp--preset--font-size--medium)`).
-- **100% FSE PRESET CONSUMPTION**:
-  - Font sizes -> `var(--wp--preset--font-size--*)`
-  - Section paddings -> `padding-block: var(--wp--preset--spacing--50)` or `spacing-60`
-  - Card paddings & gaps -> `var(--wp--preset--spacing--30)` or `spacing-20`
-  - Title gaps -> `margin-bottom: var(--wp--preset--spacing--30)`
-  - Colors & backgrounds -> `var(--wp--preset--color--*)`
-- **ABSOLUTE BAN ON RAW PIXEL FONT SIZES ON UTILITY CLASSES (SPECIFICITY TRAP)**:
-  * In Webflow, classes like `._24px-link`, `._24px-text`, `._18px-text`, `._30px-title`, `._44px-text` contain raw `font-size: 24px; line-height: 36px;` that override semantic `h1`–`h6` tags due to class specificity (`0-1-0` vs `0-0-1`).
-  * In Phase 2: All such utility classes MUST either have their hardcoded pixel values replaced with `var(--wp--preset--font-size--*)` (e.g. `._24px-link { font-size: var(--wp--preset--font-size--medium); }`) OR have `font-size` stripped entirely so the semantic heading tag (`h1`–`h6`) controls the typography from `theme.json`!
-- **ZERO `!important`**: Every `!important` rule must be cleanly excised.
-- **EQUAL HEIGHT CARDS & BENTO GRID GEOMETRY**:
-  ```css
-  .grid-container, .features-grid, .services-list {
-    display: grid;
-    align-items: stretch;
-  }
-  .card, .feature-card, .service-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  .card .card-footer, .card .btn, .card .button {
-    margin-top: auto; /* Aligns all buttons at the exact same vertical baseline */
-  }
-  ```
-- **BENTO ASYMMETRIC GRID ALIGNMENT**:
-  * When a stacked 2-card column (`.bento-left`) sits beside a tall media card (`.rounded-photo.portrait`), the tall media card MUST declare `height: 100%; object-fit: cover;` so its bottom edge lines up exactly 1:1 with the stacked column.
-  * The vertical gap between stacked bento items must strictly use `var(--wp--preset--spacing--20)` or `spacing-30`.
-- **FLOATING FROSTED-GLASS ICON BADGES (`.card-glass-icon`)**:
-  * Badges overlapping the boundary between card image and body:
-    ```css
-    .card-glass-icon {
-      position: absolute;
-      bottom: 0;
-      left: var(--wp--preset--spacing--20);
-      transform: translateY(50%);
-      z-index: 2;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      backdrop-filter: blur(8px);
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .card-body {
-      padding-top: calc(var(--wp--preset--spacing--30) + 16px);
-    }
-    ```
-- **SLIDER / CAROUSEL ENGINEERING (Autoplay & 3.5 Slides Fade)**:
-  ```css
-  .swiper-wrapper {
-    align-items: stretch;
-  }
-  .swiper-slide {
-    height: auto;
-    display: flex;
-    flex-direction: column;
-  }
-  .slider-wrapper {
-    position: relative;
-    overflow: hidden;
-  }
-  .slider-wrapper::after {
-    content: "";
-    position: absolute;
-    top: 0; right: 0; bottom: 0;
-    width: 80px;
-    background: linear-gradient(to right, transparent, var(--wp--preset--color--base));
-    pointer-events: none;
-    z-index: 5;
-  }
-  ```
-- **MOBILE CLEARANCE & CONTAINER MARGINS (`@media (max-width: 767px)`)**:
-  * **Hero Top Clearance**: Whenever a navbar is `fixed`, `sticky`, or `absolute`, `.hero` on mobile MUST specify `padding-top: calc(var(--wp--preset--spacing--60) + 40px);` (or ~100px+) so the navbar never overlaps the top line of the H1 headline.
-  * **Safe Margin Mandate**: Mobile container margins MUST strictly be `16–20px` (`.container { width: min(var(--container-max-width), calc(100% - var(--wp--preset--spacing--40))); margin-inline: auto; }`).
-  * **Mobile Header Navigation & Hamburger Menu Contract**: On mobile viewports (`<= 767px`), global site navigation MUST NOT be omitted or displaced by an oversized desktop CTA button. The header MUST always render an accessible hamburger menu toggle (`button.mobile-menu-toggle` with inline Lucide `menu` / `x` SVG, `stroke-width="1"`, touch target `>= 44x44px`) connected to an interactive slide-out drawer or overlay. Desktop navigation links collapse into the drawer, and redundant header CTA buttons are either simplified or housed inside the menu drawer.
-  * **Header Streamlining**: Auxiliary pills and secondary text MUST be hidden on mobile (`display: none;`).
-- **NATIVE PRODUCTION JAVASCRIPT & MOTION ENGINE (`index.html`)**:
-  Phase 2 deliverables MUST include a self-contained, high-performance vanilla JavaScript module in `index.html` executing:
-  1. **`initScrollIllumination()`**: Calculates scroll progress through sections with text highlights (e.g. *What We Offer*), sequentially illuminating `<span class="scroll-word">` from `opacity: 0.25` to `opacity: 1.0; color: var(--wp--preset--color--contrast);`.
-  2. **`initScrollEntrance()`**: Attaches a single shared `IntersectionObserver` to all `[data-reveal]` elements (cards, bento blocks, statistics, timeline nodes) to trigger smooth staggered fade-up (`opacity: 1; transform: translateY(0);`).
-  3. **`initMobileMenu()`**: Implements clean toggle state between `.menu-toggle` and `.mobile-menu-drawer.is-open` with `aria-expanded` synchronization and body scroll lock.
-  4. **`initTestimonialSlider()`**: Powers smooth auto-cycling for testimonials (4-second interval, pausing gracefully on pointer hover, with manual arrow controls).
-  5. **`initBackToTop()`**: Provides smooth window scrolling to top when clicking the footer chevron icon.
-
----
-
-### 2.2. Critical UI Traps & Runtime Fixes
-1. **Ghost Section & Blank Content Elimination**:
-   - All animated elements MUST have default visible state in CSS: `opacity: 1; transform: none;`. Never leave elements at `opacity: 0` waiting for JS triggers.
-   - Inverted sections (dark cards or light cards) MUST explicitly declare both `background-color` AND `color` tokens (`--wp--preset--color--surface` + `--wp--preset--color--contrast`) to prevent white-on-white or black-on-black text collision.
+### Mandatory Rules for Phase 2:
+1. **100% Gutenberg Token Usage**:
+   - Every font-size must be `var(--wp--preset--font-size--*)`.
+   - Every padding/margin/gap must be `var(--wp--preset--spacing--*)`.
+   - Every color must be `var(--wp--preset--color--*)`.
+   - Zero hardcoded pixel sizes or hex colors on component classes.
 2. **Universal Optical Icon Hierarchy & Anti-Miniaturization**:
    - Any `<img>` <= 64px or SVG icon MUST be replaced with inline Lucide SVG.
    - **MANDATORY 3-TIER OPTICAL SIZING & CONTAINER BOX ARCHITECTURE**:
-     * **Tier 1 (Stat & Metric Big Numbers - e.g. `8,000+`, `$5B+`)**: Squircle tile container `52px × 52px` (or `56px`), SVG icon `28px × 28px` (min 26px), `stroke-width="1.75"` (or `2.0`). Must optically balance the heavy weight of bold numbers.
-     * **Tier 2 (Feature Capsules & Value Lists - e.g. `Strategic Planning`, `Smart Health`)**: Rounded square/circle tile container `.feature-icon-box` `38px × 38px` (or `42px`), SVG icon `20px × 20px` (min 20px), `stroke-width="1.75"`. NEVER leave naked, unboxed SVG icons floating loosely in empty whitespace next to bold typography!
-     * **Tier 3 (Inline Micro-Affordances - Button chevrons, badges)**: SVG icon `16px × 16px`, `stroke-width="1.75"`.
-   - Anti-repetition rule: no consecutive identical icons in the same section.
-   - Icon colors must match extracted computed color tokens. Review stars MUST be `#F59E0B`.
-3. **Total Elimination of Latin Placeholder Text**:
-   - 100% replace all Latin dummy copy (`Sed acc...`, `Sed ut perspiciatis`, `Lorem ipsum`) with natural commercial copy.
-4. **Button Deduplication & Contrast**:
-   - Strip `.is-text-absolute` duplicate text blocks.
-   - Pill buttons on dark themes (`.white-button`) MUST explicitly declare `color: var(--wp--preset--color--base);` (black) to prevent inheriting white text from global anchor rules.
-5. **Webflow Curtain/Overlay Elimination**:
-   - Strip `data-w-id` from `.image-show-style` and enforce `.image-show-style, .bg-column-mask, .bg-color-column { display: none; }` in `main.css`.
-6. **Webflow Watermark Badge Elimination (`.w-webflow-badge`)**:
-   - Declare `a.w-webflow-badge, .w-webflow-badge { display: none; }` at the **VERY END** of `main.css` with tag-qualified specificity.
-7. **Semantic Headings Upgrade (`div.heading---h*` -> `<h1-h6>`)**:
-   - Transform heading `<div>` wrappers into real semantic elements (`<h2 class="heading---h2">`, `<h4 class="heading---h4">`). Ensure section headings are `<h2>` and internal card headings are `<h4>`.
+     * **Tier 1 (Metric & Stat Cards like `8,000+`)**: Must use a **`52px × 52px` squircle container tile** (`.bento-badge`) with a **`28px` inline SVG** (`stroke-width: 1.75`).
+     * **Tier 2 (Feature Capsules & Value Lists like `Strategic Planning`, `Smart Health`)**: Must use a **`38px × 38px` squircle icon box** (`.feature-icon-box`) with subtle tinted background (`background: rgba(..., 0.06)` or `#F4F5F7`), `border-radius: var(--wp--preset--spacing--10)` (8px), housing a **`20px` inline SVG** (`stroke-width: 1.75`). Standalone, naked unboxed icons floating loosely next to bold headlines are STRICTLY PROHIBITED.
+     * **Tier 3 (Inline micro-elements & button chevrons)**: `16px` SVG with `stroke-width: 1.75`.
+   - AI sparkle icons (`✨`), magic wands, and generic placeholder graphics are STRICTLY FORBIDDEN.
+3. **Native CSS Sticky Stacking Cards Engine**:
+   - Multi-card feature or service decks (*What We Offer*) MUST implement native CSS `position: sticky; top: calc(...); margin-bottom: calc(...);` with staggered increasing top offsets (`top: 80px, 110px, 140px...`).
+   - Cards stack sequentially on desktop with multi-layer elevation drop-shadows, and gracefully degrade to `position: static` on mobile (`<= 767px`).
+4. **WCAG AA Optical Contrast & Dark Canvas Typography Invariant**:
+   - Hero introductory copy above-the-fold MUST maintain 100% opacity (`opacity: 1`) and high contrast (`color: rgba(255, 255, 255, 0.88)` on dark canvases) upon initial load. Never wrap hero copy in `scroll-word` spans.
+   - All text on dark surfaces must maintain a minimum 4.5:1 contrast ratio. Dark text tokens on dark surfaces are strictly forbidden.
+   - Scroll-illuminated words on dark backgrounds MUST illuminate to pure bright white (`#ffffff`).
+5. **Section Heading Dominance Enforcement**:
+   - Every section must have an `<h2>` styled with `var(--wp--preset--font-size--large)` (28px - 40px fluid).
+   - Every card within a section must have an `<h4>` styled with `var(--wp--preset--font-size--medium)` (18px - 21.6px fluid).
+   - Section headings MUST visually dominate card headings.
+6. **Card Geometry & Layout**:
+   - All cards in flex/grid rows must have `height: 100%; display: flex; flex-direction: column;`.
+   - Card CTA buttons must have `margin-top: auto;` to align baselines.
+   - Card rows must have `align-items: stretch;`.
+7. **Slider / Carousel Implementation**:
+   - If a carousel exists, include native Swiper or lightweight vanilla JS carousel with `autoplay: { delay: 4000, pauseOnMouseEnter: true }`.
+   - Slide items must be equal height.
+   - Fractional slide views must have container `overflow: hidden;` with right-edge fade mask.
+8. **Motion Engine (Native Vanilla JavaScript)**:
+   - Include vanilla JavaScript for:
+     1. **`initScrollIllumination()`**: Calculates scroll progress through sections with text highlights (e.g. *What We Offer*), sequentially illuminating `<span class="scroll-word">` from `opacity: 0.25` to `opacity: 1.0; color: #ffffff;`.
+     2. **`initScrollEntrance()`**: `IntersectionObserver` observing all `[data-reveal]` elements with staggered entrance classes.
+     3. **`initMobileMenu()`**: Interactive drawer toggle toggling `.is-open` and updating ARIA attributes.
+     4. **`initCounters()`**: Animated number counters for metric statistics.
 
 ---
 
-### 2.3. OpenDesign Engine Orchestration & Production Gates
-- **Two-Stage State Machine Compliance**: In `request` stage, emit `<open-design-plan-contract>` and `<open-design-runtime-state>` (`outcome: 'completed'`). In `production` stage, directly write deliverables (`index.html`, `main.css`). Emitting another plan contract in production stage triggers `od_next_protocol_stage_mismatch`.
-- **Headless API Automation Pipeline (Preferred over Flaky Browser Clicks)**:
-  Instead of fragile CDP UI clicks that can get blocked by onboarding dialogs or feedback modals, automate OpenDesign directly via its daemon API (`http://127.0.0.1:7456`):
-  1. `POST /api/projects`: `{ id: UUID, name: "...", skillId: "beplus-spec-remake" }`.
-  2. `PUT /api/projects/:id/conversations/:cid/messages/:userMsgId`: `{ id: userMsgId, role: "user", content: prompt, position: 0 }`.
-  3. `PUT /api/projects/:id/conversations/:cid/messages/:asstMsgId`: `{ id: asstMsgId, role: "assistant", content: "", position: 1, runStatus: "queued" }`. **CRITICAL SQLITE CONSTRAINT**: `content` and `position` are strictly `NOT NULL` in SQLite. Omitting `content: ""` causes an HTTP 500 error (`NOT NULL constraint failed: messages.content`).
-  4. `POST /api/chat`: `{ projectId, conversationId, assistantMessageId, message: prompt, userPrompt: prompt, skillId: "beplus-spec-remake", agentId: "opencode", clientType: "web" }`. **CRITICAL PITFALL**: The daemon validates `message !== 'string' || !message.trim()`. Passing `userPrompt` without `message: prompt` fails immediately with `BAD_REQUEST: message required`.
-  5. The response is an SSE event stream (`text/event-stream`). Monitor events or inspect `/var/lib/docker/volumes/open-design_open_design_data/_data/runs/<run_id>/state.json`.
-- **API Project Creation Contract (`POST /api/projects`)**: Include explicit UUID `id` AND `skillId: "beplus-spec-remake"`.
-- **Docker Container Permissions Guard**: Ensure `/app/skills/` has `chmod -R a+rX` and `chown -R open-design:open-design` so container UID 1001 never encounters `EACCES`.
-- **CDP Native Input Dispatching (Fallback UI Path)**: When submitting prompts to OpenDesign via CDP port 9222, focus `[data-testid="chat-composer-input"]`, dispatch `Input.insertText` to synchronize React/Lexical state, and dispatch native click on `[data-testid="chat-send"]`. If routed to `/files/index.html`, navigate back to `/conversations/<id>` first. If an in-app feedback modal appears (`We'd love your feedback — help improve OpenDesign`), dismiss it immediately by clicking the close button (`×` / `button[aria-label="Close"]`) so it does not block CDP interactions or screenshot captures.
-- **Timeout & Context Window Guard**: If OpenCode experiences `ContextOverflowError` (>1M tokens), purge the bloated session record in `agent_sessions` (`DELETE FROM agent_sessions WHERE conversation_id = ?;` in `app.sqlite`).
+## 3. PHASE 3: AUTOMATED QUALITY GATE
 
----
-
-## 3. AUTOMATED QUALITY GATES AUDIT
-
-Before concluding, the AI must run the automated validation script to verify compliance:
+Run the automated verification script to validate compliance before presenting deliverables:
 
 ```python
-import os, re, sys
+import re, sys, os
 from bs4 import BeautifulSoup
 
-html_file = "ritovex-home.html" if os.path.exists("ritovex-home.html") else "index.html"
-html = open(html_file, "r", encoding="utf-8").read()
-css = open("main.css", "r", encoding="utf-8").read()
+html = open("index.html").read()
+css = open("main.css").read()
 soup = BeautifulSoup(html, "html.parser")
+
 errors = []
 
 # 1. Spec presence
@@ -369,95 +282,88 @@ if "!important" in css:
 
 # 3. Standard FSE Tokens Check
 required_tokens = [
-    "--nextora-font-heading",
     "--wp--preset--color--base",
     "--wp--preset--color--contrast",
+    "--wp--preset--color--paragraph",
     "--wp--preset--color--primary",
-    "--wp--preset--color--accent",
-    "--wp--preset--font-size--small",
-    "--wp--preset--font-size--base",
-    "--wp--preset--font-size--medium",
-    "--wp--preset--font-size--large",
-    "--wp--preset--font-size--x-large",
     "--wp--preset--spacing--10",
     "--wp--preset--spacing--20",
     "--wp--preset--spacing--30",
     "--wp--preset--spacing--40",
     "--wp--preset--spacing--50",
-    "--wp--preset--spacing--60"
+    "--wp--preset--spacing--60",
+    "--wp--preset--font-size--small",
+    "--wp--preset--font-size--base",
+    "--wp--preset--font-size--medium",
+    "--wp--preset--font-size--large",
+    "--wp--preset--font-size--xx-large"
 ]
 for t in required_tokens:
     if t not in css:
-        errors.append(f"TOKEN DEFECT: Missing required FSE token: {t}")
+        errors.append(f"MISSING TOKEN: Required FSE token '{t}' not defined in :root!")
 
-# 4. Prohibited invented tokens
-for bad in ["--wp--preset--color--ink", "--wp--preset--color--paper", "--wp--preset--font-size--display", "--wp--preset--font-size--hero"]:
-    if bad in css:
-        errors.append(f"PROHIBITION: Found non-standard invented variable: {bad}")
+# 4. Zero hardcoded px font-sizes outside :root
+css_body = css[css.find("}"):] if "}" in css else css
+px_font_sizes = re.findall(r"font-size:\s*\d+px", css_body)
+if px_font_sizes:
+    errors.append(f"TOKEN DEFECT: Found {len(px_font_sizes)} hardcoded pixel font-sizes outside :root! Must use var(--wp--preset--font-size--*).")
 
-# 5. Review star color
-if "#F59E0B" not in css and "#f59e0b" not in css:
-    errors.append("COLOR DEFECT: Review star color MUST be #F59E0B!")
+# 5. Section Heading Dominance Check (H2 must be larger than H4)
+h2_tags = soup.find_all("h2")
+h4_tags = soup.find_all("h4")
+if len(h2_tags) < 2:
+    errors.append("HEADING DEFECT: Insufficient <h2> section headings! Every major section must have an <h2>.")
 
-# 6. Legacy template assets check
-legacy_images = re.findall(r"assets/images/68[a-f0-9]+_[A-Za-z0-9_-]+\.(?:jpg|png)", html)
-if len(legacy_images) > 3:
-    errors.append(f"ASSET DEFECT: Found {len(legacy_images)} legacy scraped images! Must replace 100% with Unsplash photos.")
+# 6. Equal Height Cards Check
+card_rows = soup.find_all(class_=re.compile(r"grid|cards|flex|row", re.I))
+# Verify stretch alignment exists in css
+if "align-items: stretch" not in css and "align-items:stretch" not in css:
+    errors.append("LAYOUT DEFECT: Missing 'align-items: stretch' on card containers!")
 
 # 7. Optical Icon Hierarchy & AI sparkle ban
 if re.search(r"sparkles", html, re.I):
     errors.append("ICON DEFECT: AI sparkle icons are strictly prohibited!")
 
-# Check for miniaturized naked icons (icons <= 16px next to headings without container box)
-if re.search(r'<div class=[\"\']capsule-content[\"\']>[\s\S]*?<strong>[\s\S]*?</div>', html):
-    if '.feature-icon-box' not in css and 'class="feature-icon-box"' not in html:
-        errors.append("ICON DEFECT: Feature capsules MUST use .feature-icon-box container tiles to prevent miniaturized icons!")
+# Check for miniaturized naked icons (icons <= 16px outside button tags)
+small_naked_svgs = soup.find_all(lambda tag: tag.name == 'svg' and tag.get('width') in ['12', '14', '16'] and not tag.find_parent(['button', 'a', '.feature-icon-box']))
+if small_naked_svgs:
+    errors.append(f"ICON DEFECT: Found {len(small_naked_svgs)} tiny naked SVGs outside buttons/containers! Must use 3-Tier Optical Sizing (38px box for features, 52px for stats).")
 
-# 8. Template typos & Latin placeholder detection
-for typo in ["Real Woks", "Qoute", "Recants Article"]:
-    if typo in html:
-        errors.append(f"COPY DEFECT: Found uncorrected template typo: {typo}")
+# 8. Zero Latin dummy text
+latin_matches = re.findall(r"\b(lorem|ipsum|sed\s+ut|sed\s+acc|dolor\s+sit|consectetur)\b", html, re.I)
+if latin_matches:
+    errors.append(f"CONTENT DEFECT: Found {len(latin_matches)} Latin placeholder words in HTML! Must replace with 100% production copy.")
 
-if re.search(r"\b(lorem\s+ipsum|sed\s+ut\s+perspiciatis|sed\s+acc|dolor\s+sit\s+amet|consectetur\s+adipiscing)\b", html, re.I):
-    errors.append("COPY DEFECT: Found Latin placeholder text ('Lorem ipsum' / 'Sed acc...') in HTML! Must replace with 100% real commercial copy.")
+# 9. Zero legacy scraped images
+legacy_images = soup.find_all("img", src=re.compile(r"webflow|cdn\.prod\.website-files|uploads-ssl", re.I))
+if legacy_images:
+    errors.append(f"ASSET DEFECT: Found {len(legacy_images)} legacy Webflow/scraped images! Must replace 100% with Unsplash photos.")
 
-# 9. Prohibition of raw clamp() outside :root
-root_match = re.search(r":root\s*\{([^}]+)\}", css)
-root_css = root_match.group(1) if root_match else ""
-css_without_root = css.replace(root_css, "")
-if "clamp(" in css_without_root:
-    errors.append("PRESET DEFECT: Found raw clamp() outside :root! All font-sizes and spacings must consume var(--wp--preset--*) tokens.")
+# 10. Swiper / Slider Autoplay check (if slider exists)
+if "swiper" in html.lower():
+    if "autoplay" not in html and "autoplay" not in css:
+        errors.append("SLIDER DEFECT: Swiper slider detected but autoplay configuration is missing!")
 
-# 10. Prohibition of 'demo' placeholder tags in HTML
-if re.search(r"\b(demo content|demo testimonial|demo visual|demo contact|prototype note)\b", html, re.I):
-    errors.append("COPYWRITING DEFECT: Found 'demo' placeholder badges or disclaimers in HTML! Content must be 100% genuine commercial copy.")
+# 11. Zero Specificity Traps (.link-block, ._24px-link overriding h3/h4)
+if re.search(r"\._\d+px-link|\.heading-link\s+h[1-6]", css):
+    errors.append("SPECIFICITY TRAP: Found utility class overriding semantic heading font-sizes! Use semantic classes instead.")
 
-# 11. Prohibition of heading font-size overrides
-if re.search(r"\.[a-zA-Z0-9_-]+\s+(?:h1|h2|h3|h4)\s*\{[^}]*font-size", css):
-    errors.append("OVERRIDE DEFECT: Found selector overriding heading font-size! Headings must strictly follow global theme.json tokens.")
+# 12. Bento Portrait Aspect Ratio Check
+if re.search(r"bento", html, re.I):
+    if "aspect-ratio" not in css:
+        errors.append("BENTO DEFECT: Bento grid detected but missing explicit aspect-ratio definitions for visual cards!")
 
-# 12. Section Heading Dominance Check (h2 section title vs h4 card titles)
-sections = soup.find_all(["section", "div"], class_=re.compile(r"section|wrapper|container", re.I))
-for sec in sections:
-    h2_tags = sec.find_all("h2")
-    # If a section contains multiple cards, ensure card titles are not h2
-    cards = sec.find_all(["div", "article"], class_=re.compile(r"card|item|step|feature", re.I))
-    if len(cards) >= 2:
-        for card in cards:
-            if card.find("h2"):
-                errors.append(f"HEADING HIERARCHY DEFECT: Card in section contains <h2>! Card titles MUST be <h4> with medium font-size.")
-                break
+# 13. Frosted Glass Badge Clearance
+if re.search(r"backdrop-filter", css):
+    if "margin-bottom" not in css and "padding-bottom" not in css:
+        errors.append("BADGE CLEARANCE DEFECT: Frosted glass badges must have explicit clearance margins above headings!")
 
-# 13. Absolute Prohibition of Raw Pixel Font Sizes in CSS Classes (Specificity Trap)
-raw_pixel_font_sizes = re.findall(r"\bfont-size:\s*\d+px", css_without_root)
-if raw_pixel_font_sizes:
-    errors.append(f"PIXEL DEFECT: Found {len(raw_pixel_font_sizes)} hardcoded pixel font-size declarations (e.g. '{raw_pixel_font_sizes[0]}') in CSS outside :root! All font-sizes must consume var(--wp--preset--font-size--*).")
-
-# 14. Prohibition of Duplicate Card Titles (Anti-Duplication Contract)
-card_titles = [c.get_text(strip=True) for c in soup.find_all(["h3", "h4", "h5", "div"], class_=re.compile(r"card.*title|card.*heading|text---bold", re.I)) if len(c.get_text(strip=True)) > 5]
+# 14. Anti-Duplicate Card Title Check
 seen_titles = {}
-for t in card_titles:
-    seen_titles[t] = seen_titles.get(t, 0) + 1
+for h in soup.find_all(["h3", "h4", "h5"]):
+    text = h.get_text().strip()
+    if len(text) > 4 and text not in ["Learn More", "Read More", "Get Started", "View Details"]:
+        seen_titles[text] = seen_titles.get(text, 0) + 1
 duplicates = [t for t, count in seen_titles.items() if count > 1]
 if duplicates:
     errors.append(f"DUPLICATE CONTENT DEFECT: Found duplicated card titles: {duplicates}! Every card must have a unique commercial headline.")
@@ -515,14 +421,14 @@ else:
 
 ## 4. SKILL SOURCE & VERSION CONTROL (GIT)
 
-The master source code, inspection scripts, templates, and reference manuals for `beplus-spec-remake` are version-controlled in a private GitHub repository:
+The master source code, inspection scripts, templates, and reference manuals for `beplus-spec-remake` are version-controlled in a public GitHub repository:
 - **Repository**: `https://github.com/ducdung196qtr/beplus-spec-remake.git` (Public)
 - **Local Directory**: `/root/.hermes/skills/web-design/beplus-spec-remake`
 - **Docker Mount/Sync**: `/app/skills/beplus-spec-remake` inside container `open-design`
 - **Sync Command**:
   ```bash
   docker cp /root/.hermes/skills/web-design/beplus-spec-remake/. open-design:/app/skills/beplus-spec-remake/
-  docker exec -u 0 open-design chown -R open-design:open-design /app/skills/beplus-spec-remake
+  docker exec -u 0 open-design chown -R 1001:1001 /app/skills/beplus-spec-remake
   docker exec -u 0 open-design chmod -R a+rX /app/skills/beplus-spec-remake
   ```
 - **Git Push/Rollback Protocol**: After major updates or before experimental modifications, commit and push to `origin main` (`git push origin main`) to ensure clean rollback capability.
