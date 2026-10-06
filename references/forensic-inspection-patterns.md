@@ -1357,3 +1357,92 @@ In Phase 1 `CLONE-SPEC.md`, AI OpenDesign MUST explicitly specify:
 1. `Scroll Dynamics`: "Sticky Stacking Card Deck with staggered `top` offsets (Cards 01–06 dock sequentially on scroll)".
 2. `Visual Layering`: "Floating elevated white card (`.feature-card-list-wrap`) elevated over photo with 3D drop-shadow and Tier 2 optical icons".
 3. `Text Illumination`: "Word-by-word span segmentation with scrub-based illumination (`opacity: 0.2` -> `opacity: 1.0`) on the primary section title".
+
+---
+
+## 35. WCAG AA Optical Contrast & Dark Canvas Typography Invariant
+
+### 35.1. The Root Cause of AI "Illegible / Black Text on Dark Backgrounds"
+A notorious failure mode in AI-generated web designs is text that becomes nearly invisible against dark backgrounds. This occurs due to three insidious traps:
+
+1. **The Inverted Token Semantic Trap**:
+   In Gutenberg FSE defaults:
+   - `--wp--preset--color--base` is `#ffffff` (White).
+   - `--wp--preset--color--contrast` is `#201d1d` or `#000000` (Dark Charcoal / Black).
+   - `--wp--preset--color--paragraph` is `#6d6d6d` (Muted Dark Gray).
+   When an AI designs a dark section (e.g., `#111111` or a dark skyscraper hero photo), it frequently uses `var(--wp--preset--color--paragraph)` for body copy, or worse, sets illuminated text to `var(--wp--preset--color--contrast)`. On a dark background, dark charcoal on near-black yields a contrast ratio under 1.5:1 (catastrophic failure).
+
+2. **The Above-the-Fold Premature Dimming Trap**:
+   When AI implements scroll-driven text illumination (`.scroll-word`), it indiscriminately wraps hero descriptions in `span.scroll-word` with `opacity: 0.25`. But the Hero section sits at `scrollTop: 0`. The user hasn't scrolled yet! As a result, the primary value proposition is dimmed to near-black on initial page load.
+
+3. **Background Image Contrast Blindness**:
+   Dark photographs (architecture, hardware, workspaces) contain non-uniform luminance. Text placed directly over unvignetted photography easily gets lost unless explicit dark scrims (`linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85))`) and high-luminance text tokens are enforced.
+
+---
+
+### 35.2. The Invariant Rules for Dark Canvas Typography
+
+```css
+/* ==========================================================================
+   DARK CANVAS TYPOGRAPHY & WCAG AA CONTRAST CONTRACT
+   ========================================================================== */
+
+/* 1. Hero Sections & Above-the-Fold Invariant: NEVER dim on load */
+.hero-section p,
+.hero-description,
+.hero-subtitle {
+  color: rgba(255, 255, 255, 0.88); /* High contrast, comfortable reading */
+  opacity: 1 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35); /* Optical edge separation */
+}
+
+/* 2. Absolute Ban on Scroll Dimming for Above-the-Fold Hero Copy */
+.hero-section .scroll-word,
+.hero-description .scroll-word {
+  opacity: 1 !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* 3. Dark Sections vs Light Sections Token Inversion */
+/* On Light Sections: */
+.section-light, :root {
+  --text-primary: var(--wp--preset--color--contrast);  /* Dark charcoal */
+  --text-secondary: var(--wp--preset--color--paragraph); /* Muted gray #6d6d6d */
+}
+
+/* On Dark Sections: */
+.section-dark,
+.hero-section,
+.dark-canvas,
+[data-theme="dark"],
+.offer-section {
+  --text-primary: var(--wp--preset--color--base);       /* Pure White #ffffff */
+  --text-secondary: rgba(255, 255, 255, 0.85);        /* Crisp light silver */
+  --text-muted: rgba(255, 255, 255, 0.65);            /* WCAG AA compliant muted */
+}
+
+/* 4. Scroll Illumination in Dark Sections: Illuminate towards PURE WHITE */
+.section-dark .scroll-word,
+.dark-canvas .scroll-word,
+.offer-section .scroll-word {
+  color: rgba(255, 255, 255, 0.35); /* Subtle legible ghost */
+  opacity: 0.45;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+
+.section-dark .scroll-word.is-lit,
+.dark-canvas .scroll-word.is-lit,
+.offer-section .scroll-word.is-lit {
+  color: #ffffff !important;         /* Pure bright white */
+  opacity: 1 !important;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+}
+```
+
+---
+
+### 35.3. Audit Verification Gate (Automated Check)
+During Phase 2 automated testing, verify:
+1. `Hero Description Opacity`: Must be `>= 0.85`. Zero `opacity: 0.25` above the fold.
+2. `Color on Dark`: Must NOT be `var(--wp--preset--color--paragraph)` or `var(--wp--preset--color--contrast)` on dark surfaces.
+3. `WCAG AA Contrast Ratio`: Calculated minimum 4.5:1 for body copy against computed background.

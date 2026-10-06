@@ -490,11 +490,17 @@ async function auditSite(targetUrl) {
   // Recipes for native implementation in Phase 2
   const interactionRecipes = {
     scroll_text_illumination: {
-      description: "Word-by-word scroll text illumination (scrub) for hero & section headlines",
+      description: "Word-by-word scroll text illumination (scrub) for section headlines (STRICTLY FORBIDDEN on Hero above-the-fold copy)",
       css: `.scroll-word { opacity: 0.25; color: var(--wp--preset--color--paragraph); transition: opacity 0.2s ease, color 0.2s ease; display: inline-block; margin-right: 0.25em; }
-.scroll-word.is-lit { opacity: 1; color: var(--wp--preset--color--contrast); }`,
+.scroll-word.is-lit { opacity: 1; color: var(--wp--preset--color--contrast); }
+/* Dark Canvas & Hero Invariants (WCAG AA Contrast Protection) */
+.section-dark .scroll-word, .offer-section .scroll-word, [class*='dark'] .scroll-word { opacity: 0.4; color: rgba(255, 255, 255, 0.45); }
+.section-dark .scroll-word.is-lit, .offer-section .scroll-word.is-lit, [class*='dark'] .scroll-word.is-lit { opacity: 1; color: #ffffff !important; }
+.hero-description, .hero-subtitle, .hero-section p { opacity: 1 !important; color: rgba(255, 255, 255, 0.88) !important; }
+.hero-description .scroll-word { opacity: 1 !important; color: rgba(255, 255, 255, 0.88) !important; }`,
       js: `function initScrollIllumination() {
-  const targets = document.querySelectorAll('.scroll-illuminated, [data-scroll-illuminate]');
+  // Only target section titles, NEVER hero intro descriptions
+  const targets = document.querySelectorAll('.section-title.scroll-illuminated, [data-scroll-illuminate]:not(.hero-description)');
   targets.forEach(target => {
     const text = target.innerText.trim();
     const words = text.split(/\\s+/);

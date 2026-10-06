@@ -15,7 +15,7 @@ Autonomous 2-stage specification-driven clone & transformation engine for OpenDe
 
 ## Linked References & Tools
 - `references/gutenberg-token-contract.md`: Authoritative FSE design tokens, fluid clamps, and theme.json contracts.
-- `references/forensic-inspection-patterns.md`: Comprehensive 32-chapter forensic manual covering specificity traps, bento alignment, frosted glass badges, slider carousels, mobile navigation drawers, scroll text illumination, split cards with floating overlays, and workspace scratchpad isolation.
+- `references/forensic-inspection-patterns.md`: Comprehensive 34-chapter forensic manual covering specificity traps, bento alignment, frosted glass badges, slider carousels, mobile navigation drawers, scroll text illumination, split cards with floating overlays, workspace scratchpad isolation, optical icon hierarchy (curing tiny icons), and sticky stacking cards scroll engine.
 - `references/opendesign-api-orchestration.md`: Headless REST API automation pipeline for OpenDesign daemon (port 7456), SQLite message seeding constraints, and SSE streaming.
 - `templates/clone-spec-template.md`: 100% English master architectural specification template for Phase 1 `CLONE-SPEC.md`.
 - `scripts/inspect-site.mjs`: Automated CDP forensic inspection script extracting computed CSS, deep component anatomy, and motion triggers.
@@ -50,6 +50,15 @@ Autonomous 2-stage specification-driven clone & transformation engine for OpenDe
 16. **Workspace Hygiene & Scratchpad Isolation Mandate (CẤM lưu file dump thô trong project root)**:
     - Tuyệt đối CẤM tạo hoặc lưu các file HTML thô tải về (như `target.html`, `dump.html`, `raw.html`, `temp.html`) ngay trong thư mục gốc của project! OpenDesign tự động index mọi file trong project root thành deliverable hiển thị trên cây thư mục web (`/files/target.html`), gây hiểu lầm nghiêm trọng cho người dùng rằng AI chỉ copy-paste mã nguồn gốc thay vì tự thiết kế theo spec.
     - Mọi thao tác trích xuất DOM bắt buộc phải xử lý trực tiếp in-memory qua CDP port 9222 (`Runtime.evaluate`) hoặc lưu tạm ra ngoài thư mục project (như `/tmp/scratchpad/` hoặc thư mục ẩn `.cache/`) và BẮT BUỘC tự động dọn dẹp sạch sẽ (`rm -f`) trước khi kết thúc Phase 1. Thư mục project chỉ được phép chứa duy nhất các file sản phẩm chính thức (`CLONE-SPEC.md`, `index.html`, `main.css`).
+17. **Optical Icon Hierarchy & Anti-Miniaturization Standard (Triệt tiêu bệnh icon nhỏ)**:
+    - Bắt buộc tuân thủ 3-Tier Optical Sizing:
+      * **Tier 1 (Stats/Metrics số lớn như `8,000+`)**: Squircle tile `52px × 52px`, SVG icon bên trong `28px × 28px`, `stroke-width="1.75"`.
+      * **Tier 2 (Feature Capsules / Value Lists như `Strategic Planning`, `Smart Health`)**: Bắt buộc bọc trong container tile `.feature-icon-box` `38px × 38px` nền tinted nhẹ bo góc 8px, SVG icon bên trong `20px × 20px`, `stroke-width="1.75"`. Tuyệt đối CẤM thả icon trần trụi (naked unboxed SVG) trôi nổi trong khoảng trắng bên cạnh chữ bold!
+      * **Tier 3 (Inline micro-affordances, button chevrons)**: SVG icon `16px × 16px`, `stroke-width="1.75"`.
+    - Bỏ ép cứng `stroke-width: 1` cho các icon nhỏ dưới 24px để tránh biến icon thành sợi chỉ hairline mờ nhạt trên màn hình Retina.
+18. **Sticky Stacking Cards Scroll Engine (Cơ chế cuộn xếp chồng thẻ dạng bộ bài)**:
+    - Ở các section danh mục dịch vụ/tính năng nhiều card 50/50 (như *What We Offer*), trên desktop (`min-width: 768px`) BẮT BUỘC sử dụng CSS native `position: sticky; top: calc(...); margin-bottom: calc(...);` với các offset so le tăng dần (`top: 80px, 110px, 140px...`).
+    - Khi người dùng cuộn trang, các card lướt lên và xếp chồng đè lên nhau như một bộ bài vật lý 3D kèm bóng đổ đa tầng. Xuống mobile (`<= 767px`) tự động duỗi thẳng `position: static` tối ưu trải nghiệm vuốt chạm.
 
 ---
 
@@ -483,6 +492,10 @@ for bad_file in ["target.html", "dump.html", "raw.html", "scraped.html", "temp.h
 if re.search(r"offer-card|offer-list", html):
     if "position: sticky" not in css and "position:sticky" not in css:
         errors.append("SCROLL DEFECT: Multi-card offer section missing Sticky Stacking Cards interaction! Must use desktop 'position: sticky' with staggered top offsets.")
+
+# 21. WCAG AA Contrast & Dark Canvas Typography Invariant Audit
+if re.search(r"hero[^\"]*scroll-illuminated|hero-desc[^\"]*scroll-word", html, re.I):
+    errors.append("CONTRAST DEFECT: Hero subtext must NEVER have scroll-word illumination or opacity < 0.85 on initial load! Hero copy is above-the-fold and must be 100% visible, fully opaque, and high-contrast (color: rgba(255, 255, 255, 0.88) on dark canvas).")
 
 if errors:
     print("=== QUALITY AUDIT FAILED ===")
