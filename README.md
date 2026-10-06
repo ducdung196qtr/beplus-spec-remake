@@ -1,6 +1,6 @@
 # Beplus Spec Remake Engine (`beplus-spec-remake`)
 
-> **Autonomous 2-stage specification-driven website clone & reconstruction engine for OpenCode and OpenDesign, purpose-built for WordPress Gutenberg Full Site Editing (FSE) AlonePro standards.**
+> **Autonomous 2-stage specification-driven website remake & reconstruction engine for OpenCode and OpenDesign, purpose-built for WordPress Gutenberg Full Site Editing (FSE) AlonePro standards.**
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-beplus--spec--remake-blue.svg)](https://github.com/ducdung196qtr/beplus-spec-remake)
 [![WordPress FSE Compatible](https://img.shields.io/badge/WordPress-Gutenberg%20FSE%20AlonePro-brightgreen.svg)](https://wordpress.org/)
@@ -12,8 +12,8 @@
 
 The **Beplus Spec Remake Engine** (`beplus-spec-remake`) eliminates "hallucinatory AI design" by enforcing an uncompromising **2-stage specification-driven pipeline**:
 
-1. **Stage 1 (Forensic Architectural Specification)**: The agent executes Chrome DevTools Protocol (CDP port 9222) forensics and computed DOM AST analysis against the live reference website. It extracts every color token, fluid clamp typography curve, grid geometry, optical icon proportion, and interaction dynamic, compiling them into a comprehensive, strictly English architectural contract: **`CLONE-SPEC.md`**.
-2. **Stage 2 (Spec-Driven Build & Zero-Manual Assembly)**: Following human approval of the spec, the agent reads `CLONE-SPEC.md` and generates clean, semantic, production-grade **`index.html`** and **`main.css`** compliant with 100% WordPress Gutenberg FSE token conventions (`var(--wp--preset--*)`). Zero manual coding is required.
+1. **Stage 1 (Forensic Architectural Specification)**: The agent executes Chrome DevTools Protocol (CDP port 9222) forensics and computed DOM AST analysis against the live reference website. It extracts every color token, fluid clamp typography curve, grid geometry, optical icon proportion, and interaction dynamic, compiling them into a comprehensive, strictly English architectural contract: **`Beplus-spec.md`**.
+2. **Stage 2 (Spec-Driven Build & Zero-Manual Assembly)**: Following human approval of the spec, the agent reads `Beplus-spec.md` and generates clean, semantic, production-grade **`index.html`** and **`main.css`** compliant with 100% WordPress Gutenberg FSE token conventions (`var(--wp--preset--*)`). Zero manual coding is required.
 
 ---
 
@@ -23,7 +23,7 @@ The **Beplus Spec Remake Engine** (`beplus-spec-remake`) eliminates "hallucinato
 
 If you are running the OpenDesign web workspace or OpenCode daemon in Docker:
 
-1. **Clone or Copy the Skill into the Container**:
+1. **Download or Clone the Skill into the Container**:
    ```bash
    # From your host machine:
    git clone https://github.com/ducdung196qtr/beplus-spec-remake.git /tmp/beplus-spec-remake
@@ -46,7 +46,7 @@ If you are running the OpenDesign web workspace or OpenCode daemon in Docker:
 4. **Invoke in OpenDesign UI**:
    - In any OpenDesign conversation, prefix your message with the skill tag:
      ```text
-     @beplus-spec-remake https://target-website.com/
+     @beplus-spec-remake https://your-reference-site.com/
      ```
    - Or configure the project's `skillId` to `beplus-spec-remake` upon creation.
 
@@ -56,7 +56,7 @@ If you are running the OpenDesign web workspace or OpenCode daemon in Docker:
 
 If you use `opencode-cli` directly on macOS, Linux, or a VPS:
 
-1. **Clone into the OpenCode Skills Directory**:
+1. **Install into the OpenCode Skills Directory**:
    ```bash
    mkdir -p ~/.config/opencode/skills
    cd ~/.config/opencode/skills
@@ -78,7 +78,7 @@ If you use `opencode-cli` directly on macOS, Linux, or a VPS:
 
 3. **Run via CLI**:
    ```bash
-   opencode-cli run --dir /path/to/project --prompt "Clone and reconstruct website: https://target-website.com/ using skill beplus-spec-remake"
+   opencode-cli run --dir /path/to/project --prompt "Remake and reconstruct website: https://target-website.com/ using skill beplus-spec-remake"
    ```
 
 ---
@@ -109,7 +109,7 @@ Hermes will automatically index the skill under `skills_list` and load it via `s
 ```mermaid
 graph TD
     A[User triggers @beplus-spec-remake with URL] --> B[Phase 1: Forensic Inspection via CDP]
-    B --> C[Generate CLONE-SPEC.md 100% English]
+    B --> C[Generate Beplus-spec.md 100% English]
     C --> D[Run Automated Validation Gate #1 to #21]
     D --> E[Deliver Executive Summary to User]
     E --> F{Human Review & Approval}
@@ -122,10 +122,10 @@ graph TD
 1. **Phase 1 (Forensic Inspection & Specification)**:
    - Provide the URL: `@beplus-spec-remake https://reference-site.com/`
    - The AI inspects typography, styles, layout geometry, optical icon hierarchy, and motion dynamics.
-   - Outputs a comprehensive `CLONE-SPEC.md` covering all sections.
+   - Outputs a comprehensive `Beplus-spec.md` covering all sections.
    - **Halts execution and awaits human confirmation.**
 2. **Phase 2 (Spec-Driven Build & Assembly)**:
-   - Once approved (`"Approved, proceed to Phase 2"`), the agent reads `CLONE-SPEC.md`.
+   - Once approved (`"Approved, proceed to Phase 2"`), the agent reads `Beplus-spec.md`.
    - Synthesizes `index.html` and `main.css` strictly using Gutenberg FSE tokens.
    - Runs post-build compliance audits before presenting deliverables.
 
@@ -135,7 +135,11 @@ graph TD
 
 Adhering to these strict quality gates is what separates a professional, pixel-faithful reproduction from a generic AI-generated template:
 
-### 1. Optical Icon Hierarchy & Anti-Miniaturization Standard (Gate #18)
+### 1. The 2-Stage Lifecycle (Never Skip Phase 1!)
+* **Phase 1 is Non-Negotiable**: AI models fail when attempting to write code directly from a raw web scrape. The engine **must** complete `Beplus-spec.md` first.
+* **Human-in-the-Loop Gate**: After Phase 1, the agent will stop and present an executive summary. **Review `Beplus-spec.md` and explicitly confirm** (`"Approved, proceed to Phase 2"`) before generating code.
+
+### 2. Optical Icon Hierarchy & Anti-Miniaturization Standard (Gate #18)
 * **The Root Cause**: AI models routinely render icons too tiny (14–16px) with ultra-thin hairline strokes (`stroke-width="1"`). Bold text (`font-weight: 700`) visually dwarfs naked icons, creating severe optical imbalance.
 * **Mandatory 3-Tier Optical Architecture**:
   * **Tier 1 (Metric & Stat Cards like `8,000+`)**: Must use a **`52px × 52px` squircle container tile** (`.bento-badge`) with a **`28px` inline SVG** and **`stroke-width: 1.75`**.
@@ -143,29 +147,29 @@ Adhering to these strict quality gates is what separates a professional, pixel-f
   * **Tier 3 (Inline micro-elements & button chevrons)**: **`16px`** SVG with `stroke-width: 1.75`.
 * **Zero AI Sparkle Ban**: Icons depicting sparkles, magic wands, or AI stars are forbidden.
 
-### 2. WCAG AA Optical Contrast & Dark Canvas Typography Invariant (Gate #21)
+### 3. WCAG AA Optical Contrast & Dark Canvas Typography Invariant (Gate #21)
 * **Above-the-Fold Premature Dimming Ban**: Never wrap hero introductory descriptions in `span.scroll-word` with `opacity: 0.25`. The hero sits at `scrollTop: 0`; dimming on initial load produces unreadable text that fails WCAG AA standards.
 * **Hero Subtext Contract**: Hero body text must be **100% visible and fully opaque upon initial page load** (`color: rgba(255, 255, 255, 0.88)` on dark canvases).
-* **Dark Canvas Illumination Rule**: In dark sections (e.g. *What We Offer*), scroll-illuminated text must illuminate toward **pure white (`#ffffff` / `--wp--preset--color--base`)**, NEVER dark charcoal (`--wp--preset--color--contrast`).
+* **Dark Canvas Illumination Rule**: In dark sections (e.g. *What We Offer*), scroll-illuminated text must illuminate toward **pure white (`#ffffff` / `--base`)**, NEVER dark charcoal (`--contrast`).
 
-### 3. Sticky Stacking Cards Scroll Physics (Gate #20)
+### 4. Sticky Stacking Cards Scroll Physics (Gate #20)
 * Multi-card service sections (*What We Offer*) must not be collapsed into a flat vertical list or generic grid.
 * On desktop ($\ge$ 768px), cards must utilize native CSS `position: sticky` with staggered `top` offsets (`top: 80px, 110px, 140px...`) to produce a tactile, layered card-deck peeling sensation during scrolling.
 * On mobile ($\le$ 767px), gracefully degrade to `position: static` with clean 16–20px gutters.
 
-### 4. Workspace Hygiene & Zero Scraped Dump Leaks (Gate #19)
+### 5. Workspace Hygiene & Zero Scraped Dump Leaks (Gate #19)
 * **Never leave raw scraped dumps** (`target.html`, `dump.html`, `scraped.html`, `raw.html`) in the project root!
 * Scraped inspection files must be isolated inside `/tmp/scratchpad/` and purged after Phase 1. Exposing raw dumps in the root directory causes the OpenDesign UI to index them, creating confusion.
 
-### 5. Zero Vietnamese Tolerance in Specification MD (Gate #15)
-* `CLONE-SPEC.md` must be composed in **100% professional technical English**.
+### 6. Zero Vietnamese Tolerance in Specification MD (Gate #15)
+* `Beplus-spec.md` must be composed in **100% professional technical English**.
 * No Vietnamese characters or translation artifacts are allowed in markdown tables, column headers, or descriptions.
 
-### 6. Zero Latin / Lorem Ipsum Mandate (Gate #3)
+### 7. Zero Latin / Lorem Ipsum Mandate (Gate #3)
 * Every single headline, value proposition, feature bullet, review, and FAQ must be original, high-grade commercial English copy.
 * Any occurrence of `Lorem ipsum`, `dolor sit amet`, or placeholder tokens results in immediate QA rejection.
 
-### 7. 100% WordPress Gutenberg FSE Token Compliance
+### 8. 100% WordPress Gutenberg FSE Tokens
 * **Colors**: Exclusively use `var(--wp--preset--color--*)` (`base`, `contrast`, `primary`, `secondary`, `tertiary`, `paragraph`).
 * **Spacing**: Exclusively use `var(--wp--preset--spacing--*)` (`10` to `60`).
 * **Typography**: Exclusively use `var(--wp--preset--font-size--*)` (`small` to `xx-large`).
@@ -182,10 +186,11 @@ Adhering to these strict quality gates is what separates a professional, pixel-f
 beplus-spec-remake/
 ├── SKILL.md                                 # Master skill contract & 21 Quality Gates
 ├── README.md                                # Comprehensive setup & operational guide
+├── LICENSE                                  # MIT Open Source License
 ├── scripts/
 │   └── inspect-site.mjs                     # CDP/AST forensic inspection script
 ├── templates/
-│   └── clone-spec-template.md               # 12-section blueprint template (100% English)
+│   └── beplus-spec-template.md              # 12-section blueprint template (100% English)
 └── references/
     ├── forensic-inspection-patterns.md       # 35 tactical technical patterns
     ├── gutenberg-token-contract.md          # AlonePro FSE token mapping specification

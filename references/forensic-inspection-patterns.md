@@ -117,10 +117,10 @@ Do NOT replace dynamic animations with static blocks unless explicitly specified
 
 ### 4.2. Actionable Master Blueprint vs. Defensive "Pending" Drafts
 - **Pitfall**: When an AI agent performs forensic audits without a headless browser visual engine, it often falls into an overly cautious pattern: marking layout dimensions as "pending review", leaving copy as vague excerpts, and outputting meta-disclaimers.
-- **User Expectation**: The user expects a complete, production-ready architectural contract (`CLONE-SPEC.md`). Every section must have:
+- **User Expectation**: The user expects a complete, production-ready architectural contract (`Beplus-spec.md`). Every section must have:
   1. **Finalized Production Text**: 100% concrete replacement copy written out for every heading, paragraph, button, and card item (no "pending", no "lorem ipsum"). Sửa sạch 100% commercial typos (`Real Woks` -> `Recent Works`, `Get free Qoute` -> `Get Free Quote`, `Recants Article` -> `Recent Articles`, `Let's Start Talk` -> `Let's Start Talking`, clean static counters `250+`, `12+`, `20+`, `5K+`).
   2. **Exhaustive 4-Tier Motion Specs**: Trigger (on-load, on-scroll, hover), mechanical transitions (`rotate`, `translateY`, `box-shadow`, `color`), ambient loop physics (pure CSS keyframe marquee, duration, linear, no pause on hover), and designated driving engine (CSS, Swiper.js, IX2).
-  3. **Section-by-Section QA Verification Matrix**: At the bottom of `CLONE-SPEC.md`, an individual audit row for each section from top to bottom. Phase 1 is ONLY complete when every single section is verified and confirmed `PASS`.
+  3. **Section-by-Section QA Verification Matrix**: At the bottom of `Beplus-spec.md`, an individual audit row for each section from top to bottom. Phase 1 is ONLY complete when every single section is verified and confirmed `PASS`.
 
 ---
 
@@ -185,7 +185,7 @@ OpenDesign's execution strategy `od-next-strategy` (v2.0.4+) operates on an expl
 
 ### 7.1. Stage 1: `inputStage: 'request'` (Plan Freeze & Specification)
 - OpenDesign receives the initial prompt and classifies the route (typically `route: 'full_plan'`).
-- The AI agent reads project files (`CLONE-SPEC.md`, `site-audit.json`), freezes design constraints, and emits the Plan Contract block:
+- The AI agent reads project files (`Beplus-spec.md`, `site-audit.json`), freezes design constraints, and emits the Plan Contract block:
   `<open-design-plan-contract>` containing `{ runManifest, taskProfile, ... }`.
 - OpenDesign's daemon validates the plan contract, generates an immutable hash (`planContractHash`), and transitions the durable task record to `inputStage: 'production'`, claiming the subsequent physical run.
 
@@ -207,8 +207,8 @@ inputs: plan.runManifest.inputRefs.map((id) => ({
     available: id === 'request',
 })),
 ```
-The daemon hardcodes `available: id === 'request'`. If an AI agent includes project filenames like `CLONE-SPEC.md` or `site-audit.json` in `runManifest.inputRefs`, the daemon evaluates them as `available: false` and blocks execution with:
-`od_next_preflight_input_unavailable:CLONE-SPEC.md`
+The daemon hardcodes `available: id === 'request'`. If an AI agent includes project filenames like `Beplus-spec.md` or `site-audit.json` in `runManifest.inputRefs`, the daemon evaluates them as `available: false` and blocks execution with:
+`od_next_preflight_input_unavailable:Beplus-spec.md`
 
 ### 8.2. Dual Mitigation & Resolution
 1. **Container Daemon Patch**: In `/app/apps/daemon/dist/strategies/od-next/resolver.js`, update `available: id === 'request'` to `available: true` (or check file existence) so project artifacts pass preflight.
@@ -266,7 +266,7 @@ if (btnStatus?.result?.value && !btnStatus.result.value.disabled) {
 
 ### 12.1. Request Stage vs. Production Stage Rules
 In OpenDesign's `od-next` strategy with `route: "full_plan"`:
-- **`inputStage: 'request'`**: Planning-only stage. The Coding Agent (OpenCode) is strictly barred from generating deliverable files (`index.html`, `main.css`). If a prompt demands "write index.html now" on the request stage, OpenCode will either report `outcome: "blocked"` with reason `od_next_canonical_deliverable_invalid` (because it cannot deliver files yet) or loop into repeatedly editing `CLONE-SPEC.md`.
+- **`inputStage: 'request'`**: Planning-only stage. The Coding Agent (OpenCode) is strictly barred from generating deliverable files (`index.html`, `main.css`). If a prompt demands "write index.html now" on the request stage, OpenCode will either report `outcome: "blocked"` with reason `od_next_canonical_deliverable_invalid` (because it cannot deliver files yet) or loop into repeatedly editing `Beplus-spec.md`.
 - **How to advance to `production` stage**:
   The agent must freeze the specification and output the two machine contract blocks:
   1. `<open-design-plan-contract>` (containing the approved goal, deliverables, build requirements, and full plan).
@@ -279,7 +279,7 @@ In the subsequent continuation run (`stage="production"`), OpenCode receives:
 Only in this stage must OpenCode call its file tools (`write`, `apply_patch`) to write `index.html` and `main.css`. Outputting another `<open-design-plan-contract>` during production triggers `od_next_protocol_stage_mismatch`.
 
 ### 12.3. Anti-Hallucination & Disclaimer Suppression on Commercial Datasets
-- **LLM Safety Reflex**: When given commercial metrics (`250+ Projects`, `12+ Years`, `5K+ Clients`) or testimonials without external HTTP URLs, LLMs often reflexively insert "sample UI content only", "illustrative sample metrics", or "sample case studies" disclaimers into `CLONE-SPEC.md` or the HTML deliverable.
+- **LLM Safety Reflex**: When given commercial metrics (`250+ Projects`, `12+ Years`, `5K+ Clients`) or testimonials without external HTTP URLs, LLMs often reflexively insert "sample UI content only", "illustrative sample metrics", or "sample case studies" disclaimers into `Beplus-spec.md` or the HTML deliverable.
 - **Instruction Mandate**: The prompt to OpenDesign must explicitly include:
   `"Treat all supplied copy and commercial numbers as authoritatively confirmed. Do not add disclaimers, sample labels, or qualifiers (e.g. 'sample UI content only', 'illustrative metrics', 'demo content') anywhere in the specification or code deliverables."`
 
@@ -376,7 +376,7 @@ When OpenDesign needs clarification (such as verifying commercial data or select
 - Submitting this exact string into the Lexical composer immediately satisfies `FORM_ANSWERED_SYSTEM_OVERRIDE` and advances OpenDesign's finite state machine autonomously.
 
 ### 11.3. VPS Disk Exhaustion & 0-Byte Silent Generation Trap (`ENOSPC`)
-- **Symptom**: `CLONE-SPEC.md` or `index.html` created with size 0 bytes; OpenCode CPU stays active but nothing is flushed to disk. `opencode.log` reveals:
+- **Symptom**: `Beplus-spec.md` or `index.html` created with size 0 bytes; OpenCode CPU stays active but nothing is flushed to disk. `opencode.log` reveals:
   `ERROR message="Failed to fetch models.dev" cause="Cause([Die(Error: ENOSPC: no space left on device, mkdir '...locks/...lock.breaker')])"`
 - **Cause**: Chromium headless user data dir (`/home/open-design/.config/chromium-headless/`) balloons to 700MB+, `/tmp` fills with deleted file handles, and the root 24GB disk hits 100%.
 - **Safe Container Purge (Recovers 1–1.5GB instantly)**:
@@ -1060,11 +1060,11 @@ function initScrollEntrance() {
 ## 30. 100% Professional English Markdown Deliverables Mandate
 
 ### 30.1. The Language Contamination Defect
-In past iterations, AI agents occasionally emitted Vietnamese table headers (e.g., `STT`, `Tên Section`, `Bố cục & Token`, `Tiêu chí đối soát`) inside `CLONE-SPEC.md` or review plans.
+In past iterations, AI agents occasionally emitted Vietnamese table headers (e.g., `STT`, `Tên Section`, `Bố cục & Token`, `Tiêu chí đối soát`) inside `Beplus-spec.md` or review plans.
 This contaminates commercial deliverables intended for international standard workflows.
 
 ### 30.2. Strict English Rule
-- Every file with extension `.md` (specifically `CLONE-SPEC.md`, plan contracts, and audit matrices) MUST be written in 100% professional commercial English.
+- Every file with extension `.md` (specifically `Beplus-spec.md`, plan contracts, and audit matrices) MUST be written in 100% professional commercial English.
 - All table headers must use standard English taxonomy:
   `No. | Section Name | Layout & Tokens | Heading Hierarchy (H2>H4) | Production Copy | Motion & Micro-Interactions | Assets & Lucide Icons | QA Verdict`
 - Section criteria tables must use:
@@ -1228,7 +1228,7 @@ In OpenDesign and modern file-driven AI workspaces, the backend daemon monitors 
    - Any temporary scratchpad file created during Phase 1 inspection MUST be automatically purged (`rm -f /tmp/scratchpad/target.html`) before the agent finishes Phase 1.
 4. **Deliverable Sanctity**:
    The project directory must contain ONLY intentional, high-standard deliverables:
-   - Phase 1: `CLONE-SPEC.md` (and intermediate JSON audits like `site-audit.json`).
+   - Phase 1: `Beplus-spec.md` (and intermediate JSON audits like `site-audit.json`).
    - Phase 2: `index.html` (100% clean Gutenberg FSE DOM) and `main.css` (100% Gutenberg FSE tokens).
 
 
@@ -1353,7 +1353,7 @@ While Webflow binds this to internal interaction scripts and Lenis, the AlonePro
 ```
 
 ### 34.3. Specification & Prompting Contract for AI OpenDesign
-In Phase 1 `CLONE-SPEC.md`, AI OpenDesign MUST explicitly specify:
+In Phase 1 `Beplus-spec.md`, AI OpenDesign MUST explicitly specify:
 1. `Scroll Dynamics`: "Sticky Stacking Card Deck with staggered `top` offsets (Cards 01–06 dock sequentially on scroll)".
 2. `Visual Layering`: "Floating elevated white card (`.feature-card-list-wrap`) elevated over photo with 3D drop-shadow and Tier 2 optical icons".
 3. `Text Illumination`: "Word-by-word span segmentation with scrub-based illumination (`opacity: 0.2` -> `opacity: 1.0`) on the primary section title".

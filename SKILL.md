@@ -1,6 +1,6 @@
 ---
 name: beplus-spec-remake
-description: Autonomous 2-stage specification-driven clone & transformation engine for OpenDesign and AlonePro WordPress Gutenberg FSE themes. Bắt buộc duyệt spec trước khi build, cam kết 100% Gutenberg FSE tokens var(--wp--preset--*), 0 manual coding, 0 CSS đè, 0 !important, 0 clamp ngoài :root.
+description: Autonomous 2-stage specification-driven remake & transformation engine for OpenDesign and AlonePro WordPress Gutenberg FSE themes. Bắt buộc duyệt spec trước khi build, cam kết 100% Gutenberg FSE tokens var(--wp--preset--*), 0 manual coding, 0 CSS đè, 0 !important, 0 clamp ngoài :root.
 category: web-design
 triggers:
   - "beplus-spec-remake"
@@ -11,19 +11,19 @@ triggers:
 
 # Beplus Spec Remake Engine (v2.0)
 
-Autonomous 2-stage specification-driven clone & transformation engine for OpenDesign and AlonePro WordPress Gutenberg FSE themes.
+Autonomous 2-stage specification-driven remake & transformation engine for OpenDesign and AlonePro WordPress Gutenberg FSE themes.
 
 ## Linked References & Tools
 - `references/gutenberg-token-contract.md`: Authoritative FSE design tokens, fluid clamps, and theme.json contracts.
 - `references/forensic-inspection-patterns.md`: Comprehensive 35-chapter forensic manual covering specificity traps, bento alignment, frosted glass badges, slider carousels, mobile navigation drawers, scroll text illumination, split cards with floating overlays, workspace scratchpad isolation, optical icon hierarchy (curing tiny icons), sticky stacking cards scroll engine, and WCAG AA dark canvas typography invariant (curing invisible dimmed text).
 - `references/opendesign-api-orchestration.md`: Headless REST API automation pipeline for OpenDesign daemon (port 7456), SQLite message seeding constraints, and SSE streaming.
-- `templates/clone-spec-template.md`: 100% English master architectural specification template for Phase 1 `CLONE-SPEC.md`.
+- `templates/beplus-spec-template.md`: 100% English master architectural specification template for Phase 1 `Beplus-spec.md`.
 - `scripts/inspect-site.mjs`: Automated CDP forensic inspection script extracting computed CSS, deep component anatomy, and motion triggers.
 
 ## Absolute Core Mandates (Cốt Lõi Bắt Buộc)
 
 1. **2-Stage Workflow (Spec Trước, Build Sau)**:
-   - **Phase 1: Forensic Architectural Specification**: Deeply audits the target site using Chrome DevTools Protocol (CDP port 9222) and computed CSS forensics. Produces `CLONE-SPEC.md` covering all 12 sections with zero placeholders and zero guessing. **STOPS and requests human approval.**
+   - **Phase 1: Forensic Architectural Specification**: Deeply audits the target site using Chrome DevTools Protocol (CDP port 9222) and computed CSS forensics. Produces `Beplus-spec.md` covering all 12 sections with zero placeholders and zero guessing. **STOPS and requests human approval.**
    - **Phase 2: Spec-Driven Build & In-Place Refactoring**: Upon human approval, builds/refactors the production deliverables (`index.html`, `main.css`).
 2. **Zero Manual Coding**: Mọi thao tác từ bóc tách, sinh đặc tả, build mã nguồn, chạy QA và tinh chỉnh (refine) đều phải được tự động hóa hoàn toàn qua agent loop. Không chỉnh sửa code trực tiếp bằng tay.
 3. **100% Gutenberg FSE Token Compliance**: 100% màu sắc, typography và spacing trong `main.css` phải sử dụng biến preset FSE (`var(--wp--preset--*)`). Tuyệt đối CẤM hardcoded hex colors, CẤM pixel font-sizes trên selector, CẤM `clamp()` ngoài `:root`.
@@ -35,7 +35,7 @@ Autonomous 2-stage specification-driven clone & transformation engine for OpenDe
 9. **Slider & Carousel Engineering Standards**: Mọi slider (Swiper/carousel) BẮT BUỘC có chế độ `autoplay` (delay 3.5s - 4.5s, pause on hover), các slide bắt buộc bằng chiều cao nhau (`height: 100%`). Khi hiển thị số slide thập phân (ví dụ 3.5 items trên desktop), vùng chứa phải `overflow: hidden` và có lớp phủ gradient mờ cạnh phải (`mask-image` hoặc fade overlay) để item 0.5 trông mượt mà, chủ đích.
 10. **Ghost Section & Blank Content Elimination**: CẤM để section bị trắng nội dung do lỗi interaction Webflow IX2. CSS gốc bắt buộc có trạng thái hiển thị fallback (`opacity: 1; transform: none;`). Các section đảo màu (dark card trên nền sáng, light card trên nền tối) bắt buộc khai báo đồng thời cả token background và token text color. Triệt tiêu toàn bộ curtain mask (`.image-show-style`) và modal che màn hình.
 11. **Total Elimination of Latin Placeholder Text**: Quét sạch 100% các đoạn text Latin giả lập ("Lorem ipsum", "Sed ut perspiciatis", "Sed acc...") từ template Webflow và viết lại thành nội dung thương mại thật sự sắc bén, đúng độ dài 1:1.
-12. **100% Professional English for All Markdown & Spec Artifacts (CẤM Tiếng Việt trong MD)**: Toàn bộ các file tài liệu đặc tả markdown (`CLONE-SPEC.md`), plan contracts, bảng QA matrix (`No.`, `Section Name`, `Layout & Tokens`, `Heading Hierarchy (H2>H4)`, `Production Copy`, `Motion & Micro-Interactions`, `Assets & Lucide Icons`, `QA Verdict`), và phản hồi text của AI BẮT BUỘC 100% bằng tiếng Anh chuyên nghiệp. Tuyệt đối CẤM chèn tiếng Việt vào trong file markdown sinh ra!
+12. **100% Professional English for All Markdown & Spec Artifacts (CẤM Tiếng Việt trong MD)**: Toàn bộ các file tài liệu đặc tả markdown (`Beplus-spec.md`), plan contracts, bảng QA matrix (`No.`, `Section Name`, `Layout & Tokens`, `Heading Hierarchy (H2>H4)`, `Production Copy`, `Motion & Micro-Interactions`, `Assets & Lucide Icons`, `QA Verdict`), và phản hồi text của AI BẮT BUỘC 100% bằng tiếng Anh chuyên nghiệp. Tuyệt đối CẤM chèn tiếng Việt vào trong file markdown sinh ra!
 13. **Scroll-Driven Text Illumination & Staggered Viewport Reveal**: 
     - **Word-by-Word Scroll Text Illumination (Scrub)**: Khi section gốc có hiệu ứng cuộn làm chữ sáng dần theo thanh cuộn (như ở *What We Offer*), BẮT BUỘC bóc tách dòng text thành các thẻ `<span class="scroll-word">`, ban đầu để mờ (`opacity: 0.25; color: var(--wp--preset--color--paragraph)`), và dùng script tính toán vị trí cuộn để bật sáng dần từng từ sang `opacity: 1; color: var(--wp--preset--color--contrast)`.
     - **Staggered Viewport Entrance**: Các card, bento item, feature boxes khi bước vào viewport BẮT BUỘC có hiệu ứng fade-up tuần tự (`opacity: 0; transform: translateY(32px)`) kích hoạt qua `IntersectionObserver` với stagger delay `calc(var(--index, 0) * 0.1s)`.
@@ -49,7 +49,7 @@ Autonomous 2-stage specification-driven clone & transformation engine for OpenDe
       * **Photographic Thematic Harmony**: Ảnh Unsplash được chọn BẮT BUỘC phải ăn khớp 100% với chủ đề của ảnh gốc (ví dụ: ảnh gốc là đội ngũ họp bàn quanh phòng hội thảo có bảng biểu số liệu thì ảnh Unsplash phải là doanh nghiệp họp bàn, CẤM đưa ảnh tòa nhà chọc trời hoặc ảnh không đúng ngữ cảnh).
 16. **Workspace Hygiene & Scratchpad Isolation Mandate (CẤM lưu file dump thô trong project root)**:
     - Tuyệt đối CẤM tạo hoặc lưu các file HTML thô tải về (như `target.html`, `dump.html`, `raw.html`, `temp.html`) ngay trong thư mục gốc của project! OpenDesign tự động index mọi file trong project root thành deliverable hiển thị trên cây thư mục web (`/files/target.html`), gây hiểu lầm nghiêm trọng cho người dùng rằng AI chỉ copy-paste mã nguồn gốc thay vì tự thiết kế theo spec.
-    - Mọi thao tác trích xuất DOM bắt buộc phải xử lý trực tiếp in-memory qua CDP port 9222 (`Runtime.evaluate`) hoặc lưu tạm ra ngoài thư mục project (như `/tmp/scratchpad/` hoặc thư mục ẩn `.cache/`) và BẮT BUỘC tự động dọn dẹp sạch sẽ (`rm -f`) trước khi kết thúc Phase 1. Thư mục project chỉ được phép chứa duy nhất các file sản phẩm chính thức (`CLONE-SPEC.md`, `index.html`, `main.css`).
+    - Mọi thao tác trích xuất DOM bắt buộc phải xử lý trực tiếp in-memory qua CDP port 9222 (`Runtime.evaluate`) hoặc lưu tạm ra ngoài thư mục project (như `/tmp/scratchpad/` hoặc thư mục ẩn `.cache/`) và BẮT BUỘC tự động dọn dẹp sạch sẽ (`rm -f`) trước khi kết thúc Phase 1. Thư mục project chỉ được phép chứa duy nhất các file sản phẩm chính thức (`Beplus-spec.md`, `index.html`, `main.css`).
 17. **Optical Icon Hierarchy & Anti-Miniaturization Standard (Triệt tiêu bệnh icon nhỏ)**:
     - Bắt buộc tuân thủ 3-Tier Optical Sizing:
       * **Tier 1 (Stats/Metrics số lớn như `8,000+`)**: Squircle tile `52px × 52px`, SVG icon bên trong `28px × 28px`, `stroke-width="1.75"`.
@@ -68,9 +68,9 @@ Autonomous 2-stage specification-driven clone & transformation engine for OpenDe
 
 ## 1. PHASE 1: FORENSIC ARCHITECTURAL SPECIFICATION
 
-The AI must create `CLONE-SPEC.md` in the project root directory.
+The AI must create `Beplus-spec.md` in the project root directory.
 
-### Mandatory Content of `CLONE-SPEC.md`:
+### Mandatory Content of `Beplus-spec.md`:
 1. **Measured Global Design System Tokens**:
    - Primary Heading Font & Body Font stacks measured via CDP.
    - Strict 8-variable Gutenberg palette (`base`, `contrast`, `paragraph`, `primary`, `secondary`, `surface`, `border`, `accent #F59E0B`).
@@ -183,10 +183,10 @@ For EVERY section from Header to Footer, document:
 ---
 
 ### 1.4. Human Review Checkpoint (Stop & Confirm)
-After writing `CLONE-SPEC.md`, the AI MUST STOP and print the executive summary:
+After writing `Beplus-spec.md`, the AI MUST STOP and print the executive summary:
 ```markdown
 ### 📋 Specification Complete: Ready for Your Review
-I have completed the forensic architectural specification `CLONE-SPEC.md` based on real measured data from [Target Site A].
+I have completed the forensic architectural specification `Beplus-spec.md` based on real measured data from [Target Site A].
 
 - **Brand & Niche**: [Niche] | [Brand Name]
 - **Heading Font**: `var(--nextora-font-heading)` = [Font Name]
@@ -359,8 +359,9 @@ soup = BeautifulSoup(html, "html.parser")
 errors = []
 
 # 1. Spec presence
-if not os.path.exists("CLONE-SPEC.md"):
-    errors.append("CRITICAL: CLONE-SPEC.md does not exist in workspace!")
+spec_file = "Beplus-spec.md" if os.path.exists("Beplus-spec.md") else ("beplus-spec.md" if os.path.exists("beplus-spec.md") else ("CLONE-SPEC.md" if os.path.exists("CLONE-SPEC.md") else None))
+if not spec_file:
+    errors.append("CRITICAL: Beplus-spec.md does not exist in workspace!")
 
 # 2. Zero !important
 if "!important" in css:
@@ -401,7 +402,7 @@ if "#F59E0B" not in css and "#f59e0b" not in css:
 # 6. Legacy template assets check
 legacy_images = re.findall(r"assets/images/68[a-f0-9]+_[A-Za-z0-9_-]+\.(?:jpg|png)", html)
 if len(legacy_images) > 3:
-    errors.append(f"ASSET DEFECT: Found {len(legacy_images)} legacy clone images! Must replace 100% with Unsplash photos.")
+    errors.append(f"ASSET DEFECT: Found {len(legacy_images)} legacy scraped images! Must replace 100% with Unsplash photos.")
 
 # 7. Optical Icon Hierarchy & AI sparkle ban
 if re.search(r"sparkles", html, re.I):
@@ -462,11 +463,11 @@ if duplicates:
     errors.append(f"DUPLICATE CONTENT DEFECT: Found duplicated card titles: {duplicates}! Every card must have a unique commercial headline.")
 
 # 15. 100% English Markdown Artifacts Audit
-if os.path.exists("CLONE-SPEC.md"):
-    spec_content = open("CLONE-SPEC.md").read()
+if spec_file and os.path.exists(spec_file):
+    spec_content = open(spec_file).read()
     vn_terms = re.findall(r"\b(STT|Tên Section|Bố cục|Nội dung|Chuyển động|Hình ảnh|Tiêu chí đối soát|Thực tế kiểm định|Kết luận|Bảng tổng duyệt)\b", spec_content, re.I)
     if vn_terms:
-        errors.append(f"LANGUAGE DEFECT: Found Vietnamese terms ({set(vn_terms)}) in CLONE-SPEC.md! All markdown deliverables MUST be 100% English.")
+        errors.append(f"LANGUAGE DEFECT: Found Vietnamese terms ({set(vn_terms)}) in {spec_file}! All markdown deliverables MUST be 100% English.")
 
 # 16. Mobile Hamburger Navigation Audit
 has_mobile_toggle = soup.find(class_=re.compile(r"menu-toggle|mobile-menu|hamburger|nav-toggle", re.I)) or soup.find("button", attrs={"aria-label": re.compile(r"menu|navigation", re.I)})
