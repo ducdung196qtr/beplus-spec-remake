@@ -124,30 +124,41 @@ Tuyệt đối CẤM AI tự ý đơn giản hóa cấu trúc hoặc chuyển đ
   - Engine: [Pure CSS @keyframes / Webflow IX2 localized runtime `assets/js/webflow.main.js` / Swiper.js `assets/js/swiper.min.js`].
   - Initialization: Explicit DOM selector initialization.
 
-#### D. Asset & Icon Specifications
+#### D. Asset, Icon & Slider Specifications
 - **Photography (100% Unsplash Real Photos)**:
   - Asset 1: URL `https://images.unsplash.com/photo-[ID]?auto=format&fit=crop&w=1200&q=80`, Aspect Ratio `[16:10 / 4:3 / 1:1]`, Subject `[DESCRIPTION]`.
-- **Icons (100% Lucide Stroke-Width=1)**:
-  - Icon 1: `<svg class="lucide lucide-[name]" stroke="currentColor" stroke-width="1" ...>...</svg>`
-  - Review Stars: Lucide Star icon filled and stroked with `--wp--preset--color--accent` (`#F59E0B`).
+- **Universal Icon vs Image Disambiguation (100% Lucide Stroke-Width=1)**:
+  - *Heuristic*: All original `<img>` with dimensions <= 64px, `.svg` files, or inside badge/button/timeline nodes are classified as **Icon Nodes** (NEVER replaced with Unsplash photos).
+  - *Context-Aware Semantic Selection*:
+    * Card 1 ([TITLE]): `<svg class="lucide lucide-[ICON_NAME_1]" stroke="currentColor" stroke-width="1">...</svg>` (Mapped to [SEMANTIC_MEANING])
+    * Card 2 ([TITLE]): `<svg class="lucide lucide-[ICON_NAME_2]" stroke="currentColor" stroke-width="1">...</svg>` (Mapped to [SEMANTIC_MEANING])
+    * Card 3 ([TITLE]): `<svg class="lucide lucide-[ICON_NAME_3]" stroke="currentColor" stroke-width="1">...</svg>` (Mapped to [SEMANTIC_MEANING])
+  - *Anti-Repetition*: Zero duplicate icons across sibling cards in this section.
+  - *Color Extraction*: Computed stroke/fill measured as `[COLOR_TOKEN]` (Rating Stars: `#F59E0B`).
+- **Slider / Carousel Specifications (If Applicable)**:
+  - Autoplay: `delay: 4000ms`, `pauseOnMouseEnter: true`, `disableOnInteraction: false`.
+  - Geometry: All slides strictly equal height (`height: auto; display: flex; flex-direction: column;`).
+  - Fractional Slides (e.g. 3.5 on desktop): Container `overflow: hidden;` with right-edge gradient overlay fade (`linear-gradient(to right, transparent, var(--wp--preset--color--base))`).
 
 #### 🎯 Section QA Acceptance Contract (KẾT QUẢ MONG MUỐN & ĐỐI SOÁT KIỂM ĐỊNH)
 
 ##### A. Expected Production State (Kết quả mong muốn bắt buộc)
-- **Geometry & Tokens**: Bố cục flex/grid đúng tỷ lệ, padding-block chuẩn FSE spacing tokens, lề mobile 16-20px.
-- **Copywriting**: 100% text thương mại sản xuất hoàn chỉnh, sạch toàn bộ lỗi chính tả và placeholder.
-- **Motion Physics**: Đầy đủ 4 tầng chuyển động (on-load, scroll, hover, continuous loop), thời lượng ms và easing curve rõ ràng.
-- **Asset Compliance**: 100% ảnh Unsplash thật đúng aspect-ratio, 100% icon Lucide nét mảnh `stroke-width="1"`.
+- **Geometry & Tokens**: Bố cục flex/grid đúng tỷ lệ, padding-block chuẩn FSE spacing tokens, lề mobile 16-20px, card bằng nhau (equal height).
+- **Heading Hierarchy**: Tiêu đề section là `<h2>` to nhất (`var(--wp--preset--font-size--large)`), tiêu đề card là `<h4>` (`var(--wp--preset--font-size--medium)`).
+- **Copywriting**: 100% text thương mại sản xuất hoàn chỉnh, sạch toàn bộ lỗi chính tả và 0 text Latin ("Sed acc...", "Lorem ipsum").
+- **Motion & Slider**: Đầy đủ 4 tầng chuyển động, slider autoplay mượt mà + fade overlay cạnh phải cho slide thập phân 3.5.
+- **Asset & Icon Compliance**: Phân định chuẩn icon vs ảnh; 100% ảnh Unsplash thật đúng aspect-ratio; 100% icon Lucide nét mảnh `stroke-width="1"` ngữ nghĩa không lặp lại, màu chuẩn từ DOM gốc.
 
 ##### B. Verification & Acceptance Criteria (Check lại đối soát sau khi hoàn thành)
 | Tiêu chí đối soát | Kết quả mong muốn | Thực tế kiểm định | Kết luận |
 |---|---|---|---|
-| **Bố cục & Token** | Chuẩn FSE token, responsive mobile 16-20px | Đã kiểm định theo theme.json và CSS variables | **PASS** |
-| **Nội dung chữ** | Sửa sạch lỗi chính tả, text thương mại đầy đủ | Đã thay thế 100%, không còn placeholder/pending | **PASS** |
-| **Chuyển động** | Đo trực tiếp từ CDP/IX2 timeline, mô tả 4 tầng | Trigger, easing, duration khớp thực tế | **PASS** |
-| **Hình ảnh & Icon** | 100% Unsplash đúng tỷ lệ, Lucide stroke=1 | Đã mapping đầy đủ URL và SVG inline | **PASS** |
+| **Bố cục & Token** | Chuẩn FSE token, responsive mobile 16-20px, card equal height | Đã kiểm định theo theme.json, CSS variables, flex stretch | **PASS** |
+| **Phân cấp Heading** | Section H2 (large) > Card H4 (medium) > Eyebrow H6 (small) | Tiêu đề chính to nhất, các card H4 nhỏ hơn hợp lý | **PASS** |
+| **Nội dung chữ** | Sạch lỗi chính tả, 0 text Latin ('Sed acc', 'Lorem ipsum') | Đã thay thế 100% copy thương mại chuẩn niche | **PASS** |
+| **Chuyển động & Slider** | Đo từ CDP/IX2 timeline, slider autoplay + fade overlay | Autoplay 4s, equal height, fade overlay 3.5 slides | **PASS** |
+| **Hình ảnh & Icon** | 100% Unsplash đúng tỷ lệ, Lucide stroke=1 ngữ nghĩa không lặp | Dùng đúng icon theo title, màu chuẩn đo từ DOM gốc | **PASS** |
 
-> **Section Outcome**: **PASS** *(Chỉ nghiệm thu khi cả 4 tiêu chí đều đạt chuẩn PASS)*
+> **Section Outcome**: **PASS** *(Chỉ nghiệm thu khi cả 5 tiêu chí đều đạt chuẩn PASS)*
 
 ---
 
@@ -155,19 +166,19 @@ Tuyệt đối CẤM AI tự ý đơn giản hóa cấu trúc hoặc chuyển đ
 
 Bảng tổng duyệt đối soát toàn bộ từng section một từ Header đến Footer. **Mọi section bắt buộc phải đạt PASS thì tài liệu mới được coi là hoàn tất và sẵn sàng cho người dùng duyệt chuyển sang Pha 2:**
 
-| STT | Tên Section | Bố cục & Token | Nội dung sản xuất | Motion Physics (4 tầng) | Assets & Lucide Icons | Kết quả nghiệm thu |
-|:---:|:---|:---:|:---:|:---:|:---:|:---:|
-| 01 | Header & Navigation | PASS | PASS | PASS | PASS | **PASS** |
-| 02 | Hero Banner | PASS | PASS | PASS | PASS | **PASS** |
-| 03 | Partner Logo Ticker | PASS | PASS | PASS | PASS | **PASS** |
-| 04 | About Us & Metrics | PASS | PASS | PASS | PASS | **PASS** |
-| 05 | Services Collection | PASS | PASS | PASS | PASS | **PASS** |
-| 06 | Portfolio Works | PASS | PASS | PASS | PASS | **PASS** |
-| 07 | 3-Step Process | PASS | PASS | PASS | PASS | **PASS** |
-| 08 | Specialty Ticker | PASS | PASS | PASS | PASS | **PASS** |
-| 09 | Testimonials & Reviews | PASS | PASS | PASS | PASS | **PASS** |
-| 10 | Call To Action (CTA) | PASS | PASS | PASS | PASS | **PASS** |
-| 11 | Recent Blog Articles | PASS | PASS | PASS | PASS | **PASS** |
-| 12 | Footer & Newsletter | PASS | PASS | PASS | PASS | **PASS** |
+| STT | Tên Section | Bố cục & Token | Heading H2>H4 | Nội dung sản xuất | Motion & Slider | Assets & Lucide Icons | Kết quả nghiệm thu |
+|:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| 01 | Header & Navigation | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 02 | Hero Banner | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 03 | Partner Logo Ticker | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 04 | About Us & Metrics | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 05 | Services Collection | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 06 | Portfolio Works | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 07 | 3-Step Process | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 08 | Specialty Ticker | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 09 | Testimonials & Reviews | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 10 | Call To Action (CTA) | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 11 | Recent Blog Articles | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| 12 | Footer & Newsletter | PASS | PASS | PASS | PASS | PASS | **PASS** |
 
 > **Final Architectural Verdict**: **ALL SECTIONS PASS — SPECIFICATION APPROVED FOR HUMAN REVIEW**

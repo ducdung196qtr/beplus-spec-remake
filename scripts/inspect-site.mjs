@@ -8,7 +8,13 @@
  *    - Real computed styles (computed font sizes, line heights, colors, layout dimensions)
  *    - Real Webflow IX2 animation timeline (actions, triggers, easing curves & durations)
  *    - Animation-to-Section mapping (each motion action mapped to its target section)
- *    - Image dimensions & computed aspect-ratios (16:9, 16:10, 4:3, 1:1, etc.)
+ *    - Intelligent Image vs Icon Disambiguation:
+ *      * Small <img> (<=64px, svg, icon classes, inside badge/button/timeline) -> classified as ICONS
+ *      * Real photos (cards, hero, background) -> classified as CONTENT IMAGES with aspect ratios
+ *    - Icon color extraction (computed color, stroke, fill, and container background)
+ *    - Slider & Carousel architecture detection (Swiper, Webflow slider, slidesPerView, autoplay)
+ *    - Section heading hierarchy analysis (h2 section title vs h4 internal card titles)
+ *    - Latin placeholder ("Lorem ipsum", "Sed acc...") detection
  *    - Full section text extraction (headings, paragraphs, buttons, list items)
  * 2. STATIC CSS & DOM INSPECTION (Fallback & Supplementary):
  *    - Fetches external Webflow stylesheets, parses CSS variables, typography clamp tokens
@@ -123,6 +129,7 @@ async function probeViaCdp(url) {
         const h1 = document.querySelector("h1");
         const h2 = document.querySelector("h2");
         const h3 = document.querySelector("h3");
+        const h4 = document.querySelector("h4");
         const p = document.querySelector("p");
         const primaryBtn = document.querySelector(".primary-button, .w-button, button");
 
@@ -140,6 +147,18 @@ async function probeViaCdp(url) {
             fontWeight: window.getComputedStyle(h2).fontWeight,
             color: window.getComputedStyle(h2).color
           } : null,
+          h3: h3 ? {
+            fontSize: window.getComputedStyle(h3).fontSize,
+            lineHeight: window.getComputedStyle(h3).lineHeight,
+            fontWeight: window.getComputedStyle(h3).fontWeight,
+            color: window.getComputedStyle(h3).color
+          } : null,
+          h4: h4 ? {
+            fontSize: window.getComputedStyle(h4).fontSize,
+            lineHeight: window.getComputedStyle(h4).lineHeight,
+            fontWeight: window.getComputedStyle(h4).fontWeight,
+            color: window.getComputedStyle(h4).color
+          } : null,
           p: p ? {
             fontSize: window.getComputedStyle(p).fontSize,
             lineHeight: window.getComputedStyle(p).lineHeight,
@@ -148,50 +167,125 @@ async function probeViaCdp(url) {
           button: primaryBtn ? {
             fontSize: window.getComputedStyle(primaryBtn).fontSize,
             backgroundColor: window.getComputedStyle(primaryBtn).backgroundColor,
+            color: window.getComputedStyle(primaryBtn).color,
             borderRadius: window.getComputedStyle(primaryBtn).borderRadius,
             padding: window.getComputedStyle(primaryBtn).padding
           } : null
         };
 
-        // 3. Computed Images with Aspect Ratios
-        const images = Array.from(document.querySelectorAll("img")).map((img, i) => {
-          const rect = img.getBoundingClientRect();
-          const nw = img.naturalWidth || Math.round(rect.width) || 0;
-          const nh = img.naturalHeight || Math.round(rect.height) || 0;
-          let ratioStr = "1:1";
-          if (nw && nh) {
-            const r = nw / nh;
-            if (Math.abs(r - 16/9) < 0.15) ratioStr = "16:9";
-            else if (Math.abs(r - 16/10) < 0.15) ratioStr = "16:10";
-            else if (Math.abs(r - 4/3) < 0.15) ratioStr = "4:3";
-            else if (Math.abs(r - 3/2) < 0.15) ratioStr = "3:2";
-            else if (Math.abs(r - 1) < 0.15) ratioStr = "1:1";
-            else ratioStr = nw + ":" + nh;
+        // 3. Intelligent Disambiguation: Images vs Icons
+        const rawImgs = Array.from(document.querySelectorAll("img, svg"));
+        const contentImages = [];
+        const detectedIcons = [];
+
+        rawImgs.forEach((el, i) => {
+          const rect = el.getBoundingClientRect();
+          const isSvg = el.tagName.toLowerCase() === "svg";
+          const src = isSvg ? "" : (el.src || "");
+          const className = (typeof el.className === "string" ? el.className : (el.getAttribute("class") || "")).toLowerCase();
+          const alt = isSvg ? "" : (el.alt || "");
+          
+          const nw = el.naturalWidth || Math.round(rect.width) || 0;
+          const nh = el.naturalHeight || Math.round(rect.height) || 0;
+          
+          const parent = el.parentElement;
+          const parentClass = parent ? (typeof parent.className === "string" ? parent.className.toLowerCase() : "") : "";
+          const closestCard = el.closest(".card, [class*='card'], .feature-box, .service-row, .step-item, .testimonial, .timeline, li");
+          const cardTitle = closestCard ? (closestCard.querySelector("h1, h2, h3, h4, h5, h6, [class*='heading'], [class*='title']")?.innerText?.trim() || "") : "";
+
+          // Heuristic to detect if element is an ICON vs a CONTENT PHOTO
+          const isIconClass = /icon|image-(?:1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-4])px|svg|symbol|bullet|badge|arrow|star|nav|check/i.test(className);
+          const isIconParent = /icon|badge|circle|pill|bullet|timeline|step-icon/i.test(parentClass);
+          const isSmall = (nw > 0 && nw <= 64) || (nh > 0 && nh <= 64) || (rect.width > 0 && rect.width <= 64);
+          const isSvgSrc = src.endsWith(".svg") || src.includes("/icons/") || src.includes("icon-");
+
+          if (isSvg || isIconClass || isIconParent || (isSmall && (isSvgSrc || alt.toLowerCase().includes("icon") || alt.toLowerCase().includes("arrow")))) {
+            // Classified as an ICON
+            const cs = window.getComputedStyle(el);
+            const parentCs = parent ? window.getComputedStyle(parent) : cs;
+            detectedIcons.push({
+              index: detectedIcons.length + 1,
+              type: isSvg ? "svg" : "img",
+              src: src,
+              className: className,
+              alt: alt,
+              computedDimensions: { width: Math.round(rect.width), height: Math.round(rect.height) },
+              computedColor: cs.color,
+              computedFill: cs.fill,
+              computedStroke: cs.stroke,
+              badgeBackgroundColor: parentCs.backgroundColor,
+              cardTitleContext: cardTitle,
+              section: (el.closest("section, .section, header, footer, nav")?.className || "global")
+            });
+          } else if (nw > 64 || nh > 64 || (!isIconClass && src.length > 0)) {
+            // Classified as a CONTENT IMAGE
+            let ratioStr = "1:1";
+            if (nw && nh) {
+              const r = nw / nh;
+              if (Math.abs(r - 16/9) < 0.15) ratioStr = "16:9";
+              else if (Math.abs(r - 16/10) < 0.15) ratioStr = "16:10";
+              else if (Math.abs(r - 4/3) < 0.15) ratioStr = "4:3";
+              else if (Math.abs(r - 3/2) < 0.15) ratioStr = "3:2";
+              else if (Math.abs(r - 1) < 0.15) ratioStr = "1:1";
+              else ratioStr = nw + ":" + nh;
+            }
+            contentImages.push({
+              index: contentImages.length + 1,
+              src: src,
+              alt: alt || "Production visual",
+              naturalWidth: nw,
+              naturalHeight: nh,
+              aspectRatio: ratioStr,
+              section: (el.closest("section, .section, header, footer, nav")?.className || "global")
+            });
           }
-          const closestSec = img.closest("section, .section, header, footer, nav");
+        });
+
+        // 4. Slider / Carousel Architecture Extraction
+        const sliderEls = Array.from(document.querySelectorAll(".swiper, .w-slider, [class*='slider'], [class*='carousel']"));
+        const detectedSliders = sliderEls.map((s, idx) => {
+          const rect = s.getBoundingClientRect();
+          const slides = s.querySelectorAll(".swiper-slide, .w-slide, [class*='slide']");
+          const slideHeights = Array.from(slides).map(sl => Math.round(sl.getBoundingClientRect().height));
+          const allEqualHeight = slideHeights.length > 1 ? slideHeights.every(h => Math.abs(h - slideHeights[0]) < 4) : true;
+          
           return {
-            index: i + 1,
-            src: img.src,
-            alt: img.alt || "Production visual",
-            naturalWidth: nw,
-            naturalHeight: nh,
-            aspectRatio: ratioStr,
-            section: closestSec ? (closestSec.className || closestSec.tagName.toLowerCase()) : "global"
+            index: idx + 1,
+            className: s.className,
+            totalSlides: slides.length,
+            visibleWidth: Math.round(rect.width),
+            slidesEqualHeight: allEqualHeight,
+            sampleSlideHeight: slideHeights[0] || 0,
+            hasAutoplay: s.getAttribute("data-autoplay") === "true" || /autoplay/i.test(s.className),
+            section: (s.closest("section, .section")?.className || "global")
           };
         });
 
-        // 4. Computed Sections & Full Text Content
+        // 5. Latin / Lorem Ipsum Detection
+        const bodyText = document.body.innerText;
+        const latinMatches = bodyText.match(/\\b(lorem\\s+ipsum|sed\\s+ut\\s+perspiciatis|sed\\s+acc[a-z]*|dolor\\s+sit\\s+amet|consectetur\\s+adipiscing|eiusmod\\s+tempor)\\b/gi) || [];
+
+        // 6. Computed Sections, Heading Hierarchy & Full Text Content
         const sectionEls = Array.from(document.querySelectorAll("section, .section, header, footer, nav, [class*='section']"));
         const measuredSections = sectionEls.map((el, i) => {
           const rect = el.getBoundingClientRect();
           const cs = window.getComputedStyle(el);
-          const headings = Array.from(el.querySelectorAll("h1, h2, h3, h4, h5, h6")).map(h => ({
-            tag: h.tagName.toLowerCase(),
-            text: h.innerText.trim()
-          })).filter(h => h.text.length > 0);
+          const headings = Array.from(el.querySelectorAll("h1, h2, h3, h4, h5, h6")).map(h => {
+            const hCs = window.getComputedStyle(h);
+            return {
+              tag: h.tagName.toLowerCase(),
+              text: h.innerText.trim(),
+              fontSize: hCs.fontSize,
+              fontWeight: hCs.fontWeight
+            };
+          }).filter(h => h.text.length > 0);
           
           const paragraphs = Array.from(el.querySelectorAll("p")).map(p => p.innerText.trim()).filter(t => t.length > 0);
           const buttons = Array.from(el.querySelectorAll("a.w-button, a[class*='btn'], a[class*='button'], button")).map(b => b.innerText.trim()).filter(t => t.length > 0);
+
+          // Check if section has an H2 as main headline
+          const hasH2 = headings.some(h => h.tag === "h2");
+          const cardHeadings = headings.filter(h => h.tag === "h3" || h.tag === "h4");
 
           return {
             index: i + 1,
@@ -201,8 +295,10 @@ async function probeViaCdp(url) {
             width: Math.round(rect.width),
             height: Math.round(rect.height),
             backgroundColor: cs.backgroundColor,
+            color: cs.color,
             paddingTop: cs.paddingTop,
             paddingBottom: cs.paddingBottom,
+            hasH2MainHeadline: hasH2,
             headings,
             paragraphs,
             buttons
@@ -212,7 +308,10 @@ async function probeViaCdp(url) {
         return {
           ix2Data,
           computed,
-          images,
+          contentImages,
+          detectedIcons,
+          detectedSliders,
+          latinPlaceholders: Array.from(new Set(latinMatches.map(m => m.toLowerCase()))),
           measuredSections
         };
       })()`,
@@ -309,16 +408,6 @@ async function auditSite(targetUrl) {
     motionEngines.push("Native CSS Keyframes");
   }
 
-  // Parse Images
-  const imgTags = html.match(/<img[^>]+>/gi) || [];
-  const imageUrls = [];
-  for (const img of imgTags) {
-    const srcMatch = img.match(/src=["']([^"']+)["']/i);
-    if (srcMatch && !imageUrls.includes(srcMatch[1])) {
-      imageUrls.push(srcMatch[1]);
-    }
-  }
-
   // Typos Detection
   const typos = [
     { original: "Real Woks", corrected: "Recent Works", context: "Portfolio Section Heading" },
@@ -343,7 +432,10 @@ async function auditSite(targetUrl) {
     computed_forensics: cdpData ? {
       typography: cdpData.computed,
       measured_sections: cdpData.measuredSections,
-      measured_images: cdpData.images
+      measured_images: cdpData.contentImages,
+      measured_icons: cdpData.detectedIcons,
+      measured_sliders: cdpData.detectedSliders,
+      latin_placeholders: cdpData.latinPlaceholders
     } : null,
     motion_timeline: cdpData && cdpData.ix2Data ? {
       total_actions: cdpData.ix2Data.totalActions,
@@ -352,12 +444,14 @@ async function auditSite(targetUrl) {
       events: cdpData.ix2Data.events
     } : null,
     assets: {
-      total_images: imageUrls.length,
-      sample_images: imageUrls.slice(0, 15),
-      image_aspect_ratios: cdpData && cdpData.images ? cdpData.images : []
+      total_content_images: cdpData?.contentImages?.length || 0,
+      total_detected_icons: cdpData?.detectedIcons?.length || 0,
+      sample_images: (cdpData?.contentImages || []).slice(0, 10),
+      sample_icons: (cdpData?.detectedIcons || []).slice(0, 10)
     },
     commercial_polish: {
       detected_typos: detectedTypos,
+      detected_latin_placeholders: cdpData?.latinPlaceholders || [],
       static_metrics_preservation: [
         { label: "Projects Completed", value: "250+" },
         { label: "Years Experience", value: "12+" },
@@ -374,16 +468,16 @@ async function auditSite(targetUrl) {
   console.log(`- CSS Variables: ${cssVars.length}`);
   console.log(`- Top Colors: ${topColors.slice(0, 5).map(c => c.color).join(", ")}`);
   console.log(`- Motion Engines: ${motionEngines.join(", ")}`);
-  if (cdpData && cdpData.ix2Data) {
-    console.log(`- CDP Live IX2 Events: ${cdpData.ix2Data.totalEvents}, Actions: ${cdpData.ix2Data.totalActions}`);
-    console.log(`- CDP Measured Images: ${cdpData.images.length} with Aspect Ratios`);
-    console.log(`- CDP Measured Sections: ${cdpData.measuredSections.length}`);
+  if (cdpData) {
+    console.log(`- CDP Content Images: ${cdpData.contentImages?.length || 0}`);
+    console.log(`- CDP Detected Icons: ${cdpData.detectedIcons?.length || 0} (with computed colors)`);
+    console.log(`- CDP Detected Sliders: ${cdpData.detectedSliders?.length || 0}`);
+    console.log(`- Latin Placeholders Found: ${cdpData.latinPlaceholders?.length || 0}`);
+    console.log(`- CDP Measured Sections: ${cdpData.measuredSections?.length || 0}`);
   }
-  console.log(`- Total Unique Images: ${imageUrls.length}`);
-  console.log(`- Typos to Correct: ${detectedTypos.map(t => t.original).join(", ")}`);
 }
 
-const targetUrl = process.argv[2] || "https://ritovex.webflow.io/";
+const targetUrl = process.argv[2] || "https://agency-nx.webflow.io/";
 auditSite(targetUrl).catch(err => {
   console.error(`[Inspector] Fatal error: ${err.message}`);
   process.exit(1);

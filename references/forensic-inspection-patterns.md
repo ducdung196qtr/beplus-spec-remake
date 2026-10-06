@@ -586,6 +586,197 @@ When programmatically spawning new projects via the OpenDesign REST API:
   html = replace_heading('h5', 'heading---h5', html)
   ```
 
+---
+
+## 16. Universal Icon vs Image Disambiguation Architecture
+
+### 16.1. The Webflow `<img>` Icon Trap
+In Webflow and modern headless builders, design systems often export small iconography as inline `<img>` tags pointing to Webflow CDN assets:
+`<img src="https://cdn.prod.website-files.com/.../icon.svg" class="image-30px" alt="Rocket">`
+Naive scrapers and LLMs misidentify these as general content photos and attempt to replace them with large Unsplash photos or leave them as broken external links.
+
+### 16.2. 4-Vector Disambiguation Heuristic
+An element MUST be classified as an **Icon Node** if it meets ANY of the following 4 vectors:
+1. **Geometric Vector**: Computed or declared `width` or `height` <= `64px` (e.g. `image-16px`, `image-24px`, `image-30px`, `image-45px`).
+2. **Class & Attribute Vector**: Class contains `icon`, `svg`, `symbol`, `bullet`, `badge`, `arrow`, `star`, `nav`, `check`.
+3. **MIME/Path Vector**: File path ends in `.svg` or contains `/icon/`, `/icons/`, or `icon-`.
+4. **DOM Nesting Vector**: Sits inside a circular badge (`.icon-circle`, `.badge-pill`), timeline step (`.timeline-node`), button icon slot, or checklist bullet.
+
+### 16.3. Mandate on Icon Nodes
+- **STRICT PROHIBITION**: NEVER map an Icon Node to an Unsplash photo.
+- **MANDATORY**: Replace 100% of Icon Nodes with inline **Lucide SVG icons** (`stroke-width="1"`).
+- Preserve the exact layout geometry (circle badges, connector lines, relative offsets).
+
+---
+
+## 17. Context-Aware Semantic Icon Mapping & Anti-Repetition Contract
+
+### 17.1. Anti-Repetition Rule
+In any grid, list, timeline, or series of cards, no two consecutive or sibling items may share the same icon (unless it is a uniform checklist with identical checkmarks). The AI must inspect each card's title and description individually.
+
+### 17.2. Semantic Icon Mapping Dictionary
+- **About / Overview / Introduction**: `info`, `help-circle`, `book-open`, `compass`
+- **Mission / Launch / Velocity / Execution**: `rocket`, `zap`, `send`, `flame`
+- **Vision / Focus / Discovery / Future**: `binoculars`, `eye`, `scan`, `telescope`
+- **Strategy / Goals / Objectives**: `target`, `crosshair`, `map-pin`, `route`
+- **Security / Compliance / Protection**: `shield-check`, `lock`, `badge-check`, `key`
+- **Finance / Analytics / Growth / Metrics**: `trending-up`, `bar-chart-3`, `dollar-sign`, `wallet`, `pie-chart`
+- **Design / UI / UX / Creative**: `palette`, `pen-tool`, `layers`, `layout`, `wand-2`
+- **Technology / Engineering / Code**: `code-2`, `cpu`, `terminal`, `server`, `database`
+- **Community / Team / Partnership**: `users`, `user-check`, `heart-handshake`, `message-square`
+
+### 17.3. Exact Color Extraction Protocol (Zero Guessing)
+1. Read the computed `color`, `stroke`, `fill`, and container `background-color` of the original icon node via CDP `getComputedStyle()`.
+2. If the icon sits inside an accent badge (e.g. Agency NX neon lime `#BBF340`), the icon stroke inside is solid black (`#000000`).
+3. If the icon is standalone on a dark canvas, bind stroke to `var(--wp--preset--color--primary)` or `var(--wp--preset--color--contrast)`.
+4. Review stars MUST strictly use gold `#F59E0B`. Guessing arbitrary pastel or random colors is forbidden.
+
+---
+
+## 18. Card Grid Geometry, Equal Heights & Robust Spacing Standards
+
+### 18.1. Equal Heights Contract
+Sibling cards in a grid or flex row must never have uneven vertical heights:
+```css
+.card-grid, .features-grid, .services-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: stretch; /* Forces equal height columns */
+  gap: var(--wp--preset--spacing--30);
+}
+
+.card-item, .feature-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Force bottom action or metadata to sit at the exact same baseline across all cards */
+.card-item .card-footer,
+.card-item .btn,
+.card-item [class*="button"] {
+  margin-top: auto;
+}
+```
+
+### 18.2. Text Clipping & Overflow Prevention
+- Do NOT use fixed pixel `height` on text description containers. Use `min-height: auto; height: auto; overflow: visible;`.
+- Use `text-wrap: balance;` on headings to prevent single-word orphan line wraps.
+
+### 18.3. Mobile Safe Margins Mandate
+Screen width `<= 767px` MUST maintain an exact container padding of `16–20px`:
+```css
+@media (max-width: 767px) {
+  .container, .page-wrapper > div {
+    width: min(var(--container-max-width, 1280px), calc(100% - var(--wp--preset--spacing--40)));
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+}
+```
+
+---
+
+## 19. Swiper & Carousel Autoplay, Fractional Peek (3.5) & Edge Overlay Fade Standards
+
+### 19.1. Mandatory Autoplay Specification
+All multi-card carousels (Testimonials, Portfolio reels, Client showcases) must include continuous or autoplay mechanics:
+- Autoplay delay: 3500ms to 4500ms.
+- `disableOnInteraction: false` and `pauseOnMouseEnter: true`.
+- Equal slide heights:
+  ```css
+  .swiper-wrapper {
+    align-items: stretch;
+  }
+  .swiper-slide {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  ```
+
+### 19.2. Fractional Slides (3.5 items) & Right-Edge Gradient Fade Overlay
+When desktop layouts display a fractional number of slides (such as 3.5 or 2.5 slides to hint at upcoming content):
+1. Container MUST enforce `overflow: hidden;`.
+2. A gradient fade overlay MUST be positioned on the right edge so the partially visible slide fades smoothly into the canvas background rather than abruptly clipping:
+```css
+.slider-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 90px;
+  background: linear-gradient(to right, transparent, var(--wp--preset--color--base));
+  pointer-events: none;
+  z-index: 5;
+}
+```
+3. Responsive collapse:
+   - Desktop: `slidesPerView: 3.5` (with right-edge fade)
+   - Tablet: `slidesPerView: 2.2`
+   - Mobile: `slidesPerView: 1.15` (or `1`)
+
+---
+
+## 20. Ghost Section & Blank Content Elimination Protocol
+
+### 20.1. Root Causes of Blank Sections in Cloned Sites
+1. **Webflow IX2 Scroll Trigger Detachment**: Elements initialized with `opacity: 0; transform: translateY(40px);` waiting for scroll interactions that never fire in static or headless contexts.
+2. **Text-to-Background Color Collision**: Inverted sections (dark card inside light page, or light card inside dark page) where text color cascades to match the card background (e.g. white text on white background).
+3. **Curtain Masks & Unclosed Modals**: Overlay elements (`.image-show-style`, commerce cart wrappers) covering the viewport.
+
+### 20.2. Mandatory Resolutions
+- **Fallback Base Visibility**: In `main.css`, all content containers and headings MUST default to:
+  `opacity: 1; transform: none; visibility: visible;`
+- **Dual Token Declaration on Inverted Containers**: Whenever a card or section inverts its background, declare BOTH background and text color tokens:
+  ```css
+  .dark-surface {
+    background-color: var(--wp--preset--color--contrast);
+    color: var(--wp--preset--color--base);
+  }
+  .dark-surface h4, .dark-surface p {
+    color: inherit;
+  }
+  ```
+- **Purge All Intro Curtains**: Set `.image-show-style, .bg-column-mask { display: none; }`.
+
+---
+
+## 21. Section Heading Dominance Contract (H2 Section Headings vs H4 Card Sub-headings)
+
+### 21.1. Visual Dominance Principle
+In EVERY section, the primary section title MUST visually dominate all internal card titles, feature labels, and metric numbers. A card title must never be equal to or larger than the section title.
+
+### 21.2. Strict Tag & Token Hierarchy
+1. **Hero Main Headline**: `<h1>` -> `var(--wp--preset--font-size--xx-large)` (or `x-large`).
+2. **Section Primary Title**: `<h2>` -> `var(--wp--preset--font-size--large)`.
+3. **Card Titles / Feature Item Titles / Step Titles**: `<h4>` -> `var(--wp--preset--font-size--medium)`.
+4. **Secondary Card Groupings (if 3 tiers exist)**: `<h3>` -> `var(--wp--preset--font-size--medium-plus)`.
+5. **Eyebrow / Kicker Badge**: `<h6>` or `.eyebrow` -> `var(--wp--preset--font-size--small)` with `text-transform: uppercase; letter-spacing: 0.05em;`.
+6. **Body Copy**: `<p>` -> `var(--wp--preset--font-size--base)`.
+
+---
+
+## 22. Latin Placeholder ("Lorem Ipsum" / "Sed acc") Forensic Detection & Rewrite Protocol
+
+### 22.1. The Placeholder Leak Trap
+Webflow template creators often leave Latin filler text (`Sed ut perspiciatis`, `Sed accumsan`, `Lorem ipsum`, `dolor sit amet`) in secondary card bodies, testimonials, or timeline steps.
+
+### 22.2. Zero Tolerance Mandate
+The AI must scan all extracted section content for Latin roots:
+`\b(lorem|ipsum|sed ut perspiciatis|sed acc|dolor sit|consectetur|adipiscing)\b`
+Every detected Latin paragraph MUST be 100% replaced with polished, natural commercial copywriting matching:
+1. The exact industry niche (Creative Agency, Fintech, VC, SaaS).
+2. The exact length and sentence rhythm of the original UI box.
+3. Realistic, credible terminology and verifiable metric formats.
+
+
 
 
 
