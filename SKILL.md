@@ -15,7 +15,7 @@ Autonomous 2-stage specification-driven clone & transformation engine for OpenDe
 
 ## Linked References & Tools
 - `references/gutenberg-token-contract.md`: Authoritative FSE design tokens, fluid clamps, and theme.json contracts.
-- `references/forensic-inspection-patterns.md`: Comprehensive 34-chapter forensic manual covering specificity traps, bento alignment, frosted glass badges, slider carousels, mobile navigation drawers, scroll text illumination, split cards with floating overlays, workspace scratchpad isolation, optical icon hierarchy (curing tiny icons), and sticky stacking cards scroll engine.
+- `references/forensic-inspection-patterns.md`: Comprehensive 35-chapter forensic manual covering specificity traps, bento alignment, frosted glass badges, slider carousels, mobile navigation drawers, scroll text illumination, split cards with floating overlays, workspace scratchpad isolation, optical icon hierarchy (curing tiny icons), sticky stacking cards scroll engine, and WCAG AA dark canvas typography invariant (curing invisible dimmed text).
 - `references/opendesign-api-orchestration.md`: Headless REST API automation pipeline for OpenDesign daemon (port 7456), SQLite message seeding constraints, and SSE streaming.
 - `templates/clone-spec-template.md`: 100% English master architectural specification template for Phase 1 `CLONE-SPEC.md`.
 - `scripts/inspect-site.mjs`: Automated CDP forensic inspection script extracting computed CSS, deep component anatomy, and motion triggers.
@@ -59,6 +59,10 @@ Autonomous 2-stage specification-driven clone & transformation engine for OpenDe
 18. **Sticky Stacking Cards Scroll Engine (Cơ chế cuộn xếp chồng thẻ dạng bộ bài)**:
     - Ở các section danh mục dịch vụ/tính năng nhiều card 50/50 (như *What We Offer*), trên desktop (`min-width: 768px`) BẮT BUỘC sử dụng CSS native `position: sticky; top: calc(...); margin-bottom: calc(...);` với các offset so le tăng dần (`top: 80px, 110px, 140px...`).
     - Khi người dùng cuộn trang, các card lướt lên và xếp chồng đè lên nhau như một bộ bài vật lý 3D kèm bóng đổ đa tầng. Xuống mobile (`<= 767px`) tự động duỗi thẳng `position: static` tối ưu trải nghiệm vuốt chạm.
+19. **WCAG AA Optical Contrast & Dark Canvas Typography Invariant (Tuyệt đối cấm chữ đen/mờ trên nền tối)**:
+    - **Above-the-Fold Premature Dimming Ban**: Hero subtext và các đoạn giới thiệu trên màn hình đầu tiên (above-the-fold) BẮT BUỘC hiển thị 100% opacity (`opacity: 1`) và độ tương phản cao (`color: rgba(255, 255, 255, 0.88)` trên nền tối). CẤM TUYỆT ĐỐI bọc thẻ `scroll-word` hoặc đặt opacity < 0.85 cho text Hero khi mới load trang!
+    - **Dark Canvas Invariant**: Mọi văn bản trên nền tối (`.hero-section`, `.section-dark`, dark cards, ảnh tối) phải đạt độ tương phản tối thiểu 4.5:1 (WCAG AA). CẤM sử dụng token chữ tối (`var(--wp--preset--color--paragraph)` #6d6d6d hoặc `--wp--preset--color--contrast` #201d1d) trên nền tối. Text chính dùng `var(--wp--preset--color--base)` (#ffffff), text phụ dùng `rgba(255, 255, 255, 0.85)`.
+    - **Dark Scroll Illumination**: Hiệu ứng cuộn sáng chữ (`scroll-word.is-lit`) trên nền tối BẮT BUỘC sáng lên thành màu trắng tinh (`#ffffff`), tuyệt đối CẤM chuyển thành `--contrast` (than đen).
 
 ---
 
@@ -511,7 +515,7 @@ else:
 ## 4. SKILL SOURCE & VERSION CONTROL (GIT)
 
 The master source code, inspection scripts, templates, and reference manuals for `beplus-spec-remake` are version-controlled in a private GitHub repository:
-- **Repository**: `https://github.com/ducdung196qtr/beplus-spec-remake.git` (Private)
+- **Repository**: `https://github.com/ducdung196qtr/beplus-spec-remake.git` (Public)
 - **Local Directory**: `/root/.hermes/skills/web-design/beplus-spec-remake`
 - **Docker Mount/Sync**: `/app/skills/beplus-spec-remake` inside container `open-design`
 - **Sync Command**:
