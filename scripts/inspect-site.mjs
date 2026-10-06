@@ -287,6 +287,72 @@ async function probeViaCdp(url) {
           const hasH2 = headings.some(h => h.tag === "h2");
           const cardHeadings = headings.filter(h => h.tag === "h3" || h.tag === "h4");
 
+          // 1. Deep Component Anatomy: Split Cards (50/50 Layout with Floating Overlays & Feature Pills)
+          const rawCards = Array.from(el.querySelectorAll("[class*='card'], [class*='item'], [class*='slide']"));
+          const deepCards = [];
+          rawCards.forEach(c => {
+            const hasMedia = c.querySelector("img, picture, [class*='image'], [class*='media']");
+            const hasDetails = c.querySelector("h2, h3, h4, p, [class*='title'], [class*='name']");
+            const overlayCard = c.querySelector("[class*='overlay'], [class*='wrapper'], [class*='floating'], [class*='point']");
+            const pills = Array.from(c.querySelectorAll("[class*='point'], [class*='pill'], [class*='feature'], [class*='item']")).map(p => {
+              const pTitle = p.querySelector("[class*='title'], strong, h5, h6")?.innerText.trim();
+              const pDesc = p.querySelector("[class*='info'], [class*='desc'], span, p")?.innerText.trim();
+              return {
+                title: pTitle || p.innerText.trim().slice(0, 30),
+                desc: pDesc || ""
+              };
+            }).filter(p => p.title.length > 0);
+
+            if (hasMedia && hasDetails) {
+              const num = c.querySelector("[class*='num'], [class*='step'], [class*='index']")?.innerText.trim();
+              const title = c.querySelector("h3, h4, [class*='name'], [class*='title']")?.innerText.trim();
+              const desc = c.querySelector("p, [class*='except'], [class*='desc']")?.innerText.trim();
+              const btn = c.querySelector("a, button, [class*='btn']")?.innerText.trim();
+              const imgSrc = hasMedia.tagName.toLowerCase() === "img" ? hasMedia.src : (hasMedia.querySelector("img")?.src || "");
+
+              deepCards.push({
+                cardClass: c.className,
+                isSplitLayout: true,
+                num: num || null,
+                title: title || null,
+                desc: desc || null,
+                btn: btn || null,
+                imgSrc: imgSrc ? imgSrc.slice(0, 100) : null,
+                hasFloatingOverlay: Boolean(overlayCard),
+                featurePills: pills.slice(0, 4)
+              });
+            }
+          });
+
+          // 2. Metrics / Stat Counters
+          const statCounters = Array.from(el.querySelectorAll("[class*='count'], [class*='metric'], [class*='stat']"))
+            .map(node => {
+              const val = node.innerText.trim();
+              const label = node.closest("[class*='wrap'], [class*='block'], [class*='item']")?.querySelector("[class*='title'], [class*='label'], [class*='desc'], p")?.innerText.trim();
+              return { value: val, label: label || "" };
+            })
+            .filter(item => /[0-9]+[+%$MB]/.test(item.value));
+
+          // 3. Word-by-Word Scroll Illumination Targets
+          let wordScrollIllumination = null;
+          headings.forEach(h => {
+            const spans = Array.from(h.querySelectorAll("span")).filter(sp => sp.innerText.trim().length > 0);
+            if (spans.length >= 4) {
+              wordScrollIllumination = {
+                tag: h.tag,
+                totalWords: spans.length,
+                sampleWords: spans.slice(0, 6).map(sp => sp.innerText.trim())
+              };
+            }
+          });
+
+          // 4. Background Imagery & Visual Signature
+          let bgImg = cs.backgroundImage !== "none" ? cs.backgroundImage : null;
+          if (!bgImg) {
+            const bgChild = el.querySelector("img[class*='banner'], img[class*='hero'], img[class*='bg']");
+            if (bgChild) bgImg = bgChild.src;
+          }
+
           return {
             index: i + 1,
             tag: el.tagName.toLowerCase(),
@@ -296,12 +362,16 @@ async function probeViaCdp(url) {
             height: Math.round(rect.height),
             backgroundColor: cs.backgroundColor,
             color: cs.color,
+            bgImage: bgImg ? bgImg.slice(0, 120) : null,
             paddingTop: cs.paddingTop,
             paddingBottom: cs.paddingBottom,
             hasH2MainHeadline: hasH2,
             headings,
             paragraphs,
-            buttons
+            buttons,
+            deepCards: deepCards.slice(0, 6),
+            statCounters: statCounters.slice(0, 6),
+            wordScrollIllumination
           };
         });
 
@@ -396,10 +466,19 @@ async function auditSite(targetUrl) {
     .slice(0, 10)
     .map(([color, count]) => ({ color, count }));
 
-  // Motion Detection
+  // Advanced Motion & Interaction Engine Detection
   const motionEngines = [];
   if (html.includes("data-w-id") || html.includes("Webflow.require('ix2')") || combinedCss.includes("ix-")) {
     motionEngines.push("Webflow IX2 Runtime");
+  }
+  if (html.includes("ScrollTrigger") || combinedCss.includes("ScrollTrigger") || html.includes("gsap")) {
+    motionEngines.push("GSAP ScrollTrigger");
+  }
+  if (html.includes("SplitText") || html.includes("splittext")) {
+    motionEngines.push("SplitText Word Illumination");
+  }
+  if (html.includes("lenis") || combinedCss.includes("lenis")) {
+    motionEngines.push("Lenis Smooth Scroll");
   }
   if (html.includes("lottie") || combinedCss.includes("lottie")) {
     motionEngines.push("Lottie Animation");
@@ -407,6 +486,101 @@ async function auditSite(targetUrl) {
   if (combinedCss.includes("@keyframes")) {
     motionEngines.push("Native CSS Keyframes");
   }
+
+  // Recipes for native implementation in Phase 2
+  const interactionRecipes = {
+    scroll_text_illumination: {
+      description: "Word-by-word scroll text illumination (scrub) for hero & section headlines",
+      css: `.scroll-word { opacity: 0.25; color: var(--wp--preset--color--paragraph); transition: opacity 0.2s ease, color 0.2s ease; display: inline-block; margin-right: 0.25em; }
+.scroll-word.is-lit { opacity: 1; color: var(--wp--preset--color--contrast); }`,
+      js: `function initScrollIllumination() {
+  const targets = document.querySelectorAll('.scroll-illuminated, [data-scroll-illuminate]');
+  targets.forEach(target => {
+    const text = target.innerText.trim();
+    const words = text.split(/\\s+/);
+    target.innerHTML = words.map(w => \`<span class="scroll-word">\${w}</span>\`).join(' ');
+    const wordSpans = target.querySelectorAll('.scroll-word');
+    window.addEventListener('scroll', () => {
+      const rect = target.getBoundingClientRect();
+      const winH = window.innerHeight;
+      const progress = Math.min(Math.max((winH - rect.top) / (winH * 0.8), 0), 1);
+      const litCount = Math.floor(progress * wordSpans.length);
+      wordSpans.forEach((span, i) => {
+        if (i < litCount) span.classList.add('is-lit');
+        else span.classList.remove('is-lit');
+      });
+    }, { passive: true });
+  });
+}`
+    },
+    staggered_viewport_reveal: {
+      description: "Staggered fade-up reveal for cards and bento items",
+      css: `[data-reveal] { opacity: 0; transform: translateY(32px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+[data-reveal].is-visible { opacity: 1; transform: translateY(0); }`,
+      js: `function initScrollEntrance() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('[data-reveal]').forEach((el, idx) => {
+    el.style.transitionDelay = \`\${(idx % 4) * 0.1}s\`;
+    observer.observe(el);
+  });
+}`
+    },
+    mobile_hamburger_drawer: {
+      description: "Responsive mobile hamburger menu toggle and sliding navigation drawer",
+      css: `@media (max-width: 767px) {
+  .mobile-menu-drawer { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--wp--preset--color--surface); z-index: 9999; transform: translateY(-100%); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); padding: 80px 24px 32px; display: flex; flex-direction: column; gap: 20px; }
+  .mobile-menu-drawer.is-open { transform: translateY(0); }
+  .menu-toggle { display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; padding: 8px; z-index: 10000; }
+}`,
+      js: `function initMobileMenu() {
+  const toggle = document.querySelector('.menu-toggle');
+  const drawer = document.querySelector('.mobile-menu-drawer');
+  if (toggle && drawer) {
+    toggle.addEventListener('click', () => {
+      const isOpen = drawer.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', isOpen);
+    });
+  }
+}`
+    },
+    sticky_stacking_cards: {
+      description: "Sticky Stacking Cards (Card-Deck Peeling) for multi-item offer & service showcases",
+      css: `@media (min-width: 768px) {
+  .offer-list-wrapper { position: sticky; top: 0; margin-bottom: 0; }
+  .offer-list-wrapper._01 { top: 4rem; margin-bottom: 10rem; z-index: 1; }
+  .offer-list-wrapper._02 { top: 6rem; margin-bottom: 8rem; z-index: 2; }
+  .offer-list-wrapper._03 { top: 8rem; margin-bottom: 6rem; z-index: 3; }
+  .offer-list-wrapper._04 { top: 10rem; margin-bottom: 4rem; z-index: 4; }
+  .offer-list-wrapper._05 { top: 12rem; margin-bottom: 2rem; z-index: 5; }
+  .offer-list-wrapper._06 { top: 14rem; margin-bottom: 0; z-index: 6; }
+  .offer-card { box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12), 0 16px 48px rgba(0, 0, 0, 0.2); }
+}
+@media (max-width: 767px) {
+  .offer-list-wrapper { position: static; margin-bottom: 24px; }
+}`,
+      js: `// Pure CSS position: sticky - zero JS overhead required!`
+    },
+    optical_icon_hierarchy: {
+      description: "3-Tier Optical Sizing & Container Tiles to eliminate tiny, anemic icons",
+      css: `/* Tier 1: Stat & Metric squircle tiles (e.g. 8,000+) */
+.bento-badge, .stat-icon-tile { width: 52px; height: 52px; min-width: 52px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); }
+.bento-badge svg, .stat-icon-tile svg { width: 28px; height: 28px; stroke-width: 1.75; }
+
+/* Tier 2: Feature capsule container tiles (e.g. Smart Health, Strategic Planning) */
+.feature-icon-box { width: 38px; height: 38px; min-width: 38px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: rgba(32,29,29,0.06); color: var(--wp--preset--color--contrast); margin-top: 2px; }
+.feature-icon-box svg { width: 20px; height: 20px; stroke-width: 1.75; }
+
+/* Tier 3: Inline micro-icons */
+.micro-icon { width: 16px; height: 16px; stroke-width: 1.75; }`
+    }
+  };
 
   // Typos Detection
   const typos = [
@@ -427,7 +601,8 @@ async function auditSite(targetUrl) {
       declared_fonts: declaredFonts,
       css_variables: cssVars,
       dominant_colors: topColors,
-      motion_engines: motionEngines
+      motion_engines: motionEngines,
+      interaction_recipes: interactionRecipes
     },
     computed_forensics: cdpData ? {
       typography: cdpData.computed,

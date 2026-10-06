@@ -1,7 +1,7 @@
 # ARCHITECTURAL DESIGN SPECIFICATION: [TARGET_SITE_A_URL]
 
 > **Master Forensic Architecture & Implementation Blueprint for WordPress Gutenberg FSE Reconstruction**  
-> *MANDATE: Every parameter, coordinate, font clamp, hex token, text string, animation physics curve, and asset mapping in this document is derived from live Chrome DevTools Protocol (CDP port 9222) and computed CSS forensics. GUESSING, ESTIMATING, OR USING "PENDING" PLACEHOLDERS IS STRICTLY PROHIBITED.*
+> *MANDATE: Every parameter, coordinate, font clamp, hex token, text string, animation physics curve, and asset mapping in this document is derived from live Chrome DevTools Protocol (CDP port 9222) and computed CSS forensics. GUESSING, ESTIMATING, OR USING "PENDING" PLACEHOLDERS IS STRICTLY PROHIBITED. ALL SPECIFICATIONS AND TABLES MUST BE WRITTEN IN 100% PROFESSIONAL COMMERCIAL ENGLISH.*
 
 ---
 
@@ -58,115 +58,158 @@ Measured from live browser DOM via CDP `getComputedStyle()`:
 }
 ```
 
-### 1.4. Mandatory FSE Preset Binding Rule (Zero Clamps Outside :root, Zero Heading Overrides)
-Mọi selector trong CSS sản xuất BẮT BUỘC phải sử dụng các biến preset FSE:
-- `font-size`: `var(--wp--preset--font-size--*)` (`small`, `base`, `medium`, `medium-plus`, `large`, `x-large`, `xx-large`). Tuyệt đối CẤM viết `clamp(...)` hoặc `px`/`rem` trực tiếp trên các selector thành phần.
-- `margin` / `padding` / `gap`: `var(--wp--preset--spacing--10...60)`.
-- `color` / `background`: `var(--wp--preset--color--*)`.
-- **CẤM CSS đè (Heading Overrides)**: Tiêu đề `h1`–`h6` phải tuân theo theme contract toàn cục, cấm dùng selector cha (như `.process-heading h2`, `.cta-band h2`, v.v.) để ghi đè `font-size`.
-
-### 1.5. 100% Structural Topology Fidelity Contract (Anti-Hallucination)
-Tuyệt đối CẤM AI tự ý đơn giản hóa cấu trúc hoặc chuyển đổi section sang dạng grid chung chung. Bắt buộc tuân thủ đúng 100% topology của Webflow gốc:
-- **Services**: BẮT BUỘC là **danh sách 4 hàng ngang full-width (`.service-row`)** với số thứ tự `01`–`04`, tiêu đề lớn, đường kẻ hairline ngang và nút mũi tên tròn `↗` bên phải. *CẤM chuyển thành lưới hộp 2x2 gắn ảnh.*
-- **Working Process**: BẮT BUỘC là **layout 2 cột (`.process-split`)**: cột trái cố định (sticky) gồm tiêu đề + nút "Start Projects"; cột phải gồm các thẻ card bo góc tròn lớn (`01`, `02`, `03`) có số thứ tự chìm và icon drafting. *CẤM chuyển thành lưới 3 cột bằng phẳng.*
-- **Portfolio**: BẮT BUỘC là **lưới 2 cột các thẻ card bo góc tròn lớn (`border-radius: 20px`)**, có dải gradient tối ở đáy ảnh hiển thị metadata dạng chấm `Web Development • August 23, 2025` và tiêu đề đặt ngay dưới ảnh.
-- **Testimonials**: BẮT BUỘC là **slider multi-card tràn viền**, mỗi card có 5 sao vàng `#F59E0B`, trích dẫn chi tiết, đường kẻ dotted ngang và avatar chân dung tròn cùng tên + chức danh (`Alisa Olivia, CTO at Ritovex`). *CẤM chuyển thành lưới tĩnh 4 hộp với chữ cái viết tắt.*
-
 ---
 
-## 2. Forensic Section-by-Section Architectural Specifications
+## 2. Section-by-Section Forensic Engineering Specification
 
-*(Repeat this comprehensive structure for EVERY section: Header, Hero, Partner Ticker, About Us & Metrics, Services, Portfolio, Working Process, Specialty Ticker, Testimonials, CTA, Blog, Footer)*
+*(Repeat the specification block below for ALL 12 sections from Section 01 Header to Section 12 Footer)*
 
-### Section [N]: [SECTION_NAME]
+### Section [XX]: [SECTION_TITLE_FROM_DOM]
 
-#### A. Layout Topology & Spatial Geometry
-- **Container Architecture**: Max-width `1280px`, centered, padding-inline `var(--wp--preset--spacing--20)` (mobile <=767px: `16-20px`).
-- **Padding Block**: `var(--wp--preset--spacing--50)` top, `var(--wp--preset--spacing--50)` bottom.
-- **Grid / Flex Topology**: [e.g. 2-column asymmetric grid: 52% left content / 48% right media, column-gap: `var(--wp--preset--spacing--30)`].
-- **Responsive Stacking**: Stacks vertically on mobile/tablet (<=991px), 100% full width, gap `var(--wp--preset--spacing--20)`.
+#### A. Block Geometry, Structural Topology & Equal Heights
+- **Measured Dimensions**: `height: [MEASURED_PX_OR_AUTO]`, `padding-block: var(--wp--preset--spacing--50)`
+- **Layout Architecture**: [Flexbox / CSS Grid / Asymmetrical Split / Bento Grid / Multi-card Carousel]
+- **Grid Configuration**: `grid-template-columns: repeat([N], 1fr); gap: var(--wp--preset--spacing--30);`
+- **Equal Heights Mandate**: All cards within this row MUST have `display: flex; flex-direction: column; height: 100%; align-items: stretch;`. Bottom action links or buttons MUST use `margin-top: auto;` to align baselines across the row.
+- **Mobile Responsive Container**: Mobile viewports (`<= 767px`) MUST enforce strict horizontal side gutters between `16px` and `20px` (`padding-inline: var(--wp--preset--spacing--20)`).
+- **Navigation Drawer (If Section is Header)**: Mobile header MUST include a functional hamburger button (`<button class="menu-toggle" aria-label="Toggle navigation">` with Lucide `menu`/`x` SVG) opening a dedicated navigation drawer.
 
-#### B. Finalized Production Copywriting (Zero Placeholders, 100% Genuine Commercial Copy)
-- **STRICT PROHIBITION**: CẤM tuyệt đối chèn các tag, badge hoặc disclaimer như `DEMO CONTENT`, `DEMO TESTIMONIALS`, `DEMO PORTFOLIO`, `Demo visual`, `Demo contact`, `Prototype note`.
-- **Nội dung thương mại thật**: Viết copy tự nhiên, đầy đủ, sắc sảo cho agency sáng tạo cao cấp. Số liệu thống kê thật, case study thật, testimonial thật có tên và chức danh cụ thể.
-- **Eyebrow / Badge (H6)**: `[EXACT_POLISHED_EYEBROW_TEXT]`
-- **Primary Title (H1/H2)**: `[EXACT_POLISHED_HEADLINE_TEXT]` *(Commercial typos like "Real Woks", "Recants Article", "Let’s Start Talk" cleaned)*
-- **Paragraph Description**: `[EXACT_POLISHED_BODY_COPY]`
-- **Primary CTA Button**: Label: `[EXACT_BUTTON_TEXT]`, Target: `[TARGET_URL]`, Style: Solid primary background.
-- **Secondary CTA Button**: Label: `[EXACT_SECONDARY_BUTTON_TEXT]`, Target: `[TARGET_URL]`.
-- **Card Items & Static Metrics**:
-  1. Card 1: Title `[TITLE]`, Description `[DESC]`, Metric `[STATIC_CLEAN_METRIC, e.g. 250+]`
-  2. Card 2: Title `[TITLE]`, Description `[DESC]`, Metric `[STATIC_CLEAN_METRIC, e.g. 12+]`
-  3. Card 3: Title `[TITLE]`, Description `[DESC]`, Metric `[STATIC_CLEAN_METRIC, e.g. 20+]`
-  4. Card 4: Title `[TITLE]`, Description `[DESC]`, Metric `[STATIC_CLEAN_METRIC, e.g. 5K+]`
+#### B. Semantic Heading Hierarchy & Content Copywriting
+- **Eyebrow / Kicker**: `<h6>` or `<span class="eyebrow">` -> `[MEASURED_OR_ENHANCED_EYEBROW_TEXT]` (`var(--wp--preset--font-size--small)`)
+- **Primary Section Title**: `<h2>` -> `[MEASURED_OR_ENHANCED_SECTION_TITLE]` (`var(--wp--preset--font-size--large)`)
+  * *Heading Dominance Rule*: The section title `<h2>` MUST have the largest font size in this section.
+- **Card Sub-Headings**: `<h4>` -> `[CARD_1_TITLE]`, `[CARD_2_TITLE]`, ... (`var(--wp--preset--font-size--medium)`)
+  * *Strict Prohibition*: Internal card headings must NEVER use `<h2>` or exceed the scale of the section title.
+- **Card Body Text**: `<p>` -> `[CARD_1_BODY]`, `[CARD_2_BODY]`, ... (`var(--wp--preset--font-size--base)`)
+- **Zero Latin Copywriting Mandate**: 100% genuine commercial English copy. Zero Latin dummy text (`Lorem ipsum`, `Sed ut perspiciatis`, `Sed acc` are strictly forbidden). Zero duplicate titles across sibling cards.
 
-#### C. Forensic 4-Tier Motion & Animation Blueprint (CDP & IX2 Measured)
-- **Tier 1: On-Load / Entrance Animation**:
-  - Trigger: `DOMContentLoaded`
-  - Target: Eyebrow badge, Title, Subtitle, CTA buttons (staggered entrance)
-  - Animated Properties: `opacity: 0 -> 1; transform: translateY(24px) -> translateY(0);`
-  - Duration & Easing: `0.65s`, `cubic-bezier(0.16, 1, 0.3, 1)`, stagger delay `0.1s` per item.
-- **Tier 2: Scroll-Triggered Animation**:
-  - Trigger: Viewport Intersection (`threshold: 0.15`)
-  - Target: Section containers and cards
-  - Transition: Class `.in-view` reveals content smoothly with `opacity: 1; transform: none;`.
-  - Sticky / Scroll: Header transitions to `backdrop-filter: blur(12px); background: rgba(255,255,255,0.85);` when scrolled > 50px.
-- **Tier 3: Hover & Interactive Feedback**:
-  - Target: Cards, Action Buttons, Arrow Glyphs
-  - Card Hover: `transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); transition: all 0.3s ease;`
-  - Button Hover: Background transitions `--wp--preset--color--primary -> --wp--preset--color--secondary` in `0.2s ease`.
-  - Icon Hover: Lucide arrow rotates 45° and shifts 4px up-right (`transform: translate(4px, -4px) rotate(45deg);`).
-- **Tier 4: Continuous Ambient Loops**:
-  - Target: Marquees, tickers, and looping rails
-  - Keyframes: `@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }`
-  - Duration & Timing: `28s linear infinite`, seamless without jitter, continuous rotation (no pause on hover).
-- **Tier 5: Driving Engine & Library Integration**:
-  - Engine: [Pure CSS @keyframes / Webflow IX2 localized runtime `assets/js/webflow.main.js` / Swiper.js `assets/js/swiper.min.js`].
-  - Initialization: Explicit DOM selector initialization.
+#### C. Forensic Motion Physics, Scroll Interactions & Micro-Interactions
+- **Tier 1: On-Load / Viewport Entrance**:
+  - Initial State: `opacity: 0; transform: translateY(32px);`
+  - Active State (`.is-reveal`): `opacity: 1; transform: translateY(0);`
+  - Transition Physics: `transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);`
+  - Stagger Sequence: `transition-delay: calc(var(--item-index, 0) * 0.1s);`
+  - Trigger: `IntersectionObserver` observing elements with `threshold: 0.15, rootMargin: "0px 0px -50px 0px"`.
+- **Tier 2: Scroll-Driven Text Illumination (Word-by-Word Highlight Scrub)**:
+  - *Applicability*: Essential for hero headlines, mission statements, and section intros (e.g. *What We Offer*).
+  - Markup: Text wrapped into inline words `<span class="scroll-word">[WORD]</span>`.
+  - Base State: `opacity: 0.25; color: var(--wp--preset--color--paragraph); transition: opacity 0.25s ease, color 0.25s ease;`
+  - Illuminated State (`.is-lit`): `opacity: 1.0; color: var(--wp--preset--color--contrast);`
+  - Script Driver: Viewport progress calculation illuminating words sequentially as the user scrolls through the section container.
+- **Tier 3: Card & Interactive Hover Physics**:
+  - Container Lift: `transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); border-color: rgba(255,255,255,0.2); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;`
+  - Arrow Icon Glide: `.card:hover .card-arrow { transform: translate(3px, -3px); }`
+  - Media Zoom: `.card:hover img { transform: scale(1.04); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }`
+- **Tier 4: Continuous Loops & Ambient Motion**:
+  - Logo Tickers & Marquees: `@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }`
+  - Timing: `30s linear infinite`, seamless without stutter, no pause on hover.
+- **Tier 5: Slider & Carousel Physics (If Applicable)**:
+  - Autoplay: Enabled (`delay: 4000ms`, pause on pointer hover).
+  - Navigation: Synchronized baseline navigation buttons with Lucide arrow icons (`arrow-left`, `arrow-right`).
+  - Peeking Fractional Slides (e.g. 3.5 items): Masked right-edge fade overlay (`linear-gradient(to right, transparent, var(--wp--preset--color--base))`).
+- **Tier 6: Sticky Stacking Card Deck Physics (e.g. What We Offer 50/50 Split Cards)**:
+  - *Applicability*: Multi-card showcase sections where cards progressively slide up and stack over previous cards.
+  - Desktop Implementation: `.offer-list-wrapper { position: sticky; top: calc(var(--wp--preset--spacing--40) * index); margin-bottom: calc(var(--wp--preset--spacing--60) * (total - index)); }`
+  - Stacking Effect: Lower cards glide upwards and dock over preceding cards, forming a tactile "card-deck peeling" interaction with layered drop shadows.
+  - Mobile Degradation (`<= 767px`): Strictly collapses to `position: static` with standard vertical rhythm.
 
-#### D. Asset, Icon & Slider Specifications
-- **Photography (100% Unsplash Real Photos)**:
+#### D. Exact Component Anatomy & HTML Structural Blueprint (Zero-Hallucination Mandate)
+*The AI OpenDesign engine MUST reconstruct this section following this EXACT component nesting and geometry. Flattening composite cards into generic boxes is strictly prohibited.*
+```html
+<!-- Exact Component Hierarchy Blueprint -->
+<div class="section-wrapper [SECTION_THEME_CLASS]">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">[EYEBROW]</span>
+      <h2 class="section-title scroll-illuminated">[MAIN_H2_WITH_WORD_SPANS]</h2>
+    </div>
+    <!-- Component Body: If Split Cards (e.g. 50/50 Services) -->
+    <div class="card-collection">
+      <div class="card-item split-layout" data-reveal>
+        <div class="card-content-left">
+          <span class="card-index">01</span>
+          <h4 class="card-title">[TITLE]</h4>
+          <p class="card-desc">[DESCRIPTION]</p>
+          <a class="button ghost-or-solid">[ACTION_CTA] &raquo;</a>
+        </div>
+        <div class="card-media-right">
+          <div class="media-frame"><img src="[UNSPLASH_IMAGE]" alt="[TITLE]"></div>
+          <!-- Floating Feature Overlay Card (Tier 2 Optical Hierarchy with Container Tiles) -->
+          <div class="floating-overlay-card">
+            <div class="feature-capsule">
+              <div class="feature-icon-box">
+                <svg class="lucide lucide-[ICON_1]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><!-- path --></svg>
+              </div>
+              <div class="capsule-content">
+                <strong>[FEAT_1]</strong>
+                <p>[DESC_1]</p>
+              </div>
+            </div>
+            <div class="feature-capsule">
+              <div class="feature-icon-box">
+                <svg class="lucide lucide-[ICON_2]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><!-- path --></svg>
+              </div>
+              <div class="capsule-content">
+                <strong>[FEAT_2]</strong>
+                <p>[DESC_2]</p>
+              </div>
+            </div>
+            <div class="feature-capsule">
+              <div class="feature-icon-box">
+                <svg class="lucide lucide-[ICON_3]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><!-- path --></svg>
+              </div>
+              <div class="capsule-content">
+                <strong>[FEAT_3]</strong>
+                <p>[DESC_3]</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+#### E. Asset, Icon & Media Specifications
+- **Photography (100% Real Unsplash Imagery)**:
   - Asset 1: URL `https://images.unsplash.com/photo-[ID]?auto=format&fit=crop&w=1200&q=80`, Aspect Ratio `[16:10 / 4:3 / 1:1]`, Subject `[DESCRIPTION]`.
-- **Universal Icon vs Image Disambiguation (100% Lucide Stroke-Width=1)**:
-  - *Heuristic*: All original `<img>` with dimensions <= 64px, `.svg` files, or inside badge/button/timeline nodes are classified as **Icon Nodes** (NEVER replaced with Unsplash photos).
-  - *Context-Aware Semantic Selection*:
-    * Card 1 ([TITLE]): `<svg class="lucide lucide-[ICON_NAME_1]" stroke="currentColor" stroke-width="1">...</svg>` (Mapped to [SEMANTIC_MEANING])
-    * Card 2 ([TITLE]): `<svg class="lucide lucide-[ICON_NAME_2]" stroke="currentColor" stroke-width="1">...</svg>` (Mapped to [SEMANTIC_MEANING])
-    * Card 3 ([TITLE]): `<svg class="lucide lucide-[ICON_NAME_3]" stroke="currentColor" stroke-width="1">...</svg>` (Mapped to [SEMANTIC_MEANING])
-  - *Anti-Repetition*: Zero duplicate icons across sibling cards in this section.
-  - *Color Extraction*: Computed stroke/fill measured as `[COLOR_TOKEN]` (Rating Stars: `#F59E0B`).
-- **Slider / Carousel Specifications (If Applicable)**:
-  - Autoplay: `delay: 4000ms`, `pauseOnMouseEnter: true`, `disableOnInteraction: false`.
-  - Geometry: All slides strictly equal height (`height: auto; display: flex; flex-direction: column;`).
-  - Fractional Slides (e.g. 3.5 on desktop): Container `overflow: hidden;` with right-edge gradient overlay fade (`linear-gradient(to right, transparent, var(--wp--preset--color--base))`).
+- **Universal Icon vs Image Disambiguation (100% Inline Lucide SVGs)**:
+  - Heuristic: All original `<img>` tags with dimensions <= 64px, `.svg` files, or inside badge/button/timeline containers are classified as **Icon Nodes** (NEVER replaced with Unsplash photos).
+  - Contextual Semantic Selection:
+    * Card 1: `<svg class="lucide lucide-[ICON_1]" stroke="currentColor" stroke-width="1">...</svg>` (Mapped to [SEMANTIC_ROLE])
+    * Card 2: `<svg class="lucide lucide-[ICON_2]" stroke="currentColor" stroke-width="1">...</svg>` (Mapped to [SEMANTIC_ROLE])
+    * Card 3: `<svg class="lucide lucide-[ICON_3]" stroke="currentColor" stroke-width="1">...</svg>` (Mapped to [SEMANTIC_ROLE])
+  - Anti-Repetition Rule: Zero duplicate icons across sibling cards in this section.
+  - Color Tokens: Computed stroke/fill mapped to `var(--wp--preset--color--*)` (Rating Stars: `#F59E0B`).
 
-#### 🎯 Section QA Acceptance Contract (KẾT QUẢ MONG MUỐN & ĐỐI SOÁT KIỂM ĐỊNH)
+#### 🎯 Section QA Acceptance Contract
 
-##### A. Expected Production State (Kết quả mong muốn bắt buộc)
-- **Geometry & Tokens**: Bố cục flex/grid đúng tỷ lệ, padding-block chuẩn FSE spacing tokens, lề mobile 16-20px, card bằng nhau (equal height).
-- **Heading Hierarchy**: Tiêu đề section là `<h2>` to nhất (`var(--wp--preset--font-size--large)`), tiêu đề card là `<h4>` (`var(--wp--preset--font-size--medium)`).
-- **Copywriting**: 100% text thương mại sản xuất hoàn chỉnh, sạch toàn bộ lỗi chính tả và 0 text Latin ("Sed acc...", "Lorem ipsum").
-- **Motion & Slider**: Đầy đủ 4 tầng chuyển động, slider autoplay mượt mà + fade overlay cạnh phải cho slide thập phân 3.5.
-- **Asset & Icon Compliance**: Phân định chuẩn icon vs ảnh; 100% ảnh Unsplash thật đúng aspect-ratio; 100% icon Lucide nét mảnh `stroke-width="1"` ngữ nghĩa không lặp lại, màu chuẩn từ DOM gốc.
+##### A. Expected Production State
+- **Geometry & Tokens**: Balanced flex/grid layout, FSE spacing tokens, mobile gutters 16-20px, strictly equal card heights.
+- **Heading Hierarchy**: Section title is H2 (`var(--wp--preset--font-size--large)`), card sub-headings are H4 (`var(--wp--preset--font-size--medium)`).
+- **Copywriting**: 100% commercial-grade English copywriting, zero typos, zero Latin dummy copy.
+- **Motion & Interactions**: Active scroll text illumination, staggered card entrance, card hover physics, and autoplay sliders.
+- **Asset Compliance**: High-resolution Unsplash photos and inline Lucide SVGs with `stroke-width="1"`.
 
-##### B. Verification & Acceptance Criteria (Check lại đối soát sau khi hoàn thành)
-| Tiêu chí đối soát | Kết quả mong muốn | Thực tế kiểm định | Kết luận |
-|---|---|---|---|
-| **Bố cục & Token** | Chuẩn FSE token, responsive mobile 16-20px, card equal height | Đã kiểm định theo theme.json, CSS variables, flex stretch | **PASS** |
-| **Phân cấp Heading** | Section H2 (large) > Card H4 (medium) > Eyebrow H6 (small) | Tiêu đề chính to nhất, các card H4 nhỏ hơn hợp lý | **PASS** |
-| **Nội dung chữ** | Sạch lỗi chính tả, 0 text Latin ('Sed acc', 'Lorem ipsum') | Đã thay thế 100% copy thương mại chuẩn niche | **PASS** |
-| **Chuyển động & Slider** | Đo từ CDP/IX2 timeline, slider autoplay + fade overlay | Autoplay 4s, equal height, fade overlay 3.5 slides | **PASS** |
-| **Hình ảnh & Icon** | 100% Unsplash đúng tỷ lệ, Lucide stroke=1 ngữ nghĩa không lặp | Dùng đúng icon theo title, màu chuẩn đo từ DOM gốc | **PASS** |
+##### B. Verification & Acceptance Table
+| Verification Criterion | Expected Specification | Actual Finding | Verdict |
+|---|---|---|:---:|
+| **Layout & Token Compliance** | 100% FSE presets, equal height cards, 16-20px mobile gutters | Verified via theme.json tokens and flex stretch | **PASS** |
+| **Heading Hierarchy Dominance** | Section H2 (large) > Card H4 (medium) > Eyebrow H6 (small) | Primary H2 is visually dominant, internal titles are H4 | **PASS** |
+| **Commercial Copywriting** | Zero Latin dummy text, zero typos, 100% niche English copy | Rewritten with genuine commercial copy | **PASS** |
+| **Motion Physics & Interactivity** | Scroll illumination, staggered entrance, hover physics | Native IntersectionObserver & CSS transition rules active | **PASS** |
+| **Icon & Asset Compliance** | Inline Lucide SVGs (stroke=1), semantic matching, Unsplash photos | Contextual Lucide icons mapped, real photo ratios intact | **PASS** |
 
-> **Section Outcome**: **PASS** *(Chỉ nghiệm thu khi cả 5 tiêu chí đều đạt chuẩn PASS)*
+> **Section Outcome**: **PASS** *(Proceeds only when all 5 criteria achieve verified PASS)*
 
 ---
 
 ## 3. Master Section-by-Section Forensic QA Verification Matrix
 
-Bảng tổng duyệt đối soát toàn bộ từng section một từ Header đến Footer. **Mọi section bắt buộc phải đạt PASS thì tài liệu mới được coi là hoàn tất và sẵn sàng cho người dùng duyệt chuyển sang Pha 2:**
+*Comprehensive audit matrix verifying all sections from Header to Footer prior to human sign-off:*
 
-| STT | Tên Section | Bố cục & Token | Heading H2>H4 | Nội dung sản xuất | Motion & Slider | Assets & Lucide Icons | Kết quả nghiệm thu |
+| No. | Section Name | Layout & Tokens | Heading Hierarchy (H2>H4) | Production Copy | Motion & Micro-Interactions | Assets & Lucide Icons | QA Verdict |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|
 | 01 | Header & Navigation | PASS | PASS | PASS | PASS | PASS | **PASS** |
 | 02 | Hero Banner | PASS | PASS | PASS | PASS | PASS | **PASS** |
@@ -181,4 +224,4 @@ Bảng tổng duyệt đối soát toàn bộ từng section một từ Header �
 | 11 | Recent Blog Articles | PASS | PASS | PASS | PASS | PASS | **PASS** |
 | 12 | Footer & Newsletter | PASS | PASS | PASS | PASS | PASS | **PASS** |
 
-> **Final Architectural Verdict**: **ALL SECTIONS PASS — SPECIFICATION APPROVED FOR HUMAN REVIEW**
+> **Final Architectural Verdict**: **ALL SECTIONS PASS — SPECIFICATION FULLY APPROVED FOR HUMAN REVIEW**

@@ -1,12 +1,24 @@
 ---
-name: spec-driven-clone
+name: beplus-spec-remake
 description: Autonomous 2-stage specification-driven clone & transformation engine for OpenDesign and AlonePro WordPress Gutenberg FSE themes. Bắt buộc duyệt spec trước khi build, cam kết 100% Gutenberg FSE tokens var(--wp--preset--*), 0 manual coding, 0 CSS đè, 0 !important, 0 clamp ngoài :root.
 category: web-design
+triggers:
+  - "beplus-spec-remake"
+  - "beplus spec remake"
+  - "spec remake"
+  - "@beplus-spec-remake"
 ---
 
-# Spec-Driven Clone & FSE Transform Engine (v1.1.0)
+# Beplus Spec Remake Engine (v2.0)
 
 Autonomous 2-stage specification-driven clone & transformation engine for OpenDesign and AlonePro WordPress Gutenberg FSE themes.
+
+## Linked References & Tools
+- `references/gutenberg-token-contract.md`: Authoritative FSE design tokens, fluid clamps, and theme.json contracts.
+- `references/forensic-inspection-patterns.md`: Comprehensive 32-chapter forensic manual covering specificity traps, bento alignment, frosted glass badges, slider carousels, mobile navigation drawers, scroll text illumination, split cards with floating overlays, and workspace scratchpad isolation.
+- `references/opendesign-api-orchestration.md`: Headless REST API automation pipeline for OpenDesign daemon (port 7456), SQLite message seeding constraints, and SSE streaming.
+- `templates/clone-spec-template.md`: 100% English master architectural specification template for Phase 1 `CLONE-SPEC.md`.
+- `scripts/inspect-site.mjs`: Automated CDP forensic inspection script extracting computed CSS, deep component anatomy, and motion triggers.
 
 ## Absolute Core Mandates (Cốt Lõi Bắt Buộc)
 
@@ -23,6 +35,21 @@ Autonomous 2-stage specification-driven clone & transformation engine for OpenDe
 9. **Slider & Carousel Engineering Standards**: Mọi slider (Swiper/carousel) BẮT BUỘC có chế độ `autoplay` (delay 3.5s - 4.5s, pause on hover), các slide bắt buộc bằng chiều cao nhau (`height: 100%`). Khi hiển thị số slide thập phân (ví dụ 3.5 items trên desktop), vùng chứa phải `overflow: hidden` và có lớp phủ gradient mờ cạnh phải (`mask-image` hoặc fade overlay) để item 0.5 trông mượt mà, chủ đích.
 10. **Ghost Section & Blank Content Elimination**: CẤM để section bị trắng nội dung do lỗi interaction Webflow IX2. CSS gốc bắt buộc có trạng thái hiển thị fallback (`opacity: 1; transform: none;`). Các section đảo màu (dark card trên nền sáng, light card trên nền tối) bắt buộc khai báo đồng thời cả token background và token text color. Triệt tiêu toàn bộ curtain mask (`.image-show-style`) và modal che màn hình.
 11. **Total Elimination of Latin Placeholder Text**: Quét sạch 100% các đoạn text Latin giả lập ("Lorem ipsum", "Sed ut perspiciatis", "Sed acc...") từ template Webflow và viết lại thành nội dung thương mại thật sự sắc bén, đúng độ dài 1:1.
+12. **100% Professional English for All Markdown & Spec Artifacts (CẤM Tiếng Việt trong MD)**: Toàn bộ các file tài liệu đặc tả markdown (`CLONE-SPEC.md`), plan contracts, bảng QA matrix (`No.`, `Section Name`, `Layout & Tokens`, `Heading Hierarchy (H2>H4)`, `Production Copy`, `Motion & Micro-Interactions`, `Assets & Lucide Icons`, `QA Verdict`), và phản hồi text của AI BẮT BUỘC 100% bằng tiếng Anh chuyên nghiệp. Tuyệt đối CẤM chèn tiếng Việt vào trong file markdown sinh ra!
+13. **Scroll-Driven Text Illumination & Staggered Viewport Reveal**: 
+    - **Word-by-Word Scroll Text Illumination (Scrub)**: Khi section gốc có hiệu ứng cuộn làm chữ sáng dần theo thanh cuộn (như ở *What We Offer*), BẮT BUỘC bóc tách dòng text thành các thẻ `<span class="scroll-word">`, ban đầu để mờ (`opacity: 0.25; color: var(--wp--preset--color--paragraph)`), và dùng script tính toán vị trí cuộn để bật sáng dần từng từ sang `opacity: 1; color: var(--wp--preset--color--contrast)`.
+    - **Staggered Viewport Entrance**: Các card, bento item, feature boxes khi bước vào viewport BẮT BUỘC có hiệu ứng fade-up tuần tự (`opacity: 0; transform: translateY(32px)`) kích hoạt qua `IntersectionObserver` với stagger delay `calc(var(--index, 0) * 0.1s)`.
+    - **Card & Arrow Micro-Interactions**: Hover vào card BẮT BUỘC có hiệu ứng nâng card (`transform: translateY(-4px)`), đổ bóng mềm, mũi tên trượt chéo `translate(3px, -3px)`, và ảnh zoom nhẹ `scale(1.04)`. CẤM để card trơ tĩnh không phản hồi!
+14. **Responsive Mobile Navigation Drawer & Hamburger Toggle**: Trên màn hình mobile (`<= 767px`), CẤM làm mất thanh điều hướng. BẮT BUỘC sinh nút toggle hamburger (`<button class="menu-toggle" aria-label="Toggle navigation">` với icon Lucide `menu` / `x`) và menu drawer trượt xuống/trượt ngang chứa toàn bộ link menu chính + nút CTA!
+15. **Zero-Deviation Topology Replication & Thematic Harmony Contract (CẤM biến đổi bố cục & giải thể component gốc)**:
+    - AI OpenDesign tuyệt đối CẤM suy đoán hoặc tự ý vẽ lại một thiết kế generic khác xa trang gốc. BẮT BUỘC tái hiện 1:1 cấu trúc hình học và lớp phủ (layering) của từng component:
+      * **Hero Architecture**: Nếu web gốc dùng floating island navbar (header nổi bo góc tách rời mép) + ảnh nền doanh nghiệp có lớp phủ tối + nút ghost viền mỏng (`border: 1px solid white; background: transparent;`), BẮT BUỘC tái hiện chính xác floating island navbar và nút ghost. CẤM đổi thành header dính phẳng thông thường!
+      * **Split Cards with Floating Overlays (vd: What We Offer)**: Nếu card gốc là dạng chia đôi 50/50 (cột trái: số thứ tự `01` + tiêu đề + đoạn văn + nút; cột phải: khung ảnh + **thẻ card trắng nổi đè lên trên** chứa 3 viên thuốc tính năng có icon checkmark), BẮT BUỘC tái hiện chính xác bố cục 50/50 và thẻ nổi đè lên ảnh. CẤM giải thể thành box phẳng đơn giản!
+      * **Bento Grid Contrasting Cards**: Nếu bento gốc phối hợp giữa card ảnh (`bg`), card trắng (`white`) và card tối (`black`), BẮT BUỘC giữ nguyên sự tương phản màu sắc bề mặt của từng card.
+      * **Photographic Thematic Harmony**: Ảnh Unsplash được chọn BẮT BUỘC phải ăn khớp 100% với chủ đề của ảnh gốc (ví dụ: ảnh gốc là đội ngũ họp bàn quanh phòng hội thảo có bảng biểu số liệu thì ảnh Unsplash phải là doanh nghiệp họp bàn, CẤM đưa ảnh tòa nhà chọc trời hoặc ảnh không đúng ngữ cảnh).
+16. **Workspace Hygiene & Scratchpad Isolation Mandate (CẤM lưu file dump thô trong project root)**:
+    - Tuyệt đối CẤM tạo hoặc lưu các file HTML thô tải về (như `target.html`, `dump.html`, `raw.html`, `temp.html`) ngay trong thư mục gốc của project! OpenDesign tự động index mọi file trong project root thành deliverable hiển thị trên cây thư mục web (`/files/target.html`), gây hiểu lầm nghiêm trọng cho người dùng rằng AI chỉ copy-paste mã nguồn gốc thay vì tự thiết kế theo spec.
+    - Mọi thao tác trích xuất DOM bắt buộc phải xử lý trực tiếp in-memory qua CDP port 9222 (`Runtime.evaluate`) hoặc lưu tạm ra ngoài thư mục project (như `/tmp/scratchpad/` hoặc thư mục ẩn `.cache/`) và BẮT BUỘC tự động dọn dẹp sạch sẽ (`rm -f`) trước khi kết thúc Phase 1. Thư mục project chỉ được phép chứa duy nhất các file sản phẩm chính thức (`CLONE-SPEC.md`, `index.html`, `main.css`).
 
 ---
 
@@ -250,7 +277,15 @@ Only after user confirmation does the AI execute Phase 2:
 - **MOBILE CLEARANCE & CONTAINER MARGINS (`@media (max-width: 767px)`)**:
   * **Hero Top Clearance**: Whenever a navbar is `fixed`, `sticky`, or `absolute`, `.hero` on mobile MUST specify `padding-top: calc(var(--wp--preset--spacing--60) + 40px);` (or ~100px+) so the navbar never overlaps the top line of the H1 headline.
   * **Safe Margin Mandate**: Mobile container margins MUST strictly be `16–20px` (`.container { width: min(var(--container-max-width), calc(100% - var(--wp--preset--spacing--40))); margin-inline: auto; }`).
+  * **Mobile Header Navigation & Hamburger Menu Contract**: On mobile viewports (`<= 767px`), global site navigation MUST NOT be omitted or displaced by an oversized desktop CTA button. The header MUST always render an accessible hamburger menu toggle (`button.mobile-menu-toggle` with inline Lucide `menu` / `x` SVG, `stroke-width="1"`, touch target `>= 44x44px`) connected to an interactive slide-out drawer or overlay. Desktop navigation links collapse into the drawer, and redundant header CTA buttons are either simplified or housed inside the menu drawer.
   * **Header Streamlining**: Auxiliary pills and secondary text MUST be hidden on mobile (`display: none;`).
+- **NATIVE PRODUCTION JAVASCRIPT & MOTION ENGINE (`index.html`)**:
+  Phase 2 deliverables MUST include a self-contained, high-performance vanilla JavaScript module in `index.html` executing:
+  1. **`initScrollIllumination()`**: Calculates scroll progress through sections with text highlights (e.g. *What We Offer*), sequentially illuminating `<span class="scroll-word">` from `opacity: 0.25` to `opacity: 1.0; color: var(--wp--preset--color--contrast);`.
+  2. **`initScrollEntrance()`**: Attaches a single shared `IntersectionObserver` to all `[data-reveal]` elements (cards, bento blocks, statistics, timeline nodes) to trigger smooth staggered fade-up (`opacity: 1; transform: translateY(0);`).
+  3. **`initMobileMenu()`**: Implements clean toggle state between `.menu-toggle` and `.mobile-menu-drawer.is-open` with `aria-expanded` synchronization and body scroll lock.
+  4. **`initTestimonialSlider()`**: Powers smooth auto-cycling for testimonials (4-second interval, pausing gracefully on pointer hover, with manual arrow controls).
+  5. **`initBackToTop()`**: Provides smooth window scrolling to top when clicking the footer chevron icon.
 
 ---
 
@@ -258,9 +293,12 @@ Only after user confirmation does the AI execute Phase 2:
 1. **Ghost Section & Blank Content Elimination**:
    - All animated elements MUST have default visible state in CSS: `opacity: 1; transform: none;`. Never leave elements at `opacity: 0` waiting for JS triggers.
    - Inverted sections (dark cards or light cards) MUST explicitly declare both `background-color` AND `color` tokens (`--wp--preset--color--surface` + `--wp--preset--color--contrast`) to prevent white-on-white or black-on-black text collision.
-2. **Universal Icon vs Image Substitution**:
-   - Any `<img>` <= 64px or SVG icon MUST be replaced with inline Lucide SVG (`stroke-width="1"`).
-   - Use context-aware semantic mapping based on card content (About -> `info`, Mission -> `rocket`, Vision -> `binoculars`, Security -> `shield-check`, Growth -> `trending-up`).
+2. **Universal Optical Icon Hierarchy & Anti-Miniaturization**:
+   - Any `<img>` <= 64px or SVG icon MUST be replaced with inline Lucide SVG.
+   - **MANDATORY 3-TIER OPTICAL SIZING & CONTAINER BOX ARCHITECTURE**:
+     * **Tier 1 (Stat & Metric Big Numbers - e.g. `8,000+`, `$5B+`)**: Squircle tile container `52px × 52px` (or `56px`), SVG icon `28px × 28px` (min 26px), `stroke-width="1.75"` (or `2.0`). Must optically balance the heavy weight of bold numbers.
+     * **Tier 2 (Feature Capsules & Value Lists - e.g. `Strategic Planning`, `Smart Health`)**: Rounded square/circle tile container `.feature-icon-box` `38px × 38px` (or `42px`), SVG icon `20px × 20px` (min 20px), `stroke-width="1.75"`. NEVER leave naked, unboxed SVG icons floating loosely in empty whitespace next to bold typography!
+     * **Tier 3 (Inline Micro-Affordances - Button chevrons, badges)**: SVG icon `16px × 16px`, `stroke-width="1.75"`.
    - Anti-repetition rule: no consecutive identical icons in the same section.
    - Icon colors must match extracted computed color tokens. Review stars MUST be `#F59E0B`.
 3. **Total Elimination of Latin Placeholder Text**:
@@ -279,9 +317,16 @@ Only after user confirmation does the AI execute Phase 2:
 
 ### 2.3. OpenDesign Engine Orchestration & Production Gates
 - **Two-Stage State Machine Compliance**: In `request` stage, emit `<open-design-plan-contract>` and `<open-design-runtime-state>` (`outcome: 'completed'`). In `production` stage, directly write deliverables (`index.html`, `main.css`). Emitting another plan contract in production stage triggers `od_next_protocol_stage_mismatch`.
-- **API Project Creation Contract (`POST /api/projects`)**: Include explicit UUID `id` AND `skillId: "spec-driven-clone"`.
+- **Headless API Automation Pipeline (Preferred over Flaky Browser Clicks)**:
+  Instead of fragile CDP UI clicks that can get blocked by onboarding dialogs or feedback modals, automate OpenDesign directly via its daemon API (`http://127.0.0.1:7456`):
+  1. `POST /api/projects`: `{ id: UUID, name: "...", skillId: "beplus-spec-remake" }`.
+  2. `PUT /api/projects/:id/conversations/:cid/messages/:userMsgId`: `{ id: userMsgId, role: "user", content: prompt, position: 0 }`.
+  3. `PUT /api/projects/:id/conversations/:cid/messages/:asstMsgId`: `{ id: asstMsgId, role: "assistant", content: "", position: 1, runStatus: "queued" }`. **CRITICAL SQLITE CONSTRAINT**: `content` and `position` are strictly `NOT NULL` in SQLite. Omitting `content: ""` causes an HTTP 500 error (`NOT NULL constraint failed: messages.content`).
+  4. `POST /api/chat`: `{ projectId, conversationId, assistantMessageId, message: prompt, userPrompt: prompt, skillId: "beplus-spec-remake", agentId: "opencode", clientType: "web" }`. **CRITICAL PITFALL**: The daemon validates `message !== 'string' || !message.trim()`. Passing `userPrompt` without `message: prompt` fails immediately with `BAD_REQUEST: message required`.
+  5. The response is an SSE event stream (`text/event-stream`). Monitor events or inspect `/var/lib/docker/volumes/open-design_open_design_data/_data/runs/<run_id>/state.json`.
+- **API Project Creation Contract (`POST /api/projects`)**: Include explicit UUID `id` AND `skillId: "beplus-spec-remake"`.
 - **Docker Container Permissions Guard**: Ensure `/app/skills/` has `chmod -R a+rX` and `chown -R open-design:open-design` so container UID 1001 never encounters `EACCES`.
-- **CDP Native Input Dispatching**: When submitting prompts to OpenDesign via CDP port 9222, focus `[data-testid="chat-composer-input"]`, dispatch `Input.insertText` to synchronize React/Lexical state, and dispatch native click on `[data-testid="chat-send"]`. If routed to `/files/index.html`, navigate back to `/conversations/<id>` first.
+- **CDP Native Input Dispatching (Fallback UI Path)**: When submitting prompts to OpenDesign via CDP port 9222, focus `[data-testid="chat-composer-input"]`, dispatch `Input.insertText` to synchronize React/Lexical state, and dispatch native click on `[data-testid="chat-send"]`. If routed to `/files/index.html`, navigate back to `/conversations/<id>` first. If an in-app feedback modal appears (`We'd love your feedback — help improve OpenDesign`), dismiss it immediately by clicking the close button (`×` / `button[aria-label="Close"]`) so it does not block CDP interactions or screenshot captures.
 - **Timeout & Context Window Guard**: If OpenCode experiences `ContextOverflowError` (>1M tokens), purge the bloated session record in `agent_sessions` (`DELETE FROM agent_sessions WHERE conversation_id = ?;` in `app.sqlite`).
 
 ---
@@ -345,11 +390,14 @@ legacy_images = re.findall(r"assets/images/68[a-f0-9]+_[A-Za-z0-9_-]+\.(?:jpg|pn
 if len(legacy_images) > 3:
     errors.append(f"ASSET DEFECT: Found {len(legacy_images)} legacy clone images! Must replace 100% with Unsplash photos.")
 
-# 7. Lucide stroke-width = 1 & AI sparkle ban
-if "stroke-width: 1" not in css and 'stroke-width="1"' not in html:
-    errors.append("ICON DEFECT: Lucide icons must have stroke-width: 1!")
+# 7. Optical Icon Hierarchy & AI sparkle ban
 if re.search(r"sparkles", html, re.I):
     errors.append("ICON DEFECT: AI sparkle icons are strictly prohibited!")
+
+# Check for miniaturized naked icons (icons <= 16px next to headings without container box)
+if re.search(r'<div class=[\"\']capsule-content[\"\']>[\s\S]*?<strong>[\s\S]*?</div>', html):
+    if '.feature-icon-box' not in css and 'class="feature-icon-box"' not in html:
+        errors.append("ICON DEFECT: Feature capsules MUST use .feature-icon-box container tiles to prevent miniaturized icons!")
 
 # 8. Template typos & Latin placeholder detection
 for typo in ["Real Woks", "Qoute", "Recants Article"]:
@@ -400,6 +448,42 @@ duplicates = [t for t, count in seen_titles.items() if count > 1]
 if duplicates:
     errors.append(f"DUPLICATE CONTENT DEFECT: Found duplicated card titles: {duplicates}! Every card must have a unique commercial headline.")
 
+# 15. 100% English Markdown Artifacts Audit
+if os.path.exists("CLONE-SPEC.md"):
+    spec_content = open("CLONE-SPEC.md").read()
+    vn_terms = re.findall(r"\b(STT|Tên Section|Bố cục|Nội dung|Chuyển động|Hình ảnh|Tiêu chí đối soát|Thực tế kiểm định|Kết luận|Bảng tổng duyệt)\b", spec_content, re.I)
+    if vn_terms:
+        errors.append(f"LANGUAGE DEFECT: Found Vietnamese terms ({set(vn_terms)}) in CLONE-SPEC.md! All markdown deliverables MUST be 100% English.")
+
+# 16. Mobile Hamburger Navigation Audit
+has_mobile_toggle = soup.find(class_=re.compile(r"menu-toggle|mobile-menu|hamburger|nav-toggle", re.I)) or soup.find("button", attrs={"aria-label": re.compile(r"menu|navigation", re.I)})
+if not has_mobile_toggle:
+    errors.append("MOBILE UX DEFECT: Missing mobile hamburger toggle button! Must include <button class=\"menu-toggle\" aria-label=\"Toggle navigation\"> with Lucide menu icon.")
+
+# 17. Native Motion & Interaction Script Audit
+if not re.search(r"IntersectionObserver|initScroll|initMobile|initSlider|scroll-word", html):
+    errors.append("MOTION DEFECT: Missing interactive script engine! index.html must include native vanilla JS for scroll reveal, word illumination, and mobile menu.")
+
+# 18. Component Topology & Anti-Flattening Audit (What We Offer 50/50 Split & Floating Overlays)
+offer_cards = soup.find_all(class_=re.compile(r"offer-card|split-card", re.I))
+if offer_cards:
+    for oc in offer_cards:
+        has_media = oc.find(class_=re.compile(r"offer-images|card-media|media-frame", re.I))
+        has_details = oc.find(class_=re.compile(r"offer-details|card-details|content-col", re.I))
+        if not (has_media and has_details):
+            errors.append("TOPOLOGY DEFECT: Split card has been flattened! Must preserve 2-column split (content column + media frame with floating overlay card).")
+            break
+
+# 19. Workspace Hygiene & Raw Dump Detection
+for bad_file in ["target.html", "dump.html", "raw.html", "scraped.html", "temp.html"]:
+    if os.path.exists(bad_file):
+        errors.append(f"WORKSPACE HYGIENE DEFECT: Found raw scraped dump file '{bad_file}' in project root! Intermediate dumps must be isolated in /tmp/ or deleted.")
+
+# 20. Sticky Stacking Cards Scroll Engine Audit
+if re.search(r"offer-card|offer-list", html):
+    if "position: sticky" not in css and "position:sticky" not in css:
+        errors.append("SCROLL DEFECT: Multi-card offer section missing Sticky Stacking Cards interaction! Must use desktop 'position: sticky' with staggered top offsets.")
+
 if errors:
     print("=== QUALITY AUDIT FAILED ===")
     for e in errors:
@@ -413,14 +497,14 @@ else:
 
 ## 4. SKILL SOURCE & VERSION CONTROL (GIT)
 
-The master source code, inspection scripts, templates, and reference manuals for `spec-driven-clone` are version-controlled in a private GitHub repository:
-- **Repository**: `https://github.com/ducdung196qtr/spec-driven-clone.git` (Private)
-- **Local Directory**: `/root/.hermes/skills/web-design/spec-driven-clone`
-- **Docker Mount/Sync**: `/app/skills/spec-driven-clone` inside container `open-design`
+The master source code, inspection scripts, templates, and reference manuals for `beplus-spec-remake` are version-controlled in a private GitHub repository:
+- **Repository**: `https://github.com/ducdung196qtr/beplus-spec-remake.git` (Private)
+- **Local Directory**: `/root/.hermes/skills/web-design/beplus-spec-remake`
+- **Docker Mount/Sync**: `/app/skills/beplus-spec-remake` inside container `open-design`
 - **Sync Command**:
   ```bash
-  docker cp /root/.hermes/skills/web-design/spec-driven-clone/. open-design:/app/skills/spec-driven-clone/
-  docker exec -u 0 open-design chown -R open-design:open-design /app/skills/spec-driven-clone
-  docker exec -u 0 open-design chmod -R a+rX /app/skills/spec-driven-clone
+  docker cp /root/.hermes/skills/web-design/beplus-spec-remake/. open-design:/app/skills/beplus-spec-remake/
+  docker exec -u 0 open-design chown -R open-design:open-design /app/skills/beplus-spec-remake
+  docker exec -u 0 open-design chmod -R a+rX /app/skills/beplus-spec-remake
   ```
 - **Git Push/Rollback Protocol**: After major updates or before experimental modifications, commit and push to `origin main` (`git push origin main`) to ensure clean rollback capability.

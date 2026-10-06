@@ -909,6 +909,327 @@ Template creators often duplicate cards (e.g. Card 1 and Card 3 both having "Ada
 - **STRICT PROHIBITION**: Every card in a grid MUST have a unique headline, unique copy, and distinct semantic icon.
 - When inspecting templates, if duplicated cards are detected, the AI must synthesize a fresh, industry-accurate commercial variation (e.g. "Automated Reconciliation" or "Real-Time Treasury") rather than cloning duplicate text.
 
+---
+
+## 27. Mobile Viewport Header Architecture: Hamburger Menu vs CTA Button
+
+### 27.1. The Mobile Navigation Displacement Trap
+A frequent failure pattern in cloned landing pages is that the desktop navbar hides all navigation links (`Home`, `Solutions`, `About Us`, `Contact`) on mobile (`display: none;`), but retains the large desktop CTA button (`Explore Business >>`) without adding a mobile hamburger toggle.
+This leaves mobile users completely stranded with no way to navigate the site structure.
+
+### 27.2. Mandatory Mobile Header Contract
+1. **Hamburger Toggle Element**:
+   The header MUST include a `<button class="mobile-menu-toggle" aria-label="Toggle navigation">` containing inline Lucide `menu` SVG (or `x` when open), with `stroke-width="1"` and a touch target of at least `44px x 44px`.
+2. **Mobile Drawer Navigation**:
+   All top-level navigation links must collapse into a smooth slide-out or full-width drawer overlay (`.mobile-menu-drawer`) when the hamburger button is clicked.
+3. **CTA Button Streamlining**:
+   - On screens `<= 767px`, the desktop CTA button should either be miniaturized (icon-only or concise label) or moved inside the mobile menu drawer to eliminate visual redundancy with the Hero CTA button.
+4. **Mobile Gutter Padding**:
+   Header and section containers on mobile MUST strictly adhere to `16px - 20px` horizontal side gutters (`var(--wp--preset--spacing--20)`).
+
+---
+
+## 28. Scroll-Driven Text Illumination (Word-by-Word Reveal / Highlight Scrub)
+
+### 28.1. The Missing Motion Defect
+Modern premium Webflow & Framer templates (such as the *What We Offer* and *Our Core Values* sections in MNC) employ dynamic scroll-driven text scrub:
+- As the user scrolls into the viewport, the headline does not simply appear static. Instead, individual words light up sequentially from a dimmed, low-contrast state to vibrant full-contrast white.
+- If the AI produces a static typography block, the remake feels lifeless and fails the "fidelity" promise.
+
+### 28.2. Mandatory Vanilla CSS & JavaScript Implementation
+To reproduce this without bulky third-party dependencies:
+
+1. **Markup Structure**:
+   Headlines flagged with `[data-scroll-illuminate]` or `.scroll-illuminated` have their words wrapped in `<span class="scroll-word">`:
+   ```html
+   <h2 class="section-title scroll-illuminated" data-scroll-illuminate>
+     Our core values define who we are, guide every decision we make, and drive us forward.
+   </h2>
+   ```
+
+2. **CSS Styling**:
+   ```css
+   .scroll-word {
+     opacity: 0.25;
+     color: var(--wp--preset--color--paragraph);
+     transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
+     display: inline-block;
+     margin-right: 0.25em;
+   }
+   .scroll-word.is-lit {
+     opacity: 1.0;
+     color: var(--wp--preset--color--contrast);
+   }
+   ```
+
+3. **High-Performance Scroll Scrub JS**:
+   ```javascript
+   function initScrollIllumination() {
+     const targets = document.querySelectorAll('.scroll-illuminated, [data-scroll-illuminate]');
+     targets.forEach(target => {
+       const text = target.innerText.trim();
+       const words = text.split(/\s+/);
+       target.innerHTML = words.map(w => `<span class="scroll-word">${w}</span>`).join(' ');
+       const wordSpans = target.querySelectorAll('.scroll-word');
+       
+       let ticking = false;
+       window.addEventListener('scroll', () => {
+         if (!ticking) {
+           window.requestAnimationFrame(() => {
+             const rect = target.getBoundingClientRect();
+             const winH = window.innerHeight;
+             // Progress from 0 (enters 80% of viewport) to 1 (reaches 30% of viewport)
+             const progress = Math.min(Math.max((winH * 0.8 - rect.top) / (winH * 0.5), 0), 1);
+             const litCount = Math.floor(progress * wordSpans.length);
+             wordSpans.forEach((span, i) => {
+               if (i < litCount) span.classList.add('is-lit');
+               else span.classList.remove('is-lit');
+             });
+             ticking = false;
+           });
+           ticking = true;
+         }
+       }, { passive: true });
+     });
+   }
+   ```
+
+---
+
+## 29. Staggered Viewport Entrance & Card Hover Micro-Interactions
+
+### 29.1. The Static Grid Defect
+When users scroll down a page, cards (features, bento items, stats, articles) should glide into view sequentially rather than pop in simultaneously or sit lifelessly. Furthermore, interactive cards must provide immediate, tactile feedback on hover.
+
+### 29.2. Staggered Entrance Pattern
+```css
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+```
+
+```javascript
+function initScrollEntrance() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('[data-reveal]').forEach((el, idx) => {
+    el.style.transitionDelay = `${(idx % 4) * 0.1}s`;
+    observer.observe(el);
+  });
+}
+```
+
+### 29.3. Card Hover Physics
+```css
+.card, .bento-card, .offer-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.35s ease, 
+              border-color 0.35s ease;
+}
+.card:hover, .bento-card:hover, .offer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.card:hover .icon-arrow, .card:hover .btn-arrow {
+  transform: translate(3px, -3px);
+  transition: transform 0.25s ease;
+}
+.card:hover img {
+  transform: scale(1.04);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+```
+
+---
+
+## 30. 100% Professional English Markdown Deliverables Mandate
+
+### 30.1. The Language Contamination Defect
+In past iterations, AI agents occasionally emitted Vietnamese table headers (e.g., `STT`, `Tên Section`, `Bố cục & Token`, `Tiêu chí đối soát`) inside `CLONE-SPEC.md` or review plans.
+This contaminates commercial deliverables intended for international standard workflows.
+
+### 30.2. Strict English Rule
+- Every file with extension `.md` (specifically `CLONE-SPEC.md`, plan contracts, and audit matrices) MUST be written in 100% professional commercial English.
+- All table headers must use standard English taxonomy:
+  `No. | Section Name | Layout & Tokens | Heading Hierarchy (H2>H4) | Production Copy | Motion & Micro-Interactions | Assets & Lucide Icons | QA Verdict`
+- Section criteria tables must use:
+  `Verification Criterion | Expected Specification | Actual Finding | Verdict`
+- Any occurrence of Vietnamese words in markdown artifacts is classified as a Quality Gate failure and rejected.
+
+---
+
+## 31. Split Cards with Floating Media Overlays & Feature Capsules (The What We Offer Pattern)
+
+### 31.1. The Component Flattening Defect
+A major cause of visual disparity between Webflow originals and AI reconstructions is "component flattening":
+- In the original site (e.g. *What We Offer*), each service is presented as an expansive 50/50 split card on a dark `#201d1d` canvas.
+- The left column contains the step index (`01`), a bold title, body copy, and a forward-navigating button.
+- The right column features a rich photographic scene overlaid by a floating white card containing three feature capsules (`Strategic Planning`, `Fast Implementation`, `ROI Focused`).
+- When AI OpenDesign flattens this into two generic single-column boxes, the design loses its spatial depth, premium hierarchy, and signature brand feel.
+
+### 31.2. Mandatory Split & Floating Overlay Architecture
+```css
+/* Container & Section */
+.offer-section {
+  background-color: var(--wp--preset--color--surface); /* Dark #201d1d */
+  padding-block: var(--wp--preset--spacing--60);
+}
+
+/* 50/50 Split Card */
+.offer-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--wp--preset--spacing--40);
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: var(--wp--preset--spacing--40);
+  margin-bottom: var(--wp--preset--spacing--30);
+  align-items: center;
+}
+
+@media (max-width: 991px) {
+  .offer-card {
+    grid-template-columns: 1fr;
+    padding: var(--wp--preset--spacing--30);
+  }
+}
+
+/* Left Column Details */
+.offer-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--20);
+}
+
+.offer-num {
+  font-size: var(--wp--preset--font-size--small);
+  font-weight: 700;
+  color: var(--wp--preset--color--primary);
+  letter-spacing: 0.1em;
+}
+
+.offer-name {
+  font-size: var(--wp--preset--font-size--large);
+  color: #111111;
+  margin: 0;
+}
+
+.offer-excerpt {
+  font-size: var(--wp--preset--font-size--base);
+  color: #555555;
+  line-height: 1.6;
+}
+
+/* Right Column Media with Floating Overlay */
+.offer-media-wrap {
+  position: relative;
+  border-radius: 16px;
+  overflow: visible; /* Allows overlay card to float partially over edge */
+}
+
+.offer-base-img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+
+/* Floating White Feature Card */
+.offer-floating-card {
+  position: absolute;
+  bottom: -16px;
+  right: -16px;
+  background: #FFFFFF;
+  border-radius: 14px;
+  padding: var(--wp--preset--spacing--20);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 260px;
+}
+
+@media (max-width: 767px) {
+  .offer-floating-card {
+    position: static;
+    margin-top: var(--wp--preset--spacing--20);
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* Feature Capsule Pills */
+.feature-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #F4F5F7;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.feature-pill-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111111;
+}
+
+.feature-pill-text strong {
+  display: block;
+  font-size: var(--wp--preset--font-size--small);
+  color: #111111;
+}
+
+.feature-pill-text span {
+  display: block;
+  font-size: calc(var(--wp--preset--font-size--small) * 0.9);
+  color: #666666;
+}
+```
+
+---
+
+## 32. Workspace Hygiene & Intermediate Scratchpad Isolation (Preventing False Scraping Alarms)
+
+### 32.1. The Root Cause of the "Target.html Scraping False Alarm"
+In OpenDesign and modern file-driven AI workspaces, the backend daemon monitors the project directory (`/app/.od/projects/<project_id>/`) in real time.
+- When an AI agent or inspect script runs a shell command like `curl -s https://example.com > target.html` (or saves raw dumped Webflow/Framer HTML) directly into the project root directory, OpenDesign's file watcher immediately detects it.
+- OpenDesign registers `target.html` as a project deliverable, indexes it in the file tree, and generates a corresponding artifact manifest (`target.html.artifact.json`).
+- When the human user opens the OpenDesign UI to review project progress, they see `target.html` in the file tree (`/files/target.html`), click it, and open browser DevTools (F12).
+- Inside DevTools, the user sees raw Webflow classes (`w-dyn-list`, `offer-card white`), Webflow CDN stylesheets, and Webflow badges. This creates the immediate, alarming impression that the AI did not follow the 2-stage spec-driven build process, but instead simply "stole" and dumped the raw source code!
+
+### 32.2. Mandatory Scratchpad Isolation Mandate
+1. **ABSOLUTE PROHIBITION ON RAW DUMPS IN PROJECT ROOT**:
+   The AI agent and forensic scripts MUST NEVER create, write, or leave files named `target.html`, `dump.html`, `raw.html`, `temp.html`, or `scraped.html` in the project root directory.
+2. **In-Memory DOM Forensics**:
+   All DOM queries, computed style extractions, and animation timeline inspections should be performed directly against the live headless Chromium tab over CDP port 9222 (`Runtime.evaluate`).
+3. **Isolated Scratchpad Directory**:
+   If an offline HTML file must be saved for regex or BeautifulSoup analysis, it MUST be written strictly to an isolated temporary directory outside the project tree:
+   - Linux host / container: `/tmp/scratchpad/target.html` or `.cache/target.html` (dot-prefixed directory ignored by OpenDesign file watchers).
+   - Any temporary scratchpad file created during Phase 1 inspection MUST be automatically purged (`rm -f /tmp/scratchpad/target.html`) before the agent finishes Phase 1.
+4. **Deliverable Sanctity**:
+   The project directory must contain ONLY intentional, high-standard deliverables:
+   - Phase 1: `CLONE-SPEC.md` (and intermediate JSON audits like `site-audit.json`).
+   - Phase 2: `index.html` (100% clean Gutenberg FSE DOM) and `main.css` (100% Gutenberg FSE tokens).
 
 
 
@@ -916,3 +1237,123 @@ Template creators often duplicate cards (e.g. Card 1 and Card 3 both having "Ada
 
 
 
+
+
+
+
+
+---
+
+## 33. Optical Icon Hierarchy & Anti-Miniaturization Standard (Curing the "Tiny Icon" Defect)
+
+### 33.1. The Root Cause of AI "Icon Miniaturization"
+In almost every AI-driven web generation workflow, icons consistently end up looking disproportionately small, frail, and anemic compared to surrounding text. This stems from three interconnected technical blind spots:
+1. **The Lucide/Feather Inherent Inset Trap**: Standard vector icon glyphs are rendered on a `24x24` viewBox, but have an intentional 2px to 3px inner padding on all sides. A glyph set to `width="16px"` or `18px` has an active visual silhouette of only **12px to 14px**!
+2. **Optical Weight Imbalance vs. Heavy Typography**: AI models calculate size purely numerically (`18px icon` vs `18px text`). However, headings and metric numbers (`8,000+`, `H4 titles`) carry `font-weight: 600–800`, which occupies massive black/white pixel density. Thin vector outlines (especially with `stroke-width="1"`) have less than 15% of that optical density, causing the icon to visually disappear ("lọt thỏm").
+3. **The "Naked SVG" Failure**: High-end Webflow templates NEVER float bare SVG outlines loosely in empty space. Human designers always place icons inside **geometric container tiles** (squircles, rounded squares, or circular badges) with subtle tinted backgrounds (`rgba(..., 0.06)`). When AI leaves icons unboxed, the eye perceives them as isolated punctuation marks rather than prominent UI anchors.
+
+### 33.2. The 3-Tier Optical Sizing & Weight Spec
+Every icon node rendered in Gutenberg FSE templates MUST adhere to this optical calibration matrix:
+
+| Component Type | Real-World Examples | Container Tile Geometry | SVG Dimensions | Stroke Width | Visual Goal |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Tier 1: Big Metric & Stat Cards** | `8,000+`, `$5B+`, Hero feature counters | `52px × 52px` or `56px × 56px` squircle (`border-radius: 12–16px`) | **`28px × 28px`** (Min 26px) | `1.75` (Bold: `2.0`) | Matches massive numerical weight of 40px+ metrics |
+| **Tier 2: Feature Capsules & Value Lists** | `Strategic Planning`, `Smart Health`, What We Offer pills | `38px × 38px` or `42px × 42px` rounded square (`border-radius: 8–10px`) | **`20px × 20px`** (Min 20px) | `1.75` | Balances bold H4 / strong titles effortlessly |
+| **Tier 3: Inline Micro-Affordances** | Button chevrons (`»`), Trust badges, status dots | Inline or `24px × 24px` flex badge | **`16px × 16px`** | `1.75` | Clear directional navigation cues without breaking baseline |
+
+### 33.3. Mandatory Icon Box Architecture
+Whenever a feature list or floating card is constructed, the markup MUST wrap the SVG in a dedicated `.feature-icon-box`:
+```html
+<!-- CORRECT: Optical Hierarchy Compliant -->
+<div class="feature-capsule">
+  <div class="feature-icon-box">
+    <svg class="lucide lucide-compass" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+      <!-- paths -->
+    </svg>
+  </div>
+  <div class="capsule-content">
+    <strong>Strategic Planning</strong>
+    <p>Custom roadmaps engineered for rapid enterprise expansion.</p>
+  </div>
+</div>
+```
+```css
+/* CSS Token Implementation */
+.feature-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: var(--wp--preset--spacing--10, 8px);
+  background-color: rgba(32, 29, 29, 0.05); /* or subtle tint */
+  color: var(--wp--preset--color--contrast);
+  margin-top: 2px;
+}
+.feature-icon-box svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.75;
+}
+```
+
+---
+
+## 34. Sticky Stacking Cards Scroll Engine (The What We Offer Architecture)
+
+### 34.1. The Phenomenon of "Card Deck Peeling"
+On high-end Webflow corporate sites like MNC Global Solutions, Section 03 ("What We Offer") does NOT render as a mundane, static vertical list of boxes. Instead, it functions as an interactive **Sticky Stacking Card Deck**:
+1. When the user scrolls down, **Card 01** docks ("sticks") near the top of the viewport (`top: 4rem` or `top: 60px`).
+2. As the user continues scrolling, **Card 02** slides up from below and **stacks directly over Card 01**, docking at `top: 6rem`.
+3. Cards 03 through 06 progressively glide over the previous cards, creating a tactile, physical "card deck peeling" interaction.
+4. Each card is paired with a **Scroll-Driven Word Illumination** title above it and an asymmetric **Floating Media Overlay** that drifts slightly upwards on scroll.
+
+### 34.2. Pure CSS + Native Viewport Implementation (Zero Heavy Libraries)
+While Webflow binds this to internal interaction scripts and Lenis, the AlonePro Gutenberg FSE standard implements this with **100% native, performant CSS `position: sticky`** with staggered top offsets on desktop:
+
+```css
+/* Desktop Sticky Stacking Deck (min-width: 768px) */
+@media screen and (min-width: 768px) {
+  .offer-card-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* Stacking handles spacing */
+  }
+
+  .offer-list-wrapper {
+    position: sticky;
+    top: 0;
+    margin-bottom: 0;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Staggered Stacking Calculation */
+  .offer-list-wrapper._01 { top: calc(var(--wp--preset--spacing--40) * 1); margin-bottom: calc(var(--wp--preset--spacing--60) * 3); z-index: 1; }
+  .offer-list-wrapper._02 { top: calc(var(--wp--preset--spacing--40) * 1.5); margin-bottom: calc(var(--wp--preset--spacing--60) * 2.5); z-index: 2; }
+  .offer-list-wrapper._03 { top: calc(var(--wp--preset--spacing--40) * 2); margin-bottom: calc(var(--wp--preset--spacing--60) * 2); z-index: 3; }
+  .offer-list-wrapper._04 { top: calc(var(--wp--preset--spacing--40) * 2.5); margin-bottom: calc(var(--wp--preset--spacing--60) * 1.5); z-index: 4; }
+  .offer-list-wrapper._05 { top: calc(var(--wp--preset--spacing--40) * 3); margin-bottom: calc(var(--wp--preset--spacing--60) * 1); z-index: 5; }
+  .offer-list-wrapper._06 { top: calc(var(--wp--preset--spacing--40) * 3.5); margin-bottom: 0; z-index: 6; }
+
+  /* Tactile Stacking Shadow */
+  .offer-card {
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12), 0 16px 48px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Mobile Graceful Degradation (<= 767px) */
+@media screen and (max-width: 767px) {
+  .offer-list-wrapper {
+    position: static;
+    margin-bottom: var(--wp--preset--spacing--30);
+  }
+}
+```
+
+### 34.3. Specification & Prompting Contract for AI OpenDesign
+In Phase 1 `CLONE-SPEC.md`, AI OpenDesign MUST explicitly specify:
+1. `Scroll Dynamics`: "Sticky Stacking Card Deck with staggered `top` offsets (Cards 01–06 dock sequentially on scroll)".
+2. `Visual Layering`: "Floating elevated white card (`.feature-card-list-wrap`) elevated over photo with 3D drop-shadow and Tier 2 optical icons".
+3. `Text Illumination`: "Word-by-word span segmentation with scrub-based illumination (`opacity: 0.2` -> `opacity: 1.0`) on the primary section title".
