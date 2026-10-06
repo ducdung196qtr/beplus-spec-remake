@@ -776,6 +776,140 @@ Every detected Latin paragraph MUST be 100% replaced with polished, natural comm
 2. The exact length and sentence rhythm of the original UI box.
 3. Realistic, credible terminology and verifiable metric formats.
 
+---
+
+## 23. The Specificity Trap of Webflow Pixel Utility Classes (`._24px-link`, `._24px-text`)
+
+### 23.1. The DevTools Cascade Defect
+In Webflow and export bundles, typography utility classes exist throughout stylesheets:
+```css
+._24px-link {
+  font-size: 24px;
+  line-height: 36px;
+}
+```
+When an HTML heading element `<h3 class="_24px-link">` or `<h4 class="_24px-link">` is evaluated:
+1. The FSE element selector `h3 { font-size: var(--wp--preset--font-size--medium-plus); }` has specificity `(0, 0, 1)`.
+2. The class selector `._24px-link` has specificity `(0, 1, 0)`.
+3. In browser DevTools, the FSE token is struck through (`strikethrough`) and overridden by the hardcoded `24px`!
+
+### 23.2. Mandatory Resolution in Phase 2
+The AI must perform an automated sweep of all utility font-size declarations:
+1. Replace all pixel font sizes on classes with FSE presets:
+   ```css
+   ._24px-link, ._24px-text, ._22px-text {
+     font-size: var(--wp--preset--font-size--medium);
+     line-height: 1.25;
+   }
+   ._18px-text, ._16px-link {
+     font-size: var(--wp--preset--font-size--base);
+   }
+   ._30px-title, ._44px-text {
+     font-size: var(--wp--preset--font-size--large);
+   }
+   ```
+2. OR strip the `font-size` declaration from the utility class so the semantic tag (`<h1>`–`<h6>`) dictates the typography directly from `theme.json`.
+
+---
+
+## 24. Bento Grid Multi-Row Asymmetric Geometry & Bottom Alignment
+
+### 24.1. The Height Mismatch Defect
+In split Bento sections (e.g. Prospect SaaS Section 3):
+- Left column has 2 stacked cards (`.square-box` testimonial card + `.widescreen-ratio` abstract image).
+- Right column has 1 tall portrait photo card (`.rounded-photo.portrait`).
+- If the right image does not have an explicit `height: 100%; object-fit: cover;`, its bottom edge will detach from the left column's baseline, creating an awkward ragged gap.
+
+### 24.2. Mandatory CSS Topology
+```css
+.bento-wrap {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: stretch;
+  gap: var(--wp--preset--spacing--30);
+}
+
+.bento-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--20);
+  height: 100%;
+}
+
+.bento-left .square-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bento-left .square-box .button {
+  margin-top: auto; /* Aligns button to bottom of quote without crowding text */
+}
+
+.rounded-photo.portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+```
+
+---
+
+## 25. Floating Glassmorphism Icon Badges (`.card-glass-icon`)
+
+### 25.1. Overlap Geometry & Clearance
+When modern cards place a circular icon badge floating between the top media container and the bottom card content:
+1. **Absolute Positioning**:
+   ```css
+   .card-image-wrap {
+     position: relative;
+   }
+   .card-glass-icon {
+     position: absolute;
+     bottom: 0;
+     left: var(--wp--preset--spacing--20);
+     transform: translateY(50%);
+     z-index: 2;
+     width: 44px;
+     height: 44px;
+     border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     background: rgba(255, 255, 255, 0.65);
+     border: 1px solid rgba(255, 255, 255, 0.4);
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+   }
+   ```
+2. **Body Padding Clearance**:
+   The card body below must provide clearance so headline text never touches or clips under the badge:
+   ```css
+   .card-body {
+     padding-top: calc(var(--wp--preset--spacing--30) + 14px);
+   }
+   ```
+3. **Inline Lucide Icon**:
+   Inside `.card-glass-icon`, replace Webflow `<img>` with inline `<svg class="lucide lucide-..." stroke="var(--wp--preset--color--contrast)" stroke-width="1">`.
+
+---
+
+## 26. Testimonial Carousel Architecture & Anti-Duplication Contract
+
+### 26.1. Equal Height Slides & Baseline-Aligned Controls
+In testimonial sliders (e.g. Prospect SaaS Section 7):
+- All slides must have identical heights (`height: auto; display: flex;`).
+- Navigation buttons (`.slider-prev`, `.slider-next`) must be positioned at the bottom right of the container, aligned horizontally with the support CTA bar (`align-items: center; gap: 12px;`).
+- Use inline Lucide arrows (`<svg class="lucide lucide-arrow-left">` and `lucide-arrow-right"`).
+
+### 26.2. Anti-Duplication Contract across Cards
+Template creators often duplicate cards (e.g. Card 1 and Card 3 both having "Adaptive Intelligence").
+- **STRICT PROHIBITION**: Every card in a grid MUST have a unique headline, unique copy, and distinct semantic icon.
+- When inspecting templates, if duplicated cards are detected, the AI must synthesize a fresh, industry-accurate commercial variation (e.g. "Automated Reconciliation" or "Real-Time Treasury") rather than cloning duplicate text.
+
+
 
 
 

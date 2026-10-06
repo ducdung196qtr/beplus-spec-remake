@@ -178,8 +178,11 @@ Only after user confirmation does the AI execute Phase 2:
   - Card paddings & gaps -> `var(--wp--preset--spacing--30)` or `spacing-20`
   - Title gaps -> `margin-bottom: var(--wp--preset--spacing--30)`
   - Colors & backgrounds -> `var(--wp--preset--color--*)`
+- **ABSOLUTE BAN ON RAW PIXEL FONT SIZES ON UTILITY CLASSES (SPECIFICITY TRAP)**:
+  * In Webflow, classes like `._24px-link`, `._24px-text`, `._18px-text`, `._30px-title`, `._44px-text` contain raw `font-size: 24px; line-height: 36px;` that override semantic `h1`–`h6` tags due to class specificity (`0-1-0` vs `0-0-1`).
+  * In Phase 2: All such utility classes MUST either have their hardcoded pixel values replaced with `var(--wp--preset--font-size--*)` (e.g. `._24px-link { font-size: var(--wp--preset--font-size--medium); }`) OR have `font-size` stripped entirely so the semantic heading tag (`h1`–`h6`) controls the typography from `theme.json`!
 - **ZERO `!important`**: Every `!important` rule must be cleanly excised.
-- **EQUAL HEIGHT CARDS**:
+- **EQUAL HEIGHT CARDS & BENTO GRID GEOMETRY**:
   ```css
   .grid-container, .features-grid, .services-list {
     display: grid;
@@ -191,9 +194,35 @@ Only after user confirmation does the AI execute Phase 2:
     height: 100%;
   }
   .card .card-footer, .card .btn, .card .button {
-    margin-top: auto;
+    margin-top: auto; /* Aligns all buttons at the exact same vertical baseline */
   }
   ```
+- **BENTO ASYMMETRIC GRID ALIGNMENT**:
+  * When a stacked 2-card column (`.bento-left`) sits beside a tall media card (`.rounded-photo.portrait`), the tall media card MUST declare `height: 100%; object-fit: cover;` so its bottom edge lines up exactly 1:1 with the stacked column.
+  * The vertical gap between stacked bento items must strictly use `var(--wp--preset--spacing--20)` or `spacing-30`.
+- **FLOATING FROSTED-GLASS ICON BADGES (`.card-glass-icon`)**:
+  * Badges overlapping the boundary between card image and body:
+    ```css
+    .card-glass-icon {
+      position: absolute;
+      bottom: 0;
+      left: var(--wp--preset--spacing--20);
+      transform: translateY(50%);
+      z-index: 2;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-body {
+      padding-top: calc(var(--wp--preset--spacing--30) + 16px);
+    }
+    ```
 - **SLIDER / CAROUSEL ENGINEERING (Autoplay & 3.5 Slides Fade)**:
   ```css
   .swiper-wrapper {
@@ -356,6 +385,20 @@ for sec in sections:
             if card.find("h2"):
                 errors.append(f"HEADING HIERARCHY DEFECT: Card in section contains <h2>! Card titles MUST be <h4> with medium font-size.")
                 break
+
+# 13. Absolute Prohibition of Raw Pixel Font Sizes in CSS Classes (Specificity Trap)
+raw_pixel_font_sizes = re.findall(r"\bfont-size:\s*\d+px", css_without_root)
+if raw_pixel_font_sizes:
+    errors.append(f"PIXEL DEFECT: Found {len(raw_pixel_font_sizes)} hardcoded pixel font-size declarations (e.g. '{raw_pixel_font_sizes[0]}') in CSS outside :root! All font-sizes must consume var(--wp--preset--font-size--*).")
+
+# 14. Prohibition of Duplicate Card Titles (Anti-Duplication Contract)
+card_titles = [c.get_text(strip=True) for c in soup.find_all(["h3", "h4", "h5", "div"], class_=re.compile(r"card.*title|card.*heading|text---bold", re.I)) if len(c.get_text(strip=True)) > 5]
+seen_titles = {}
+for t in card_titles:
+    seen_titles[t] = seen_titles.get(t, 0) + 1
+duplicates = [t for t, count in seen_titles.items() if count > 1]
+if duplicates:
+    errors.append(f"DUPLICATE CONTENT DEFECT: Found duplicated card titles: {duplicates}! Every card must have a unique commercial headline.")
 
 if errors:
     print("=== QUALITY AUDIT FAILED ===")
